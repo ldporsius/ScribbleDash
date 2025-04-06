@@ -25,11 +25,13 @@ val Typography = Typography(
         fontFamily = fontBagelFatOneFamily,
         fontSize = 40.sp,
         lineHeight = 44.sp,
+        letterSpacing = -1.sp
     ),
     headlineLarge = TextStyle(
         fontFamily = fontBagelFatOneFamily,
         fontSize = 34.sp,
         lineHeight = 48.sp,
+        letterSpacing = .1.sp
     ),
     headlineMedium = TextStyle(
         fontFamily = fontBagelFatOneFamily,

@@ -12,10 +12,11 @@ import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
+import nl.codingwithlinda.scribbledash.feature_game.presentation.GameLevelScreen
 
 
 fun NavGraphBuilder.GameNavGraph(
-
+    navToHome: () -> Unit
 ) {
     composable<GameRootNavRoute> {
 
@@ -23,15 +24,14 @@ fun NavGraphBuilder.GameNavGraph(
         NavHost(navController = gameNavController, startDestination = GameLevelNavRoute) {
 
             composable<GameLevelNavRoute> {
-                Column {
-                    Text(text = "Game level")
-                    Button(onClick = {
+                GameLevelScreen(
+                    actionOnClose = {
+                        navToHome()
+                    },
+                    actionOnLevel = {
                         gameNavController.navigate(GameDrawNavRoute)
                     }
-                    ) {
-                        Text(text = "Draw")
-                    }
-                }
+                )
             }
 
             composable<GameDrawNavRoute> {

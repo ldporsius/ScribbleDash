@@ -3,4 +3,7 @@
     <string name="home">Home</string>
     <string name="chart">Chart</string>
     <string name="one_round_wonder">One round wonder</string>
+    <string name="beginner">Beginner</string>
+    <string name="challenging">Challenging</string>
+    <string name="master">Master</string>
 </resources>

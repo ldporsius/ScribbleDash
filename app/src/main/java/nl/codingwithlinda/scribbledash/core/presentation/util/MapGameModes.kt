@@ -1,9 +1,8 @@
-package nl.codingwithlinda.scribbledash.core.presentation
+package nl.codingwithlinda.scribbledash.core.presentation.util
 
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.presentation.model.GameModeUi
-import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import nl.codingwithlinda.scribbledash.ui.theme.success
 
 fun GameMode.toUi(): GameModeUi {

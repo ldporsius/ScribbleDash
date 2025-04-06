@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -42,7 +44,7 @@ fun HomeScreen(
         )
 
         Spacer(modifier = Modifier.height(150.dp))
-        Text(text = "Start drawing",
+        Text(text = "Start drawing!",
             style = MaterialTheme.typography.displayMedium,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
@@ -63,15 +65,23 @@ fun HomeScreen(
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     Text(text = gameMode.title.asString(),
                         style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 48.dp, end = 48.dp),
+                        color = MaterialTheme.colorScheme.onBackground,
                     )
                     Image(
                         painter = painterResource(id = gameMode.imageResourceId),
                         contentDescription = gameMode.title.asString(),
-                        modifier = Modifier.fillMaxHeight(),
+                        modifier = Modifier
+                            .aspectRatio(1f, true)
+                            .height(112.dp)
+                        ,
                         contentScale = ContentScale.FillHeight
                     )
                 }

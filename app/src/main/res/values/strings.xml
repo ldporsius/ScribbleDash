@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ScribbleDash</string>
+    <string name="home">Home</string>
+    <string name="chart">Chart</string>
 </resources>

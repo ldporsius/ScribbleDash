@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -34,6 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.navigation.nav_graphs.GameNavGraph
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.ChartNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
@@ -41,8 +43,12 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRo
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.RootNavRoute
+import nl.codingwithlinda.scribbledash.core.presentation.toUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.feature_home.presentation.HomeScreen
+import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
+import nl.codingwithlinda.scribbledash.ui.theme.backgroundLight
+import nl.codingwithlinda.scribbledash.ui.theme.surfaceHigh
 
 @Composable
 fun ScribbleDashApp() {
@@ -75,8 +81,12 @@ fun ScribbleDashApp() {
                 mutableIntStateOf(destinations.indexOfFirst { it.route == HomeNavRoute })
             }
             Scaffold(
+                containerColor = backgroundLight,
                 bottomBar = {
-                    NavigationBar {
+                    NavigationBar(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.tertiary
+                    ) {
                         destinations.forEachIndexed { index, destination ->
 
                             val selected = index == selectedIndex
@@ -112,6 +122,7 @@ fun ScribbleDashApp() {
                     composable<HomeNavRoute> {
 
                         HomeScreen(
+                            gameModes = GameMode.values().map { it.toUi() },
                             actionOnGameMode = {
                                 rootNavController.navigate(GameNavRoute)
                             }
@@ -120,7 +131,6 @@ fun ScribbleDashApp() {
 
                     composable<ChartNavRoute> {
                         Text(text = "Chart")
-
                     }
 
                 }
@@ -130,11 +140,7 @@ fun ScribbleDashApp() {
         navigation<GameNavRoute>(
             startDestination = GameRootNavRoute
         ) {
-
-            composable<GameRootNavRoute> {
-                GameNavGraph(rememberNavController())
-            }
-
+            GameNavGraph()
         }
     }
 }

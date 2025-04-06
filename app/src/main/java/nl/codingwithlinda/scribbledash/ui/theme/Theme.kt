@@ -1,28 +1,24 @@
 package nl.codingwithlinda.scribbledash.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = primary,
-    secondary = secondary,
-    tertiary = tertiaryContainer
-)
 
 private val LightColorScheme = lightColorScheme(
     primary = primary,
     secondary = secondary,
+    secondaryContainer = backgroundDark,
     tertiary = tertiaryContainer,
+    tertiaryContainer = tertiaryContainer,
     background = backgroundLight,
     surface = surfaceHigh,
+    surfaceContainerLow = surfaceLow,
     onPrimary = onPrimary,
     onSecondary = onPrimary,
     onTertiary = onPrimary,
@@ -44,7 +40,7 @@ fun ScribbleDashTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
+        darkTheme -> LightColorScheme
         else -> LightColorScheme
     }
 

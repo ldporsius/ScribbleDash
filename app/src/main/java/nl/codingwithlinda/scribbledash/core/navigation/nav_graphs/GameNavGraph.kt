@@ -6,38 +6,44 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
-
-
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
 
 
 fun NavGraphBuilder.GameNavGraph(
-    gameNavController: NavController
+
 ) {
+    composable<GameRootNavRoute> {
 
-    composable<GameLevelNavRoute> {
-        Column {
-            Text(text = "Game level")
-            Button(onClick = {
-                gameNavController.navigate(GameDrawNavRoute)
-            }
-            ) {
-                Text(text = "Draw")
-            }
-        }
-    }
+        val gameNavController = rememberNavController()
+        NavHost(navController = gameNavController, startDestination = GameLevelNavRoute) {
 
-    composable<GameDrawNavRoute> {
-        Column {
-            Text(text = "Game draw")
-            Button(onClick = {
-                gameNavController.navigate(GameLevelNavRoute)
+            composable<GameLevelNavRoute> {
+                Column {
+                    Text(text = "Game level")
+                    Button(onClick = {
+                        gameNavController.navigate(GameDrawNavRoute)
+                    }
+                    ) {
+                        Text(text = "Draw")
+                    }
+                }
             }
-            ) {
-                Text(text = "Level")
+
+            composable<GameDrawNavRoute> {
+                Column {
+                    Text(text = "Game draw")
+                    Button(onClick = {
+                        gameNavController.navigate(GameLevelNavRoute)
+                    }
+                    ) {
+                        Text(text = "Level")
+                    }
+                }
             }
         }
     }

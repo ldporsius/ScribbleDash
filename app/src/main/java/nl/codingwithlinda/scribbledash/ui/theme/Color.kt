@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.ui.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val primary = Color(0xFF238cff)
@@ -19,3 +20,7 @@ val surfaceLowest = Color(0xFFe1d5ca)
 val onSurface = Color(0xFFa5978a)
 val onSurfaceVariant = Color(0xFFf6f1ec)
 
+val backgroundGradient = Brush.verticalGradient(
+    colors = listOf(backgroundLight, backgroundDark)
+
+)

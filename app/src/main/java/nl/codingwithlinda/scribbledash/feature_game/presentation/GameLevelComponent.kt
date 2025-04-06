@@ -31,7 +31,6 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.toUi
 @Composable
 fun GameLevelComponent(
     gameLevel: GameLevel,
-    actionOnLevel: () -> Unit,
 
 ) {
     val imageOffset = when(gameLevel){

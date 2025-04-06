@@ -52,8 +52,7 @@ fun GameLevelScreen(
                 .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Start drawing!",
-                style = MaterialTheme.typography.bodyLarge)
+
             Text(text = "Start drawing!",
                 style = MaterialTheme.typography.displayMedium)
             Text(text = "Choose a difficulty setting",
@@ -61,11 +60,7 @@ fun GameLevelScreen(
             )
 
             Spacer(modifier = Modifier.height(48.dp))
-            BoxWithConstraints {
-                val width = maxWidth
-                val height = maxHeight
-
-                Row(
+             Row(
                     modifier = Modifier
                         .height(125.dp)
                         .fillMaxWidth(),
@@ -80,10 +75,6 @@ fun GameLevelScreen(
                     ) {
                         GameLevelComponent(
                             gameLevel = GameLevel.BEGINNER,
-                            actionOnLevel = {
-                                actionOnLevel(GameLevel.BEGINNER)
-                            },
-
                             )
                     }
                     Box(modifier = Modifier
@@ -94,10 +85,6 @@ fun GameLevelScreen(
                     ) {
                         GameLevelComponent(
                             gameLevel = GameLevel.CHALLENGING,
-                            actionOnLevel = {
-                                actionOnLevel(GameLevel.CHALLENGING)
-                            },
-
                             )
                     }
                     Box(modifier = Modifier
@@ -108,13 +95,9 @@ fun GameLevelScreen(
                     ) {
                         GameLevelComponent(
                             gameLevel = GameLevel.MASTER,
-                            actionOnLevel = {
-                                actionOnLevel(GameLevel.MASTER)
-                            },
-
                             )
                     }
-                }
+
             }
         }
     }

@@ -1,10 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,7 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
-import nl.codingwithlinda.scribbledash.feature_game.presentation.GameLevelScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.GameDrawScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.GameDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevelScreen
 
 
 fun NavGraphBuilder.GameNavGraph(
@@ -35,15 +34,15 @@ fun NavGraphBuilder.GameNavGraph(
             }
 
             composable<GameDrawNavRoute> {
-                Column {
-                    Text(text = "Game draw")
-                    Button(onClick = {
-                        gameNavController.navigate(GameLevelNavRoute)
-                    }
-                    ) {
-                        Text(text = "Level")
-                    }
-                }
+
+                val viewModel = viewModel<GameDrawViewModel>()
+                GameDrawScreen(
+                    actionOnClose = {
+                        navToHome()
+                    },
+                    uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+                    onAction = viewModel::handleAction
+                )
             }
         }
     }

@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.presentation
+package nl.codingwithlinda.scribbledash.feature_game.level.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

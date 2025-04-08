@@ -1,16 +1,15 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state
 
 import androidx.compose.ui.geometry.Offset
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.ColoredDrawPath
 
 data class GameDrawUiState(
-    val drawPaths: List<DrawPath> = emptyList(),
-    val undoStack: List<DrawPath> = emptyList(),
-    val redoStack: List<DrawPath> = emptyList(),
-    val currentPath: DrawPath? = null,
-    val currentOffset: Offset? = null
+    val drawPaths: List<ColoredDrawPath> = emptyList(),
+    val undoStack: Int = 0,
+    val redoStack: Int = 0,
+    val currentPath: ColoredDrawPath? = null,
 ){
-    fun isUndoAvailable() = undoStack.isNotEmpty()
-    fun isRedoAvailable() = redoStack.isNotEmpty()
+    fun isUndoAvailable() = undoStack > 0
+    fun isRedoAvailable() = redoStack > 0
     fun isClearAvailable() = drawPaths.isNotEmpty()
 }

@@ -2,6 +2,7 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.presentation
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -19,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.GameDrawBottomBar
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
@@ -63,6 +66,18 @@ fun GameDrawScreen(
                .width(360.dp)
                .aspectRatio(1f)
                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
+               .pointerInput(true){
+                   this.detectDragGestures(
+                       onDragStart = {
+                           onAction(DrawAction.StartPath(it))
+                       },
+                       onDragEnd = {
+                           onAction(DrawAction.Save)
+                       }
+                   ) { change, dragAmount ->
+                       onAction(DrawAction.Draw(dragAmount))
+                   }
+               }
            ) {
                val width = this.size.width
                val gridSpacing = width / 3
@@ -77,6 +92,14 @@ fun GameDrawScreen(
                        color = gridColor,
                        start = androidx.compose.ui.geometry.Offset(i * gridSpacing, 0f),
                        end = androidx.compose.ui.geometry.Offset( i * gridSpacing, this.size.height),
+                   )
+               }
+
+               uiState.drawPaths.onEach {
+                   drawPath(
+                       path = it.path,
+                       color = it.color,
+                       style = Stroke(width = 2.dp.toPx())
                    )
                }
            }

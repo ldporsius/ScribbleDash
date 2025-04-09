@@ -1,11 +1,11 @@
 package nl.codingwithlinda.scribbledash.core.domain.memento
 
 
-interface CareTaker<in T, out R> {
+interface CareTaker1<T> {
     fun save(memento: T)
-    fun undo(): R?
-    fun redo(): R?
+    fun undo(): T?
+    fun redo(): T?
     fun clear()
 
-    val redoStack: R
+    val redoStack: List<T>
 }

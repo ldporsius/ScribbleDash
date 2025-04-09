@@ -1,123 +1,128 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.ColoredDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.GamePathCareTaker
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.GamePathsCareTaker
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker2
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
 
 class GameDrawViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
-    private val careTaker = GamePathsCareTaker()
+    private val careTaker = PathDataCareTaker2()
+    private val pathDrawer = StraightPathDrawer()
 
-    private val drawPaths = mutableMapOf<Int,ColoredDrawPath>()
+    private val offsets = MutableStateFlow<List<PathData>>(emptyList())
+    private var currentPath: PathData? = null
 
-
-    val uiState = _uiState.map{
-            state ->
+   val uiState = combine(_uiState, offsets){ state, offsets ->
         state.copy(
-            undoStack = drawPaths.size,
+            drawPaths = parseOffsets(offsets),
             redoStack = careTaker.redoStack.size
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
+    private fun parseOffsets(offsets: List<PathData>): List<ColoredDrawPath>{
+        return offsets.map {
+           val path = pathDrawer.drawPath(it.path, it.color)
+            ColoredDrawPath(
+                color = Color(it.color),
+                path = path.path
+            )
+        }
+    }
+
+    private fun parseOffset(offset: PathData): ColoredDrawPath{
+        val path = pathDrawer.drawPath(offset.path, offset.color)
+        return ColoredDrawPath(
+            color = Color(offset.color),
+            path = path.path
+        )
+    }
+
     fun handleAction(action: DrawAction){
         when(action){
             is DrawAction.StartPath -> {
-                val id = drawPaths.size + 1
-                val newPath = ColoredDrawPath(
-                    id = id,
-                    color = Color.Black,
-                    path = Path().apply {
-                        this.moveTo(action.offset.x, action.offset.y)
-                    }
-                )
-                drawPaths[id] = newPath
 
-                _uiState.update {
-                    it.copy(
-                        currentPath = newPath,
-                    )
-                }
+                val pathData = PathData(
+                    id = System.currentTimeMillis().toString(),
+                    color = android.graphics.Color.BLACK,
+                    path = listOf(action.offset)
+                )
+
+                currentPath = pathData
             }
             is DrawAction.Draw -> {
-                val currentPath = _uiState.value.currentPath ?: ColoredDrawPath(
-                    id = drawPaths.size + 1,
-                    color = Color.Black,
-                    path = Path()
-                )
-                val newPath = currentPath.path.apply {
-                    this.relativeLineTo(action.offset.x, action.offset.y)
-                }
-                val id = currentPath.id
-                drawPaths.put(id,
-                    currentPath.copy(path = newPath)
-                )
+                viewModelScope.launch {
 
-                _uiState.value = _uiState.value.copy(
-                    drawPaths = drawPaths.values.toList(),
-                    currentPath = currentPath.copy(path = newPath),
-                )
+                    val _currentPath = currentPath ?: return@launch
+
+                    val currentPathCopy = _currentPath.copy(
+                        path = _currentPath.path.plusElement(action.offset)
+                    )
+                    currentPath = currentPathCopy
+                    val coloredPath = parseOffset(
+                        currentPathCopy
+                    )
+                    _uiState.update {
+                       it.copy(
+                           currentPath = coloredPath
+                       )
+                    }
+                }
             }
             DrawAction.Clear -> {
                 println("VIEWMODEL CLEARS MEMENTOS")
                 careTaker.clear()
-                drawPaths.clear()
+                offsets.update {
+                    emptyList()
+                }
                 _uiState.value = GameDrawUiState()
             }
 
             DrawAction.Save -> {
                 println("VIEWMODEL SAVES MEMENTO")
-                careTaker.save(drawPaths.values.toList())
+               currentPath?.let { pathData ->
+                    offsets.update {
+                        it.plus(pathData)
+                    }
+                   careTaker.save(pathData)
+                }
+
                 _uiState.update {
                     it.copy(
                         currentPath = null,
                     )
                 }
             }
-
-            DrawAction.Redo -> {
-                val redoMemento = careTaker.redo()
-                println("VIEWMODEL HAS REDO MEMENTO $redoMemento")
-                redoMemento?.let { paths ->
-
-                    val mapPaths = paths.map {
-                        it.id to it
-                    }.toMap()
-                    drawPaths.putAll(mapPaths)
-
-                    _uiState.update {
-                        it.copy(
-                            drawPaths = drawPaths.values.toList()
-                        )
-                    }
-                }
-            }
-
             DrawAction.Undo -> {
                 val undoMemento = careTaker.undo()
                 println("VIEWMODEL HAS UNDO MEMENTO $undoMemento")
+                println("VIEWMODEL HAS UNDO MEMENTOS SIZE: ${undoMemento.size}")
                 undoMemento.let { paths ->
-                    val mapPaths = paths.map {
-                        it.id to it
-                    }.toMap()
-                    drawPaths.clear()
-                    drawPaths.putAll(mapPaths)
-                    _uiState.update {
-                        it.copy(
-                            drawPaths = drawPaths.values.toList()
-                        )
+                    offsets.update {
+                        undoMemento
                     }
+                }
+            }
+            DrawAction.Redo -> {
+                val redoMemento = careTaker.redo()
+                println("VIEWMODEL HAS REDO MEMENTO $redoMemento")
+                println("VIEWMODEL HAS REDO MEMENTOS SIZE: ${redoMemento.size}")
+                redoMemento.let { paths ->
+                   offsets.update {
+                       redoMemento
+                   }
                 }
             }
 

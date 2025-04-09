@@ -1,8 +1,10 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.data
+package nl.codingwithlinda.scribbledash.feature_game.draw.data.memento
 
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
+import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker1
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.ColoredDrawPath
 
-class GamePathsCareTaker: CareTaker<List<ColoredDrawPath>> {
+class GamePathsCareTaker: CareTaker1<List<ColoredDrawPath>> {
     private var mementos = listOf<List<ColoredDrawPath>>()
     private var mementosUndone = listOf<List<ColoredDrawPath>>()
 

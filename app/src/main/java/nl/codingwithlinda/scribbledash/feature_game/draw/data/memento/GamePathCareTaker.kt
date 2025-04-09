@@ -1,11 +1,13 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.data
+package nl.codingwithlinda.scribbledash.feature_game.draw.data.memento
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
+import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker1
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.ColoredDrawPath
 
-class GamePathCareTaker: CareTaker<ColoredDrawPath> {
+class GamePathCareTaker: CareTaker1<ColoredDrawPath> {
     private var mementos = listOf<ColoredDrawPath>()
     private var mementosUndone = mutableListOf<List<ColoredDrawPath>>()
     private var mementosRedone = listOf<ColoredDrawPath>()

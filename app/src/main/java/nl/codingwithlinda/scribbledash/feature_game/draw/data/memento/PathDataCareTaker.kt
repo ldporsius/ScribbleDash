@@ -6,7 +6,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.commands.DrawPathC
 
 class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
     private var mementos = listOf<DrawPathCommandImpl>()
-    private var cursor: Int = -1
+    private var cursor: Int = 0
     private fun mementosActive() = mementos.filter {
         !it.isUndone
     }
@@ -18,17 +18,23 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
 
     private fun lastActiveCmd(): DrawPathCommandImpl? = mementos.getOrNull(cursor)
 
-    override fun canRedo() = mementos.getOrNull(cursor)?.isUndone == true
+    override fun canRedo() = mementosUndone().isNotEmpty()
 
     override fun save(memento: PathData) {
         val cmd = DrawPathCommandImpl(memento)
-        mementos = mementos.plusElement(cmd)
-        cursor = mementos.lastIndex
+        val current = mementos.take(cursor)
+        mementos = current.plusElement(cmd).takeLast(5)
+        cursor = mementos.size
+
+        println("SAVE MEMENTOS Size: ${mementos.size}")
+        println("SAVE MEMENTOS UNDONE Size: ${mementosUndone().size}")
+        println("SAVE MEMENTOS ACTIVE Size: ${mementosActive().size}")
+        println("SAVE MEMENTOS CURSOR: $cursor")
     }
 
     override fun undo(): List<PathData>{
         mementosActive().lastOrNull()?.undo()
-        val cursorPosition = mementosActive().lastIndex
+        val cursorPosition = cursor.minus(1)
         cursor = cursorPosition.coerceAtLeast(-1)
 
         println("UNDO CURSOR: $cursor")

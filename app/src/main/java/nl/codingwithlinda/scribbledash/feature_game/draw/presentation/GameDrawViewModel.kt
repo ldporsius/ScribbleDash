@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.ColoredDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker2
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
@@ -18,7 +19,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.Game
 
 class GameDrawViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
-    private val careTaker = PathDataCareTaker2()
+    private val careTaker = PathDataCareTaker()
     private val pathDrawer = StraightPathDrawer()
 
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())

@@ -10,16 +10,19 @@ class PathDataCareTaker2: CareTaker<PathData, List<PathData>> {
     private var mementos = listOf<DrawPathCommandImpl2>()
     private var cursor: Int = -1
 
+
    override fun canRedo() = cursor < mementos.lastIndex && mementos.isNotEmpty()
 
     override fun save(memento: PathData) {
         pathData.add(memento)
+        val limit5 = pathData.takeLast(5)
+        pathData.retainAll(limit5)
         val mementoCopy = pathData.toList()
         val cmd = DrawPathCommandImpl2(mementoCopy)
-        mementos = mementos.plusElement(cmd)
+        mementos = mementos.plusElement(cmd).takeLast(5)
         cursor = mementos.lastIndex
 
-        println("SAVE MEMENTOS: ${mementos.size}")
+        println("SAVE MEMENTOS Size: ${mementos.size}")
     }
 
     override fun undo(): List<PathData>{

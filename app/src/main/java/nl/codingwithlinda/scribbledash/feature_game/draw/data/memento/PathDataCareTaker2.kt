@@ -10,9 +10,7 @@ class PathDataCareTaker2: CareTaker<PathData, List<PathData>> {
     private var mementos = listOf<DrawPathCommandImpl2>()
     private var cursor: Int = -1
 
-    private fun mementosUndone() =  mementos.subList(cursor.plus(1).coerceIn(0 .. mementos.size), mementos.size)
-
-    private fun canRedo() = cursor < mementos.lastIndex
+   override fun canRedo() = cursor < mementos.lastIndex && mementos.isNotEmpty()
 
     override fun save(memento: PathData) {
         pathData.add(memento)
@@ -32,6 +30,8 @@ class PathDataCareTaker2: CareTaker<PathData, List<PathData>> {
         pathData.clear()
         pathData.addAll(toUndo)
         println("UNDO CURSOR: $cursor")
+        println("UNDO MEMENTOS: ${mementos.size}")
+        println("CAN REDO: ${canRedo()}")
         return toUndo
     }
 
@@ -49,12 +49,9 @@ class PathDataCareTaker2: CareTaker<PathData, List<PathData>> {
     }
 
     override fun clear() {
+        pathData.clear()
         mementos = emptyList()
         cursor = -1
     }
 
-    override val redoStack: List<PathData>
-        get() = mementosUndone().map {
-            it.pathData
-        }.flatten()
 }

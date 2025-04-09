@@ -6,6 +6,5 @@ interface CareTaker<in T, out R> {
     fun undo(): R?
     fun redo(): R?
     fun clear()
-
-    val redoStack: R
+    fun canRedo(): Boolean
 }

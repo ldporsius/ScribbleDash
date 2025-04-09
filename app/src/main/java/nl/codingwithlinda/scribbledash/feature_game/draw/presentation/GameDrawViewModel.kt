@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.ColoredDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker2
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
@@ -28,17 +27,13 @@ class GameDrawViewModel: ViewModel() {
    val uiState = combine(_uiState, offsets){ state, offsets ->
         state.copy(
             drawPaths = parseOffsets(offsets),
-            redoStack = careTaker.redoStack.size
+            canRedo = careTaker.canRedo()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
     private fun parseOffsets(offsets: List<PathData>): List<ColoredDrawPath>{
         return offsets.map {
-           val path = pathDrawer.drawPath(it.path, it.color)
-            ColoredDrawPath(
-                color = Color(it.color),
-                path = path.path
-            )
+          parseOffset(it)
         }
     }
 
@@ -87,7 +82,14 @@ class GameDrawViewModel: ViewModel() {
                 offsets.update {
                     emptyList()
                 }
-                _uiState.value = GameDrawUiState()
+                _uiState.update {
+                    it.copy(
+                      currentPath = null,
+                        canRedo = careTaker.canRedo(),
+                    )
+                }
+
+                println("VIEWMODEL CAN REDO : ${careTaker.canRedo()}")
             }
 
             DrawAction.Save -> {
@@ -114,6 +116,12 @@ class GameDrawViewModel: ViewModel() {
                         undoMemento
                     }
                 }
+
+                _uiState.update {
+                    it.copy(
+                        canRedo = careTaker.canRedo(),
+                    )
+                }
             }
             DrawAction.Redo -> {
                 val redoMemento = careTaker.redo()
@@ -123,6 +131,11 @@ class GameDrawViewModel: ViewModel() {
                    offsets.update {
                        redoMemento
                    }
+                }
+                _uiState.update {
+                    it.copy(
+                        canRedo = careTaker.canRedo(),
+                    )
                 }
             }
 

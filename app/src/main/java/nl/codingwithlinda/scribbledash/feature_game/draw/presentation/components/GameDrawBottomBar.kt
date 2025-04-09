@@ -9,7 +9,6 @@ import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundDark
-import nl.codingwithlinda.scribbledash.ui.theme.backgroundLight
 import nl.codingwithlinda.scribbledash.ui.theme.onBackground
 import nl.codingwithlinda.scribbledash.ui.theme.success
 import nl.codingwithlinda.scribbledash.ui.theme.surfaceHigh

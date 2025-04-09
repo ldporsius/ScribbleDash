@@ -18,7 +18,7 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
 
     private fun lastActiveCmd(): DrawPathCommandImpl? = mementos.getOrNull(cursor)
 
-    private fun canRedo() = mementos.getOrNull(cursor)?.isUndone == true
+    override fun canRedo() = mementos.getOrNull(cursor)?.isUndone == true
 
     override fun save(memento: PathData) {
         val cmd = DrawPathCommandImpl(memento)
@@ -56,6 +56,4 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
         cursor = -1
     }
 
-    override val redoStack: List<PathData>
-        get() = mementosUndone()
 }

@@ -122,4 +122,16 @@ class PathDataCareTaker2Test{
         assertEquals(0, resUndo2.first().color)
 
     }
+
+    @Test
+    fun `test save many, undo once `(){
+        repeat(18) {
+            careTaker.save(PathData(id = it.toString(), color = it, path = emptyList()))
+        }
+
+        val resUndo1 = careTaker.undo()
+        println("RES UNDO 1: $resUndo1")
+        assertEquals(4, resUndo1.size)
+
+    }
 }

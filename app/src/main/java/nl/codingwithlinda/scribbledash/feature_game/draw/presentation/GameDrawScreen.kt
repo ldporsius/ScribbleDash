@@ -21,10 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.GameDrawBottomBar
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
@@ -32,6 +36,8 @@ import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 
 @Composable
 fun GameDrawScreen(
+    offsetParser: OffsetParser<AndroidDrawPath>,
+    pathDrawer: PathDrawer<AndroidDrawPath>,
     uiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit,
     actionOnClose: () -> Unit,
@@ -101,16 +107,20 @@ fun GameDrawScreen(
                }
 
                uiState.drawPaths.onEach {
+                   val path = offsetParser.parseOffset(pathDrawer, it)
+                   val color = Color(it.color)
                    drawPath(
-                       path = it.path.asComposePath(),
-                       color = it.color,
+                       path = path.path.asComposePath(),
+                       color = color,
                        style = Stroke(width = 2.dp.toPx())
                    )
                }
                uiState.currentPath?.let {
+                   val path = offsetParser.parseOffset(pathDrawer, it)
+                   val color = Color(it.color)
                    drawPath(
-                       path = it.path.asComposePath(),
-                       color = it.color,
+                       path = path.path.asComposePath(),
+                       color = color,
                        style = Stroke(width = 2.dp.toPx())
                    )
                }

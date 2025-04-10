@@ -34,16 +34,6 @@ class PathDataCareTaker2Test{
 
     }
 
-    @Test
-    fun `test save limit 5`(){
-        repeat(15) {
-            careTaker.save(PathData(id = it.toString(), color = 0, path = emptyList()))
-        }
-
-        val res = careTaker.redo()
-        assertEquals(5, res.size)
-
-    }
 
     @Test
     fun `test undo and redo once`(){
@@ -52,12 +42,12 @@ class PathDataCareTaker2Test{
         }
 
         val resUndo = careTaker.undo()
-        assertEquals(4, resUndo.size)
+        assertEquals(5, resUndo.size)
         val resRedo = careTaker.redo()
 
         println("RES UNDO: $resUndo")
         println("RES REDO: $resRedo")
-        assertEquals(5, resRedo.size)
+        assertEquals(6, resRedo.size)
 
     }
     @Test
@@ -131,7 +121,7 @@ class PathDataCareTaker2Test{
 
         val resUndo1 = careTaker.undo()
         println("RES UNDO 1: $resUndo1")
-        assertEquals(4, resUndo1.size)
+        assertEquals(17, resUndo1.size)
 
     }
 }

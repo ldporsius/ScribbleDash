@@ -14,9 +14,8 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
         it.isUndone
     }
 
-//    private fun lastActiveCmd(): DrawPathCommandImpl? = mementos.getOrNull(cursor)
-    private fun lastActiveCmd(): DrawPathCommandImpl? = mementosActive().lastOrNull()
-    private fun lastUndoneCmd(): DrawPathCommandImpl? = mementosUndone().lastOrNull()
+
+   // private fun lastUndoneCmd(): DrawPathCommandImpl? = mementosUndone().lastOrNull()
     private fun firstUndoneCmd(): DrawPathCommandImpl? = mementosUndone().firstOrNull()
 
     override fun canRedo() = mementosUndone().isNotEmpty()
@@ -26,7 +25,7 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
         //reset mementos to clear history
         val current = mementosActive()
 
-        mementos = current.plusElement(cmd).takeLast(5)
+        mementos = current.plusElement(cmd)
         //cursor = mementos.size
 
         println("SAVE MEMENTOS Size: ${mementos.size}")
@@ -50,7 +49,7 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
 
         //println("REDO CURSOR: $cursor")
         println(" in REDO, Undone MEMENTOS: ${mementosUndone()}")
-        println(" in REDO, MEMENTO THAT GETS REDONE: ${lastUndoneCmd()}")
+        println(" in REDO, MEMENTO THAT GETS REDONE: ${firstUndoneCmd()}")
         println("CAN REDO: ${canRedo()}")
 
         firstUndoneCmd()?.execute()

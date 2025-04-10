@@ -10,7 +10,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
-import nl.codingwithlinda.scribbledash.feature_game.test_data.FakePathDrawer
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -105,10 +104,97 @@ class GameDrawViewModelTest {
             assertEquals(8, em4.drawPaths.size)
 
             cancelAndConsumeRemainingEvents()
-
-
         }
     }
+
+    @Test
+    fun `test undo in viewmodel, can undo is false after five undoes`() = runTest(dispatcher) {
+
+        viewModel.uiState.test {
+
+            repeat(9) {
+                viewModel.handleAction(DrawAction.StartPath(Offset(1f, 1f)))
+
+                val em1 = awaitItem()
+                println("EM1: $em1")
+
+                viewModel.handleAction(DrawAction.Draw(Offset(2f, 2f)))
+
+                val em2 = awaitItem()
+                println("EM2: $em2")
+
+                viewModel.handleAction(DrawAction.Save)
+                val em3 = awaitItem()
+                println("EM3: $em3")
+            }
+
+            repeat(5) {
+                viewModel.handleAction(DrawAction.Undo)
+            }
+
+            val item = awaitItem()
+
+            println("ITEM: ${item.isUndoAvailable()}")
+            assertEquals(false, item.isUndoAvailable())
+
+            val em4 = awaitItem()
+            println("EM4: $em4")
+
+
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `test undo in viewmodel, can undo is true after five undoes and one redo`() = runTest(dispatcher) {
+
+        viewModel.uiState.test {
+
+            repeat(9) {
+                viewModel.handleAction(DrawAction.StartPath(Offset(1f, 1f)))
+
+                val em1 = awaitItem()
+                println("EM1: $em1")
+
+                viewModel.handleAction(DrawAction.Draw(Offset(2f, 2f)))
+
+                val em2 = awaitItem()
+                println("EM2: $em2")
+
+                viewModel.handleAction(DrawAction.Save)
+                awaitItem()
+
+            }
+            val em3 = awaitItem()
+            println("EM3: $em3")
+
+            assertEquals(true, em3.isUndoAvailable())
+
+            repeat(5) {
+                viewModel.handleAction(DrawAction.Undo)
+                awaitItem()
+            }
+
+
+            val item = awaitItem()
+
+            println("ITEM is undo available: ${item.isUndoAvailable()}")
+            assertEquals(false, item.isUndoAvailable())
+
+
+
+            viewModel.handleAction(DrawAction.Redo)
+            awaitItem()
+            val em5 = awaitItem()
+            println("EM5: $em5")
+            assertEquals(true, em5.isUndoAvailable())
+
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+
+
 
 
 

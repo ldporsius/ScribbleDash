@@ -6,7 +6,7 @@ import org.junit.Test
 
 class PathDataCareTakerTest{
 
-    val careTaker = PathDataCareTaker()
+    private val careTaker = PathDataCareTaker()
 
     @Test
     fun testSave(){
@@ -52,5 +52,6 @@ class PathDataCareTakerTest{
         val redoRes = careTaker.redo()
         println("REDO RES 3: $redoRes")
 
+        assertEquals(1, redoRes.size)
     }
 }

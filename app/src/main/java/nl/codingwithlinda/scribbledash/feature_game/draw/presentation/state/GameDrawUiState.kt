@@ -8,9 +8,10 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths
 data class GameDrawUiState(
     val drawPaths: List<PathData> = emptyList(),
     val canRedo: Boolean = false,
+    val canUndo: Boolean = false,
     val currentPath: PathData? = null,
 ){
-    fun isUndoAvailable() = drawPaths.isNotEmpty()
+    fun isUndoAvailable() = canUndo
     fun isRedoAvailable(): Boolean{
         println("CAN REDO in GAME DRAW UISTATE: $canRedo")
         return canRedo

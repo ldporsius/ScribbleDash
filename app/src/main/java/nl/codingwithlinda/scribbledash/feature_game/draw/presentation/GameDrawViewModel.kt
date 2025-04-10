@@ -20,8 +20,10 @@ class GameDrawViewModel(
     private val _uiState = MutableStateFlow(GameDrawUiState())
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())
     private var currentPath: PathData? = null
+    private var countUndoes: Int = 0
 
-   val uiState = combine(_uiState, offsets){ state, offsets ->
+    private fun canUndo() = countUndoes < 5 && offsets.value.isNotEmpty()
+    val uiState = combine(_uiState, offsets){ state, offsets ->
         state.copy(
             drawPaths = offsets,
             canRedo = careTaker.canRedo()
@@ -53,9 +55,9 @@ class GameDrawViewModel(
                     currentPath = currentPathCopy
 
                     _uiState.update {
-                       it.copy(
-                           currentPath = currentPathCopy
-                       )
+                        it.copy(
+                            currentPath = currentPathCopy
+                        )
                     }
                 }
             }
@@ -67,7 +69,7 @@ class GameDrawViewModel(
                 }
                 _uiState.update {
                     it.copy(
-                      currentPath = null,
+                        currentPath = null,
                         canRedo = careTaker.canRedo(),
                     )
                 }
@@ -77,49 +79,61 @@ class GameDrawViewModel(
 
             DrawAction.Save -> {
                 println("VIEWMODEL SAVES MEMENTO")
-               currentPath?.let { pathData ->
+                println("VIEWMODEL SAVES MEMENTO. canUndo: ${canUndo()}")
+
+                countUndoes = 0
+                currentPath?.let { pathData ->
                     offsets.update {
                         it.plus(pathData)
                     }
-                   careTaker.save(pathData)
+                    careTaker.save(pathData)
                 }
 
                 _uiState.update {
                     it.copy(
+                        canUndo = canUndo(),
                         currentPath = null,
                     )
                 }
             }
             DrawAction.Undo -> {
-                val undoMemento = careTaker.undo()
-                println("VIEWMODEL HAS UNDO MEMENTO $undoMemento")
-                println("VIEWMODEL HAS UNDO MEMENTOS SIZE: ${undoMemento?.size}")
-                undoMemento?.let { paths ->
-                    offsets.update {
-                        undoMemento
+                if (canUndo()) {
+                    countUndoes++
+                    val undoMemento = careTaker.undo()
+                    println("VIEWMODEL HAS UNDO MEMENTO $undoMemento")
+                    println("VIEWMODEL HAS UNDO MEMENTOS SIZE: ${undoMemento?.size}")
+                    undoMemento?.let { paths ->
+                        offsets.update {
+                            undoMemento
+                        }
                     }
-                }
 
-                _uiState.update {
-                    it.copy(
-                        canRedo = careTaker.canRedo(),
-                    )
+                    _uiState.update {
+                        it.copy(
+                            canUndo = canUndo(),
+                            canRedo = careTaker.canRedo(),
+                        )
+                    }
                 }
             }
             DrawAction.Redo -> {
+                countUndoes = countUndoes.minus(1).coerceAtLeast(0)
                 val redoMemento = careTaker.redo()
                 println("VIEWMODEL HAS REDO MEMENTO $redoMemento")
                 println("VIEWMODEL HAS REDO MEMENTOS SIZE: ${redoMemento?.size}")
-                redoMemento?.let { paths ->
-                   offsets.update {
-                       redoMemento
-                   }
-                }
                 _uiState.update {
                     it.copy(
+                        canUndo = canUndo(),
                         canRedo = careTaker.canRedo(),
                     )
                 }
+
+                redoMemento?.let { paths ->
+                    offsets.update {
+                        redoMemento
+                    }
+                }
+
             }
 
         }

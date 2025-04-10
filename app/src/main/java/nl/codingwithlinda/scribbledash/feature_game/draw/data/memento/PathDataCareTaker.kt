@@ -22,7 +22,7 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
 
     override fun save(memento: PathData) {
         val cmd = DrawPathCommandImpl(memento)
-        val current = mementos.take(cursor)
+        val current = mementos.take(cursor.coerceAtLeast(0))
         mementos = current.plusElement(cmd).takeLast(5)
         cursor = mementos.size
 

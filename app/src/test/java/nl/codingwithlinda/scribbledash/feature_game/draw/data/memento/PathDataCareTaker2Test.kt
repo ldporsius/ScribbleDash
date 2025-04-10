@@ -46,7 +46,7 @@ class PathDataCareTaker2Test{
     }
 
     @Test
-    fun `test undo`(){
+    fun `test undo and redo once`(){
         repeat(6) {
             careTaker.save(PathData(id = it.toString(), color = 0, path = emptyList()))
         }
@@ -58,6 +58,23 @@ class PathDataCareTaker2Test{
         println("RES UNDO: $resUndo")
         println("RES REDO: $resRedo")
         assertEquals(5, resRedo.size)
+
+    }
+    @Test
+    fun `test undo and save once`(){
+        repeat(1) {
+            careTaker.save(PathData(id = it.toString(), color = 0, path = emptyList()))
+        }
+
+        val resUndo = careTaker.undo()
+        assertEquals(0, resUndo.size)
+
+        careTaker.save(PathData(id = "1", color = 1, path = emptyList()))
+        val resRedo = careTaker.redo()
+
+        println("RES UNDO: $resUndo")
+        println("RES REDO: $resRedo")
+        assertEquals(1, resRedo.size)
 
     }
 }

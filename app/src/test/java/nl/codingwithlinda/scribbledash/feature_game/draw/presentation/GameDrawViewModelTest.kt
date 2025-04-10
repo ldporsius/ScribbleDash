@@ -28,7 +28,6 @@ class GameDrawViewModelTest {
         Dispatchers.setMain(dispatcher)
 
         viewModel = GameDrawViewModel(
-
             careTaker = careTaker
         )
     }
@@ -40,25 +39,77 @@ class GameDrawViewModelTest {
     @Test
     fun `test offsets in viewmodel after undo`() = runTest(dispatcher) {
 
-
         viewModel.uiState.test {
-            awaitItem()
+
             viewModel.handleAction(DrawAction.StartPath(Offset(1f, 1f)))
-            viewModel.handleAction(DrawAction.Draw(Offset(2f, 2f)))
 
             val em1 = awaitItem()
             println("EM1: $em1")
 
+            viewModel.handleAction(DrawAction.Draw(Offset(2f, 2f)))
+
+            val em2 = awaitItem()
+            println("EM2: $em2")
+
+            viewModel.handleAction(DrawAction.Save)
+            val em3 = awaitItem()
+            println("EM3: $em3")
+
             viewModel.handleAction(DrawAction.Undo)
             val item = awaitItem()
 
-            assertEquals(0, item.drawPaths.size)
+            println("ITEM: $item")
+            assertEquals(1, item.drawPaths.size)
+
+            val em4 = awaitItem()
+            println("EM4: $em4")
+
+            assertEquals(0, em4.drawPaths.size)
 
             cancelAndConsumeRemainingEvents()
 
 
         }
     }
+
+    @Test
+    fun `test offsets in viewmodel, save many, undo one`() = runTest(dispatcher) {
+
+        viewModel.uiState.test {
+
+            repeat(9) {
+                viewModel.handleAction(DrawAction.StartPath(Offset(1f, 1f)))
+
+                val em1 = awaitItem()
+                println("EM1: $em1")
+
+                viewModel.handleAction(DrawAction.Draw(Offset(2f, 2f)))
+
+                val em2 = awaitItem()
+                println("EM2: $em2")
+
+                viewModel.handleAction(DrawAction.Save)
+                val em3 = awaitItem()
+                println("EM3: $em3")
+            }
+
+            viewModel.handleAction(DrawAction.Undo)
+            val item = awaitItem()
+
+            println("ITEM: $item")
+            assertEquals(9, item.drawPaths.size)
+
+            val em4 = awaitItem()
+            println("EM4: $em4")
+
+            assertEquals(8, em4.drawPaths.size)
+
+            cancelAndConsumeRemainingEvents()
+
+
+        }
+    }
+
 
 
 

@@ -40,6 +40,7 @@ class GameDrawViewModel(
                 )
 
                 currentPath = pathData
+                println("VIEWMODEL STARTED PATH")
             }
             is DrawAction.Draw -> {
                 viewModelScope.launch {

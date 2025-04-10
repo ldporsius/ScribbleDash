@@ -77,4 +77,49 @@ class PathDataCareTaker2Test{
         assertEquals(1, resRedo.size)
 
     }
+    @Test
+    fun `test save twice, undo twice and redo once`(){
+        repeat(2) {
+            careTaker.save(PathData(id = it.toString(), color = it, path = emptyList()))
+        }
+
+        val resUndo1 = careTaker.undo()
+        assertEquals(1, resUndo1.size)
+        println("RES UNDO 1: $resUndo1")
+
+        val resUndo2 = careTaker.undo()
+        assertEquals(0, resUndo2.size)
+        println("RES UNDO 2: $resUndo2")
+
+        val resRedo = careTaker.redo()
+        println("RES REDO: $resRedo")
+
+        assertEquals(1, resRedo.size)
+        assertEquals(0, resRedo.first().color)
+
+    }
+
+    @Test
+    fun `test save one, undo, redo, save one more, undo `(){
+        repeat(1) {
+            careTaker.save(PathData(id = it.toString(), color = it, path = emptyList()))
+        }
+
+        val resUndo1 = careTaker.undo()
+        println("RES UNDO 1: $resUndo1")
+        assertEquals(0, resUndo1.size)
+
+        val redoRes = careTaker.redo()
+        println("RES REDO 1: $redoRes")
+        assertEquals(1, redoRes.size)
+
+        careTaker.save(PathData(id = "1", color = 1, path = emptyList()))
+
+        val resUndo2 = careTaker.undo()
+        assertEquals(1, resUndo2.size)
+        println("RES UNDO 2: $resUndo2")
+
+        assertEquals(0, resUndo2.first().color)
+
+    }
 }

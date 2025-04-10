@@ -22,7 +22,9 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
 
     override fun save(memento: PathData) {
         val cmd = DrawPathCommandImpl(memento)
-        val current = mementos.take(cursor.coerceAtLeast(0))
+        //reset mementos to clear history
+        val current = mementosActive()
+
         mementos = current.plusElement(cmd).takeLast(5)
         cursor = mementos.size
 
@@ -44,7 +46,6 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
     }
 
     override fun redo(): List<PathData> {
-        cursor = cursor.plus(1).coerceAtMost(mementos.lastIndex)
 
         println("REDO CURSOR: $cursor")
         println("REDO MEMENTOS: ${mementos.size}")
@@ -52,6 +53,9 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
         if (canRedo()) {
           lastActiveCmd()?.execute()
         }
+
+        cursor = cursor.plus(1).coerceAtMost(mementos.lastIndex)
+
         return mementosActive().map {
             it.pathData
         }

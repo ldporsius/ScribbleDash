@@ -24,10 +24,26 @@ fun DrawScope.centerPath(path: android.graphics.Path){
     tMatrix =  tMatrix.apply {
         setScale(sxMin, sxMin)
         postTranslate(-dx, dy)
-        postTranslate(dx2,dy2 )
-
+        postTranslate(dx2, dy2)
     }
     path.transform(
         tMatrix
     )
+}
+
+fun DrawScope.preparePath(path: android.graphics.Path, originalWidth: Float): android.graphics.Path{
+    val currentWidth = this.size.width
+    println("current:" + currentWidth)
+    val scale = currentWidth / originalWidth
+    println(scale)
+    var tMatrix = Matrix()
+    val pathCopy = android.graphics.Path(path)
+    tMatrix =  tMatrix.apply {
+        setScale(scale,scale)
+    }
+
+    pathCopy.transform(
+        tMatrix
+    )
+    return pathCopy
 }

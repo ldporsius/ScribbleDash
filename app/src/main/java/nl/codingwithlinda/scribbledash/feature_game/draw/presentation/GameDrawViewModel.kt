@@ -1,5 +1,8 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation
 
+import androidx.compose.ui.graphics.asComposePath
+import androidx.core.graphics.and
+import androidx.core.graphics.flatten
 import androidx.core.graphics.plus
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -151,14 +154,10 @@ class GameDrawViewModel(
                         pathDrawer = pathDrawer,
                         pathData = pd
                     )
-                }.map {
-                    it.path
-                }.reduce { acc, path ->
-                    acc.plus(path)
                 }
 
                 val newUserResult = ResultManager.INSTANCE.getLastResult()?.copy(
-                    userPath = SimpleDrawPath(result)
+                    userPath = result
                 )
                 newUserResult?.let {
                     ResultManager.INSTANCE.updateResult(it)

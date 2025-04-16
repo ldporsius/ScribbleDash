@@ -30,6 +30,8 @@ import androidx.compose.ui.draw.drawWithContent
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
@@ -50,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.centerPath
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.preparePath
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.CustomColoredButton
@@ -68,10 +71,16 @@ fun GameResultScreen(
 
     val resultBoundsE = examplePath.getBounds()
 
+    var originalWidth by remember {
+        mutableStateOf(0f)
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .onSizeChanged {
+                originalWidth = it.width.toFloat() - 2 * 16.dp.value
+            }
             .background(backgroundGradient)
         ,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -100,7 +109,8 @@ fun GameResultScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(250.dp)
+                .padding(16.dp)
                 .border(width = 2.dp, color = Color.Black)
 
         ) {
@@ -109,17 +119,8 @@ fun GameResultScreen(
                 modifier = Modifier
                     .height(200.dp)
                     .weight(1f)
-                    .onSizeChanged {
-                        println("SIZE OF EXAMPLE COLUMN: $it")
-                        println("SIZE OF EXAMPLE BOUNDS, WIDTH, HEIGHT: ${resultBoundsE.width}, ${resultBoundsE.height}")
-                        val sx = it.width.toFloat() / resultBoundsE.width
-                        val sy = it.height.toFloat() / resultBoundsE.height
-                        println("SX: $sx, SY: $sy")
+                    .aspectRatio(1f)
 
-                    }
-                    .graphicsLayer {
-                        this.rotationZ = -0f
-                    }
             ) {
                 Text(text = "Example")
                 OutlinedCard(
@@ -144,23 +145,27 @@ fun GameResultScreen(
 
             Column(
                 modifier = Modifier
-                    .height(200.dp)
+                    .fillMaxHeight()
                     .weight(1f)
+                    .aspectRatio(1f)
             ) {
-
+                Text(text = "Drawing")
                 OutlinedCard {
-                    Text(text = "Drawing")
+
                     Canvas(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        val userPath = result.userPath.path.asComposePath()
-                        centerPath(userPath.asAndroidPath())
-                        drawPath(
-                            path = userPath,
-                            color = Color.Black,
-                            style = Stroke(width = 2.dp.toPx())
-                        )
+
+                        result.userPath.onEach { aDrawpath ->
+                            println(originalWidth)
+                            val path = preparePath(aDrawpath.path, originalWidth)
+                            drawPath(
+                                path = path.asComposePath(),
+                                color = Color.Black,
+                                style = Stroke(width = 2.dp.toPx())
+                            )
+                        }
                     }
                 }
             }
@@ -194,7 +199,7 @@ private fun previewGameResultScreen() {
             result = DrawResult(
                 id = "",
                 examplePath = expath,
-                userPath = expath
+                userPath = listOf( expath)
             )
         ) { }
     }

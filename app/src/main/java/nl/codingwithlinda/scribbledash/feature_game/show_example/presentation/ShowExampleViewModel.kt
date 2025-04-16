@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
@@ -25,6 +26,10 @@ class ShowExampleViewModel(
             counter = time
         )
 
+    }.onEach {
+        if (it.counter == 0){
+            navToDraw()
+        }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
     init {

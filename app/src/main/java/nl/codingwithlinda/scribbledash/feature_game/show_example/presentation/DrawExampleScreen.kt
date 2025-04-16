@@ -99,7 +99,10 @@ fun DrawExampleScreen(
             .align(Alignment.BottomCenter)
             .padding(bottom = 16.dp)
         ) {
-           Text(uiState.counter.toString())
+           Text(uiState.counter.toString() + " seconds left",
+               style = MaterialTheme.typography.displayMedium,
+               modifier = Modifier.align(Alignment.Center)
+           )
         }
     }
 }

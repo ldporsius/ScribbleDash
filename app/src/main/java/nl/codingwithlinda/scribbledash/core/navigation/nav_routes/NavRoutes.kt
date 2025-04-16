@@ -24,6 +24,8 @@ object GameExampleNavRoute : NavRoute
 @Serializable
 object GameDrawNavRoute : NavRoute
 
+@Serializable
+object GameResultNavRoute : NavRoute
 
 ////////////////////////////////////
 @Serializable

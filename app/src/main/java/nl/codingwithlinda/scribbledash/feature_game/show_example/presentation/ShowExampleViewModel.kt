@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.feature_game.show_example.presentation
 
+import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,7 +10,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
+import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
+import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state.DrawExampleUiState
 
 class ShowExampleViewModel(
@@ -36,6 +40,12 @@ class ShowExampleViewModel(
         val index = (0 until exampleProvider.examples.size).random()
         exampleProvider.examples.get(index).also {example ->
 
+            ResultManager.INSTANCE.addResult(
+                DrawResult(
+                    id = System.currentTimeMillis().toString(),
+                    examplePath = example,
+                )
+            )
             _uiState.update {
                 it.copy(
                     drawPaths = listOf(example.path)

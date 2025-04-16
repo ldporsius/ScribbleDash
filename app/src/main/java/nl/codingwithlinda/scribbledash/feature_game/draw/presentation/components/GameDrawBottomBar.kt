@@ -51,10 +51,10 @@ fun GameDrawBottomBar(
 
         val clearButtonColor = if (uiState.isClearAvailable()) success else surfaceLowest
         CustomColoredButton(
-            text = "Clear canvas",
+            text = "Done",
             color = clearButtonColor,
             borderColor = surfaceHigh,
-            onClick = { onAction(DrawAction.Clear) }
+            onClick = { onAction(DrawAction.Done) }
         )
     }
 }

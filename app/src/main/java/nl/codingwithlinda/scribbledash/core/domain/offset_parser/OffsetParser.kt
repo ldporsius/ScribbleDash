@@ -7,6 +7,6 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 interface OffsetParser<T: DrawPath> {
     fun parseOffset(
         pathDrawer: PathDrawer<T>,
-        offset: PathData
+        pathData: PathData
     ): T
 }

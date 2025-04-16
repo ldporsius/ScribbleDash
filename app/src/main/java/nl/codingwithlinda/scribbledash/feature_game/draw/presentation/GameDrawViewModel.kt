@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation
 
+import androidx.core.graphics.plus
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,13 +10,21 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
+import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
+import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
 
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
+    private val offsetParser: OffsetParser<AndroidDrawPath>,
+    private val pathDrawer: PathDrawer<AndroidDrawPath>,
+    private val navToResult: () -> Unit
 ): ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())
@@ -134,7 +143,28 @@ class GameDrawViewModel(
                         redoMemento
                     }
                 }
+            }
 
+            DrawAction.Done -> {
+                val result = offsets.value.map {pd->
+                    offsetParser.parseOffset(
+                        pathDrawer = pathDrawer,
+                        pathData = pd
+                    )
+                }.map {
+                    it.path
+                }.reduce { acc, path ->
+                    acc.plus(path)
+                }
+
+                val newUserResult = ResultManager.INSTANCE.getLastResult()?.copy(
+                    userPath = SimpleDrawPath(result)
+                )
+                newUserResult?.let {
+                    ResultManager.INSTANCE.updateResult(it)
+                }
+
+                navToResult()
             }
 
         }

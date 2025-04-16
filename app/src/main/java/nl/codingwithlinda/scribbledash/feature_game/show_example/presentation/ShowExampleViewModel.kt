@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import nl.codingwithlinda.scribbledash.core.data.AndroidDrawExampleProvider
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state.DrawExampleUiState
 

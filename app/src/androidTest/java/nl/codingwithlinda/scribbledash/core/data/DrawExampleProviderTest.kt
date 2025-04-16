@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.core.data
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.runBlocking
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue

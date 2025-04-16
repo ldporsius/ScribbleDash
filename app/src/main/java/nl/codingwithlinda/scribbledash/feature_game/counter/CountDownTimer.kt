@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 class CountDownTimer {
 
     companion object {
-        const val DURATION_SECS = 3
+        const val DURATION_SECS = 4
         const val STARTTIME = 3
         const val INTERVAL = 1000L
     }

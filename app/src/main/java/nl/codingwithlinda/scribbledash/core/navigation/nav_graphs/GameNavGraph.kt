@@ -9,9 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import nl.codingwithlinda.scribbledash.core.data.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
-import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameExampleNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute

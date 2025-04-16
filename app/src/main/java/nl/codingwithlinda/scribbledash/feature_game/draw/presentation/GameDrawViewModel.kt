@@ -8,8 +8,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import nl.codingwithlinda.scribbledash.core.data.AndroidDrawExampleProvider
-import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker

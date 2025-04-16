@@ -1,7 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.di
 
 import android.app.Application
-import nl.codingwithlinda.scribbledash.core.data.AndroidDrawExampleProvider
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 
 class AndroidAppModule(
     private val application: Application

@@ -4,7 +4,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
 import org.junit.Assert.*
 import org.junit.Test
 
-class PathDataCareTaker2Test{
+class XMLPathDataCareTaker2Test{
     private val careTaker = PathDataCareTaker()
 
     @Test

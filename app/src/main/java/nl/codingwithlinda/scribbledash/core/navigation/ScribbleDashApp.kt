@@ -29,6 +29,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.navigation.nav_graphs.GameNavGraph
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.ChartNavRoute
@@ -41,7 +42,9 @@ import nl.codingwithlinda.scribbledash.feature_home.presentation.HomeScreen
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundLight
 
 @Composable
-fun ScribbleDashApp() {
+fun ScribbleDashApp(
+    appModule: AndroidAppModule
+) {
 
     val rootNavController = rememberNavController()
 
@@ -131,6 +134,7 @@ fun ScribbleDashApp() {
             startDestination = GameRootNavRoute
         ) {
             GameNavGraph(
+                appModule = appModule,
                 navToHome = {
                     rootNavController.navigate(RootNavRoute)
                 }

@@ -6,6 +6,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths
 
 @Immutable
 data class GameDrawUiState(
+    val drawState: DrawState = DrawState.EXAMPLE,
     val drawPaths: List<PathData> = emptyList(),
     val canRedo: Boolean = false,
     val canUndo: Boolean = false,
@@ -17,4 +18,6 @@ data class GameDrawUiState(
         return canRedo
     }
     fun isClearAvailable() = drawPaths.isNotEmpty() || canRedo
+
+
 }

@@ -1,10 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.data
 
 import android.app.Application
-import android.content.Context
-import android.graphics.Bitmap
 import androidx.core.graphics.PathParser
-import androidx.core.graphics.drawable.toBitmap
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
@@ -12,12 +9,11 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import org.xmlpull.v1.XmlPullParser
 
 
-
 class AndroidDrawExampleProvider private constructor(
     private val context: Application,
 ): DrawExampleProvider{
     // Data class to store path information
-    data class PathData(
+    data class XMLPathData(
         val pathData: String,
         val strokeWidth: Float,
         val fillColor: String,
@@ -99,12 +95,12 @@ class AndroidDrawExampleProvider private constructor(
 
     }
 
-    private fun parseVectorDrawable(resourceId: Int): List<PathData> {
+    private fun parseVectorDrawable(resourceId: Int): List<XMLPathData> {
         val resources = context.resources
         val parser = resources.getXml(resourceId)
 
         // For storing parsed elements
-        val paths = mutableListOf<PathData>()
+        val paths = mutableListOf<XMLPathData>()
         var width = 0
         var height = 0
         var viewportWidth = 0f
@@ -150,7 +146,7 @@ class AndroidDrawExampleProvider private constructor(
                                     }
                                 }
 
-                                paths.add(PathData(pathData, strokeWidth, fillColor, strokeColor))
+                                paths.add(XMLPathData(pathData, strokeWidth, fillColor, strokeColor))
                             }
                         }
                     }

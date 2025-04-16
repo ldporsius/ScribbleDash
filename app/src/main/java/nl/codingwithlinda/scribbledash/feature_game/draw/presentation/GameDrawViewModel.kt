@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import nl.codingwithlinda.scribbledash.core.data.AndroidDrawExampleProvider
+import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
@@ -15,7 +17,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.Draw
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
 
 class GameDrawViewModel(
-    private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker()
+    private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
 ): ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())
@@ -23,6 +25,7 @@ class GameDrawViewModel(
     private var countUndoes: Int = 0
 
     private fun canUndo() = countUndoes < 5 && offsets.value.isNotEmpty()
+
     val uiState = combine(_uiState, offsets){ state, offsets ->
         state.copy(
             drawPaths = offsets,

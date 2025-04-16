@@ -19,6 +19,9 @@ object GameRootNavRoute : NavRoute
 object GameLevelNavRoute : NavRoute
 
 @Serializable
+object GameExampleNavRoute : NavRoute
+
+@Serializable
 object GameDrawNavRoute : NavRoute
 
 

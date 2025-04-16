@@ -9,7 +9,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import nl.codingwithlinda.scribbledash.core.data.AndroidDrawExampleProvider
+import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
+import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameExampleNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
@@ -18,9 +22,12 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.Strai
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.GameDrawScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevelScreen
+import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.DrawExampleScreen
+import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.ShowExampleViewModel
 
 
 fun NavGraphBuilder.GameNavGraph(
+    appModule: AndroidAppModule,
     navToHome: () -> Unit
 ) {
     composable<GameRootNavRoute> {
@@ -34,7 +41,30 @@ fun NavGraphBuilder.GameNavGraph(
                         navToHome()
                     },
                     actionOnLevel = {
-                        gameNavController.navigate(GameDrawNavRoute)
+                        gameNavController.navigate(GameExampleNavRoute)
+                    }
+                )
+            }
+
+            composable<GameExampleNavRoute> {
+
+                val viewModel = viewModel<ShowExampleViewModel>(
+                    factory = viewModelFactory {
+                        initializer {
+                            ShowExampleViewModel(
+                                exampleProvider = appModule.drawExampleProvider,
+                                navToDraw = {
+                                    gameNavController.navigate(GameDrawNavRoute)
+                                }
+                            )
+                        }
+                    }
+                )
+
+                DrawExampleScreen(
+                    uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+                    actionOnClose = {
+                        navToHome()
                     }
                 )
             }

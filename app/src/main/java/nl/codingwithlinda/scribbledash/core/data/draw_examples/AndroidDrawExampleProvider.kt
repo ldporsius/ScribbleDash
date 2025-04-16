@@ -7,7 +7,6 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.parseVectorD
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
-import org.xmlpull.v1.XmlPullParser
 
 
 class AndroidDrawExampleProvider private constructor(

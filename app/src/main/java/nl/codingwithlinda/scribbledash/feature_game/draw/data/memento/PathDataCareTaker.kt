@@ -28,9 +28,9 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
         mementos = current.plusElement(cmd)
         //cursor = mementos.size
 
-        println("SAVE MEMENTOS Size: ${mementos.size}")
-        println("SAVE MEMENTOS UNDONE Size: ${mementosUndone().size}")
-        println("SAVE MEMENTOS ACTIVE Size: ${mementosActive().size}")
+        //println("SAVE MEMENTOS Size: ${mementos.size}")
+        //println("SAVE MEMENTOS UNDONE Size: ${mementosUndone().size}")
+        //println("SAVE MEMENTOS ACTIVE Size: ${mementosActive().size}")
         //println("SAVE MEMENTOS CURSOR: $cursor")
     }
 
@@ -48,9 +48,9 @@ class PathDataCareTaker: CareTaker<PathData, List<PathData>> {
     override fun redo(): List<PathData> {
 
         //println("REDO CURSOR: $cursor")
-        println(" in REDO, Undone MEMENTOS: ${mementosUndone()}")
-        println(" in REDO, MEMENTO THAT GETS REDONE: ${firstUndoneCmd()}")
-        println("CAN REDO: ${canRedo()}")
+        //println(" in REDO, Undone MEMENTOS: ${mementosUndone()}")
+        //println(" in REDO, MEMENTO THAT GETS REDONE: ${firstUndoneCmd()}")
+        //println("CAN REDO: ${canRedo()}")
 
         firstUndoneCmd()?.execute()
         //cursor = cursor.plus(1).coerceAtMost(mementos.lastIndex)

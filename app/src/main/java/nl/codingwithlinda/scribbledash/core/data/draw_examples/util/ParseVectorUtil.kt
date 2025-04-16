@@ -70,7 +70,7 @@ fun parseVectorDrawable(context: android.content.Context, resourceId: Int): List
 
         // Now you have all vector data parsed
         //println("Vector size: ${width}x${height}, viewport: ${viewportWidth}x${viewportHeight}")
-        println("Number of paths in vector drawable $resourceId: ${paths.size}")
+        //println("Number of paths in vector drawable $resourceId: ${paths.size}")
         paths.forEach { println(it) }
 
         return paths

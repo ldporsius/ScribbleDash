@@ -14,7 +14,6 @@ data class GameDrawUiState(
 ){
     fun isUndoAvailable() = canUndo
     fun isRedoAvailable(): Boolean{
-        println("CAN REDO in GAME DRAW UISTATE: $canRedo")
         return canRedo
     }
     fun isClearAvailable() = drawPaths.isNotEmpty() || canRedo

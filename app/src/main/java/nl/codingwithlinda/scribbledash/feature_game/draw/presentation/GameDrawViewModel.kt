@@ -84,12 +84,12 @@ class GameDrawViewModel(
                     )
                 }
 
-                println("VIEWMODEL CAN REDO : ${careTaker.canRedo()}")
+                //println("VIEWMODEL CAN REDO : ${careTaker.canRedo()}")
             }
 
             DrawAction.Save -> {
-                println("VIEWMODEL SAVES MEMENTO")
-                println("VIEWMODEL SAVES MEMENTO. canUndo: ${canUndo()}")
+                //println("VIEWMODEL SAVES MEMENTO")
+                //println("VIEWMODEL SAVES MEMENTO. canUndo: ${canUndo()}")
 
                 countUndoes = 0
                 currentPath?.let { pathData ->
@@ -110,8 +110,8 @@ class GameDrawViewModel(
                 if (canUndo()) {
                     countUndoes++
                     val undoMemento = careTaker.undo()
-                    println("VIEWMODEL HAS UNDO MEMENTO $undoMemento")
-                    println("VIEWMODEL HAS UNDO MEMENTOS SIZE: ${undoMemento?.size}")
+                    //println("VIEWMODEL HAS UNDO MEMENTO $undoMemento")
+                    //println("VIEWMODEL HAS UNDO MEMENTOS SIZE: ${undoMemento?.size}")
                     undoMemento?.let { paths ->
                         offsets.update {
                             undoMemento
@@ -129,8 +129,8 @@ class GameDrawViewModel(
             DrawAction.Redo -> {
                 countUndoes = countUndoes.minus(1).coerceAtLeast(0)
                 val redoMemento = careTaker.redo()
-                println("VIEWMODEL HAS REDO MEMENTO $redoMemento")
-                println("VIEWMODEL HAS REDO MEMENTOS SIZE: ${redoMemento?.size}")
+                //println("VIEWMODEL HAS REDO MEMENTO $redoMemento")
+                //println("VIEWMODEL HAS REDO MEMENTOS SIZE: ${redoMemento?.size}")
                 _uiState.update {
                     it.copy(
                         canUndo = canUndo(),

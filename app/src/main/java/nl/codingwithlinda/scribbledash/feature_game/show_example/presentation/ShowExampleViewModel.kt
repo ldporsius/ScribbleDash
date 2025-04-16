@@ -1,6 +1,5 @@
 package nl.codingwithlinda.scribbledash.feature_game.show_example.presentation
 
-import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +12,6 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampl
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state.DrawExampleUiState
 
 class ShowExampleViewModel(

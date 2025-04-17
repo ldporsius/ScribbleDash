@@ -37,7 +37,7 @@ class BitmapUtilKtTest{
         bPath.path.offset(100f, 100f, tPath)
 
         val nPath = SimpleDrawPath(tPath)
-        val bm = listOf(aPath, nPath).toBitmap(100)
+        val bm = listOf(aPath, nPath).toBitmap(100, 8f)
 
         context.saveBitmapToFile(bm, "test_mutiple_paths_to_bitmap.png")
     }

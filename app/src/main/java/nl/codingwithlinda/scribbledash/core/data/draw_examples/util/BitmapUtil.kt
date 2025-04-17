@@ -61,7 +61,6 @@ fun List<AndroidDrawPath>.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitm
     val nPath = normalisedPath(combinedPath, maxSize.toInt(), _strokeWidth)
     val bm = Bitmap.createBitmap(boundingBox.width().toInt(), boundingBox.height().toInt(), Bitmap.Config.ARGB_8888)
 
-    println("bitmap from list paths: boundingbox w = ${boundingBox.width()}, boundingbox h = ${boundingBox.height()}")
 
     val canvas = android.graphics.Canvas(bm)
     val paint = android.graphics.Paint().apply {
@@ -71,8 +70,19 @@ fun List<AndroidDrawPath>.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitm
     }
 
     canvas.drawPath(nPath, paint)
-    val sx = 1/(requiredSize.toFloat() / bm.width) * requiredSize
-    val sy = 1/(requiredSize.toFloat() / bm.height) * requiredSize
+    val sx = requiredSize.toFloat() / bm.width.toFloat()
+    val sy = requiredSize.toFloat() / bm.height.toFloat()
+    println("sx = $sx, sy = $sy")
 
-    return Bitmap.createScaledBitmap(bm, sx.toInt(), sy.toInt(), false)
+    val minScale = minOf(sx, sy)
+
+    val dstWidth = minScale * bm.width
+    val dstHeight = minScale * bm.height
+
+    println("bitmap from list paths: boundingbox w = ${boundingBox.width()}, boundingbox h = ${boundingBox.height()}")
+
+    val scaledBitmap = Bitmap.createScaledBitmap(bm, dstWidth.toInt(), dstHeight.toInt(), false)
+    println("scaledBitmap w = ${scaledBitmap.width}, scaledBitmap h = ${scaledBitmap.height}")
+
+    return scaledBitmap
 }

@@ -1,6 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.domain.result_manager
 
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
+import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 
 enum class ResultManager {
     INSTANCE;
@@ -8,7 +9,11 @@ enum class ResultManager {
     private val results = mutableListOf<DrawResult>()
     val resultsList: List<DrawResult> = results.toList()
 
-    fun addResult(result: DrawResult) {
+    fun addResult(level: GameLevel) {
+        val result = DrawResult(
+            id = System.currentTimeMillis().toString(),
+            level = level,
+        )
         results.add(result)
     }
 

@@ -38,12 +38,15 @@ class ShowExampleViewModel(
         val index = (0 until exampleProvider.examples.size).random()
         exampleProvider.examples.get(index).also {example ->
 
-            ResultManager.INSTANCE.addResult(
-                DrawResult(
-                    id = System.currentTimeMillis().toString(),
-                    examplePath = example,
-                )
-            )
+            ResultManager.INSTANCE.let {manager ->
+                manager.getLastResult()?.let {lastResult ->
+                    manager.updateResult(
+                        lastResult.copy(
+                            examplePath = example
+                    )
+                    )
+                }
+            }
             _uiState.update {
                 it.copy(
                     drawPaths = listOf(example.path)

@@ -44,7 +44,10 @@ fun NavGraphBuilder.GameNavGraph(
                     actionOnClose = {
                         navToHome()
                     },
-                    actionOnLevel = {
+                    actionOnLevel = {level ->
+                        ResultManager.INSTANCE.addResult(
+                            level = level
+                        )
                         gameNavController.navigate(GameExampleNavRoute)
                     }
                 )

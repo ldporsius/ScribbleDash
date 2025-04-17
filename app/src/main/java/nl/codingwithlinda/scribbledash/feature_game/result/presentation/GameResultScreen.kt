@@ -53,7 +53,10 @@ import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.centerPath
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.preparePath
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.saveBitmapToFile
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmap
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
+import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.state.GameResultAction
@@ -67,6 +70,7 @@ fun GameResultScreen(
 ) {
 
 
+    val context = LocalContext.current
     val examplePath = result.examplePath.path.asComposePath()
 
     val resultBoundsE = examplePath.getBounds()
@@ -117,7 +121,7 @@ fun GameResultScreen(
 
             Column(
                 modifier = Modifier
-                    .height(200.dp)
+                    .fillMaxHeight()
                     .weight(1f)
                     .aspectRatio(1f)
 
@@ -128,6 +132,8 @@ fun GameResultScreen(
                         defaultElevation = 8.dp
                     )
                 ) {
+                    val bm = result.examplePath.toBitmap(100)
+                    context.saveBitmapToFile(bm, "test_bitmap_example.png")
 
                     Canvas(
                         modifier = Modifier
@@ -157,7 +163,17 @@ fun GameResultScreen(
                             .fillMaxSize()
                     ) {
 
-                        result.userPath.onEach { aDrawpath ->
+                        val w = size.width
+                        val h = size.height
+                        val bm = result.userPath.toBitmap(100.dp.toPx().toInt())
+                       val dx = w/2 - bm.width/2
+                        val dy = h/2 - bm.height/2
+                        drawImage(
+                            bm.asImageBitmap(),
+                            topLeft = Offset(dx, dy),
+                            style = Stroke(2.dp.toPx())
+                        )
+                        /*result.userPath.onEach { aDrawpath ->
                             println(originalWidth)
                             val path = preparePath(aDrawpath.path, originalWidth)
                             drawPath(
@@ -165,7 +181,7 @@ fun GameResultScreen(
                                 color = Color.Black,
                                 style = Stroke(width = 2.dp.toPx())
                             )
-                        }
+                        }*/
                     }
                 }
             }
@@ -198,6 +214,7 @@ private fun previewGameResultScreen() {
         GameResultScreen(
             result = DrawResult(
                 id = "",
+                level = GameLevel.MASTER,
                 examplePath = expath,
                 userPath = listOf( expath)
             )

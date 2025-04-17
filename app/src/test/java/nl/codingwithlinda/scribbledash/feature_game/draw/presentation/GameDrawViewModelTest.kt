@@ -9,6 +9,8 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -20,6 +22,8 @@ class GameDrawViewModelTest {
 
     private val dispatcher = UnconfinedTestDispatcher()
     private val careTaker = PathDataCareTaker()
+    private val offsetParser = AndroidOffsetParser
+    private val pathDrawer = StraightPathDrawer()
     private lateinit var viewModel: GameDrawViewModel
 
     @Before
@@ -27,7 +31,10 @@ class GameDrawViewModelTest {
         Dispatchers.setMain(dispatcher)
 
         viewModel = GameDrawViewModel(
-            careTaker = careTaker
+            careTaker = careTaker,
+            offsetParser = offsetParser,
+            pathDrawer = pathDrawer,
+            navToResult = {}
         )
     }
     @After
@@ -116,29 +123,28 @@ class GameDrawViewModelTest {
                 viewModel.handleAction(DrawAction.StartPath(Offset(1f, 1f)))
 
                 val em1 = awaitItem()
-                println("EM1: $em1")
+                //println("EM1: $em1")
 
                 viewModel.handleAction(DrawAction.Draw(Offset(2f, 2f)))
 
                 val em2 = awaitItem()
-                println("EM2: $em2")
+                //println("EM2: $em2")
 
                 viewModel.handleAction(DrawAction.Save)
                 val em3 = awaitItem()
-                println("EM3: $em3")
+                //println("EM3: $em3")
             }
 
             repeat(5) {
                 viewModel.handleAction(DrawAction.Undo)
+                val item = awaitItem()
+                println("ITEM $it is undo available: ${item.isUndoAvailable()}")
+
             }
-
-            val item = awaitItem()
-
-            println("ITEM: ${item.isUndoAvailable()}")
-            assertEquals(false, item.isUndoAvailable())
-
+            awaitItem()
             val em4 = awaitItem()
             println("EM4: $em4")
+            assertEquals(false, em4.isUndoAvailable())
 
 
             cancelAndConsumeRemainingEvents()

@@ -48,12 +48,9 @@ fun AndroidDrawPath.toBitmap(requiredSize: Int): Bitmap{
 
 }
 
-fun List<AndroidDrawPath>.toBitmap(requiredSize: Int): Bitmap{
-
-    val _strokeWidth = 12f
+fun List<AndroidDrawPath>.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitmap{
 
     val boundingBox = RectF()
-
 
     val combinedPath = android.graphics.Path()
     this.forEach(){
@@ -74,13 +71,8 @@ fun List<AndroidDrawPath>.toBitmap(requiredSize: Int): Bitmap{
     }
 
     canvas.drawPath(nPath, paint)
+    val sx = 1/(requiredSize.toFloat() / bm.width) * requiredSize
+    val sy = 1/(requiredSize.toFloat() / bm.height) * requiredSize
 
-   /* this.forEach(){
-        val mRect = RectF()
-        it.path.computeBounds(mRect, true)
-        it.path.offset(-mRect.left, -mRect.top)
-        canvas.drawPath(it.path, paint)
-    }*/
-    println("bitmap from list paths: w = ${bm.width},h = ${bm.height}, bytes = ${bm.byteCount}")
-    return Bitmap.createScaledBitmap(bm, requiredSize, requiredSize, false)
+    return Bitmap.createScaledBitmap(bm, sx.toInt(), sy.toInt(), false)
 }

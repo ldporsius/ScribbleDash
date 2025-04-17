@@ -30,6 +30,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.GameDrawSc
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevelScreen
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.GameResultScreen
+import nl.codingwithlinda.scribbledash.feature_game.result.presentation.GameResultViewModel
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.state.GameResultAction
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.DrawExampleScreen
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.ShowExampleViewModel
@@ -118,15 +119,25 @@ fun NavGraphBuilder.GameNavGraph(
             }
 
             composable<GameResultNavRoute> {
-                val context = LocalContext.current
-                val ratingTextGenerator = RatingTextGenerator(context)
-                val ratingMapper = RatingMapper(ratingTextGenerator)
 
-                val accuracy = (0 .. 100).random()
+                val ratingTextGenerator = appModule.ratingTextGenerator
 
-                val rating = ratingFactory.getRating(accuracy)
+                val viewModel = viewModel<GameResultViewModel>(
+                    factory = viewModelFactory {
+                        initializer {
+                            GameResultViewModel(
+                                ratingTextGenerator = ratingTextGenerator,
+                                ratingFactory = ratingFactory
+                            )
+                        }
+                    }
+                )
 
                 val hasResult = ResultManager.INSTANCE.getLastResult()
+
+                val ratingUi = remember {
+                    viewModel.getRatingUi()
+                }
 
                 AnimatedContent(
                     targetState = hasResult,
@@ -136,7 +147,7 @@ fun NavGraphBuilder.GameNavGraph(
                         ResultManager.INSTANCE.getLastResult()?.let { it1 ->
                             GameResultScreen(
                                 result = it1,
-                                ratingUi = ratingMapper.toUi(rating, accuracy),
+                                ratingUi = ratingUi,
                                 onAction = {action ->
                                     when(action){
                                         GameResultAction.Close -> {

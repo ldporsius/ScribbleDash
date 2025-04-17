@@ -7,9 +7,6 @@ import androidx.compose.ui.res.stringResource
 sealed interface UiText {
     data class DynamicText(val value: String) : UiText
     data class StringResource(@StringRes val id: Int, val args: List<Any> = emptyList()) : UiText
-
-
-
 }
 @Composable
 fun UiText.asString(): String{

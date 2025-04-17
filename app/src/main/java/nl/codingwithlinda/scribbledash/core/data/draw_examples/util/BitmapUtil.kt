@@ -9,11 +9,11 @@ fun normalisedPath(path: android.graphics.Path, requiredSize: Int, strokeWidth: 
     val rect = RectF()
     path.computeBounds(rect, true)
 
-    println("bitmap from path. rect: w = ${rect.width()},h = ${rect.height()}")
+    //println("bitmap from path. rect: w = ${rect.width()},h = ${rect.height()}")
     val sx = requiredSize.toFloat() / (rect.width()  + 2 * strokeWidth)
     val sy = requiredSize.toFloat() / (rect.height() + 2 * strokeWidth)
     val scaleMin = minOf(sx, sy)
-    println("sx = $sx, sy = $sy, scaleMin = $scaleMin")
+    //println("sx = $sx, sy = $sy, scaleMin = $scaleMin")
 
     val dx = rect.left - strokeWidth
     val dy = rect.top - strokeWidth
@@ -72,17 +72,17 @@ fun List<AndroidDrawPath>.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitm
     canvas.drawPath(nPath, paint)
     val sx = requiredSize.toFloat() / bm.width.toFloat()
     val sy = requiredSize.toFloat() / bm.height.toFloat()
-    println("sx = $sx, sy = $sy")
+   // println("sx = $sx, sy = $sy")
 
     val minScale = minOf(sx, sy)
 
     val dstWidth = minScale * bm.width
     val dstHeight = minScale * bm.height
 
-    println("bitmap from list paths: boundingbox w = ${boundingBox.width()}, boundingbox h = ${boundingBox.height()}")
+    //println("bitmap from list paths: boundingbox w = ${boundingBox.width()}, boundingbox h = ${boundingBox.height()}")
 
     val scaledBitmap = Bitmap.createScaledBitmap(bm, dstWidth.toInt(), dstHeight.toInt(), false)
-    println("scaledBitmap w = ${scaledBitmap.width}, scaledBitmap h = ${scaledBitmap.height}")
+    //println("scaledBitmap w = ${scaledBitmap.width}, scaledBitmap h = ${scaledBitmap.height}")
 
     return scaledBitmap
 }

@@ -5,4 +5,5 @@ import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProv
 interface AppModule {
 
     val drawExampleProvider: DrawExampleProvider
+
 }

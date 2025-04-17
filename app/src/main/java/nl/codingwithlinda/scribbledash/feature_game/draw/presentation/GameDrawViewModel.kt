@@ -55,7 +55,7 @@ class GameDrawViewModel(
                 )
 
                 currentPath = pathData
-                println("VIEWMODEL STARTED PATH")
+
             }
             is DrawAction.Draw -> {
                 viewModelScope.launch {
@@ -75,7 +75,7 @@ class GameDrawViewModel(
                 }
             }
             DrawAction.Clear -> {
-                println("VIEWMODEL CLEARS MEMENTOS")
+
                 careTaker.clear()
                 offsets.update {
                     emptyList()

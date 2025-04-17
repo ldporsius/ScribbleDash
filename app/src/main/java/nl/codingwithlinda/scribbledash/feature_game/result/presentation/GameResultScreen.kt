@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
@@ -43,6 +44,10 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.centerPath
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmap
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
+import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
+import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
+import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
+import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.state.GameResultAction
@@ -52,6 +57,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 @Composable
 fun GameResultScreen(
     result: DrawResult,
+    ratingUi: RatingUi,
     onAction: (GameResultAction) -> Unit
 ) {
 
@@ -89,7 +95,7 @@ fun GameResultScreen(
             }
         }
 
-        Text(text = "100%",
+        Text(text = ratingUi.accuracyPercent.toString() + "%",
             style = MaterialTheme.typography.displayLarge)
 
         Row(
@@ -174,7 +180,7 @@ fun GameResultScreen(
                         drawImage(
                             bm.asImageBitmap(),
                             topLeft = Offset(dx, dy),
-                            style = Stroke(1.dp.toPx())
+                            style = Stroke(2.dp.toPx())
                         )
                     }
                 }
@@ -182,13 +188,13 @@ fun GameResultScreen(
         }
 
         Spacer(modifier = Modifier.weight(.5f))
-        Text("Woohoo!",
+        Text(ratingUi.title.asString(),
             style = MaterialTheme.typography.headlineLarge)
         Text(
-            stringResource(R.string.feedback_woohoo_1),
+            ratingUi.text.asString(),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.fillMaxWidth(0.8f),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -221,7 +227,14 @@ private fun PreviewGameResultScreen() {
                 level = GameLevel.MASTER,
                 examplePath = expath,
                 userPath = listOf( expath)
-            )
-        ) { }
+            ),
+            ratingUi = RatingUi(
+                rating = Oops(),
+                accuracyPercent = 100,
+                title = UiText.DynamicText("Woohoo"),
+                text = UiText.StringResource(R.string.feedback_good_1)
+            ) ,
+            onAction = {}
+        )
     }
 }

@@ -35,7 +35,7 @@ class GameResultViewModel(
     private fun calculateAccuracy(drawResult: DrawResult): Int{
        val accuracy = resultCalculator.calculateResult(
             drawResult,
-            strokeWidthUser = 1
+            strokeWidthUser = 4
         ){
             bitmapPrinter.printBitmap(it, "calculate_result_${drawResult.id}.png")
         }

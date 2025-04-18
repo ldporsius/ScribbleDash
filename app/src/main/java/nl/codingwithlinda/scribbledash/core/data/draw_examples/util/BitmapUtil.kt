@@ -5,15 +5,18 @@ import android.graphics.Matrix
 import android.graphics.RectF
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 
-fun normalisedPath(path: android.graphics.Path, requiredSize: Int, inset: Float): android.graphics.Path{
+fun normalisedPath(path: android.graphics.Path,
+                   requiredSize: Int,
+                   inset: Float): android.graphics.Path{
     val rect = RectF()
     path.computeBounds(rect, true)
 
-    //println("bitmap from path. rect: w = ${rect.width()},h = ${rect.height()}")
+    println("--In normalisedPath fun--. rect: w = ${rect.width()},h = ${rect.height()}")
+    println("--In normalisedPath fun--. rect: left = ${rect.left},top = ${rect.top}")
     val sx = requiredSize.toFloat() / (rect.width()  + 2 * inset)
     val sy = requiredSize.toFloat() / (rect.height() + 2 * inset)
     val scaleMin = minOf(sx, sy)
-    //println("sx = $sx, sy = $sy, scaleMin = $scaleMin")
+    println("--In normalisedPath fun--. sx = $sx, sy = $sy, scaleMin = $scaleMin")
 
     val dx = rect.left - inset
     val dy = rect.top - inset

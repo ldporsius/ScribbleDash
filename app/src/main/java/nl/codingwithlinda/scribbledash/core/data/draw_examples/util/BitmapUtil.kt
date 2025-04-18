@@ -5,18 +5,18 @@ import android.graphics.Matrix
 import android.graphics.RectF
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 
-fun normalisedPath(path: android.graphics.Path, requiredSize: Int, strokeWidth: Float): android.graphics.Path{
+fun normalisedPath(path: android.graphics.Path, requiredSize: Int, inset: Float): android.graphics.Path{
     val rect = RectF()
     path.computeBounds(rect, true)
 
     //println("bitmap from path. rect: w = ${rect.width()},h = ${rect.height()}")
-    val sx = requiredSize.toFloat() / (rect.width()  + 2 * strokeWidth)
-    val sy = requiredSize.toFloat() / (rect.height() + 2 * strokeWidth)
+    val sx = requiredSize.toFloat() / (rect.width()  + 2 * inset)
+    val sy = requiredSize.toFloat() / (rect.height() + 2 * inset)
     val scaleMin = minOf(sx, sy)
     //println("sx = $sx, sy = $sy, scaleMin = $scaleMin")
 
-    val dx = rect.left - strokeWidth
-    val dy = rect.top - strokeWidth
+    val dx = rect.left - inset
+    val dy = rect.top - inset
 
     path.transform(Matrix().apply {
         setTranslate(
@@ -28,11 +28,10 @@ fun normalisedPath(path: android.graphics.Path, requiredSize: Int, strokeWidth: 
     })
     return path
 }
-fun AndroidDrawPath.toBitmap(requiredSize: Int): Bitmap{
+fun AndroidDrawPath.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitmap{
 
     val bm = Bitmap.createBitmap(requiredSize, requiredSize, Bitmap.Config.ARGB_8888)
 
-    val _strokeWidth = 2f
     val canvas = android.graphics.Canvas(bm)
     val paint = android.graphics.Paint().apply {
         color = android.graphics.Color.BLACK
@@ -48,7 +47,12 @@ fun AndroidDrawPath.toBitmap(requiredSize: Int): Bitmap{
 
 }
 
-fun List<AndroidDrawPath>.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitmap{
+fun List<AndroidDrawPath>.toBitmap(
+    requiredSize: Int,
+    maxStrokeWidth: Float,
+    basisStrokeWidth: Float,
+    paintColor: Int = android.graphics.Color.BLACK
+): Bitmap{
 
     val boundingBox = RectF()
 
@@ -57,19 +61,31 @@ fun List<AndroidDrawPath>.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitm
         combinedPath.addPath(it.path)
     }
     combinedPath.computeBounds(boundingBox, true)
+
     val maxSize = maxOf(boundingBox.width(), boundingBox.height())
-    val nPath = normalisedPath(combinedPath, maxSize.toInt(), _strokeWidth)
+    val sizeFactor = requiredSize / maxSize
+    val basic_inset = basisStrokeWidth/2
+    val extra_inset = (maxStrokeWidth - basisStrokeWidth)/2
+    val inset = basic_inset + extra_inset
+    val requiredNSize = maxSize.toInt() * sizeFactor + inset * 2
+
+    boundingBox.set(0f, 0f, requiredNSize, requiredNSize)
+
+    val nPath = normalisedPath(combinedPath, requiredNSize.toInt(), inset)
+
     val bm = Bitmap.createBitmap(boundingBox.width().toInt(), boundingBox.height().toInt(), Bitmap.Config.ARGB_8888)
 
 
     val canvas = android.graphics.Canvas(bm)
     val paint = android.graphics.Paint().apply {
-        color = android.graphics.Color.BLACK
+        color = paintColor
         style = android.graphics.Paint.Style.STROKE
-        strokeWidth = _strokeWidth
+        strokeWidth = basisStrokeWidth
+        isAntiAlias = false
     }
 
     canvas.drawPath(nPath, paint)
+
     val sx = requiredSize.toFloat() / bm.width.toFloat()
     val sy = requiredSize.toFloat() / bm.height.toFloat()
    // println("sx = $sx, sy = $sy")
@@ -86,3 +102,6 @@ fun List<AndroidDrawPath>.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitm
 
     return scaledBitmap
 }
+
+
+

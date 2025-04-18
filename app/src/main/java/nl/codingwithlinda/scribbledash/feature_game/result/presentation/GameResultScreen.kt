@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -127,7 +126,6 @@ fun GameResultScreen(
                         8.dp
                     )
                 ) {
-                    val bm = result.examplePath.toBitmap(100)
 
                     Canvas(
                         modifier = Modifier
@@ -174,7 +172,10 @@ fun GameResultScreen(
                         val h = size.height
                         val requiredSize = 100.dp.toPx().toInt()
                         val strokeWidth = 2.dp.toPx()
-                        val bm = result.userPath.toBitmap(requiredSize, strokeWidth)
+                        val bm = result.userPath.toBitmap(
+                            requiredSize = requiredSize,
+                            maxStrokeWidth = strokeWidth,
+                            basisStrokeWidth = strokeWidth)
                         val dx = w/2 - bm.width/2
                         val dy = h/2 - bm.height/2
                         drawImage(

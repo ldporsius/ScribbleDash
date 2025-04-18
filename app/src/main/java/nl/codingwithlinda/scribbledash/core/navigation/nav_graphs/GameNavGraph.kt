@@ -12,9 +12,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
+import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameExampleNavRoute
@@ -121,13 +123,18 @@ fun NavGraphBuilder.GameNavGraph(
             composable<GameResultNavRoute> {
 
                 val ratingTextGenerator = appModule.ratingTextGenerator
+                val resultCalculator = ResultCalculator()
 
+                val context = LocalContext.current
+                val bitmapPrinter = AndroidBitmapPrinter(context)
                 val viewModel = viewModel<GameResultViewModel>(
                     factory = viewModelFactory {
                         initializer {
                             GameResultViewModel(
                                 ratingTextGenerator = ratingTextGenerator,
-                                ratingFactory = ratingFactory
+                                ratingFactory = ratingFactory,
+                                resultCalculator = resultCalculator,
+                                bitmapPrinter = bitmapPrinter
                             )
                         }
                     }
@@ -135,18 +142,20 @@ fun NavGraphBuilder.GameNavGraph(
 
                 val hasResult = ResultManager.INSTANCE.getLastResult()
 
-                val ratingUi = remember {
-                    viewModel.getRatingUi()
-                }
+
 
                 AnimatedContent(
                     targetState = hasResult,
                     label = "hasResult"
                 ) {
                     if (it != null) {
-                        ResultManager.INSTANCE.getLastResult()?.let { it1 ->
+                        ResultManager.INSTANCE.getLastResult()?.let { drawResult ->
+                            val ratingUi = remember {
+                                viewModel.getRatingUi(drawResult)
+                            }
+
                             GameResultScreen(
-                                result = it1,
+                                result = drawResult,
                                 ratingUi = ratingUi,
                                 onAction = {action ->
                                     when(action){

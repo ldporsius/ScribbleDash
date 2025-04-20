@@ -38,8 +38,8 @@ class ShowExampleViewModel(
 
     init {
         val index = (0 until exampleProvider.examples.size).random()
-        //val _example = exampleProvider.examples.get(index)
-        val _example = forceUmbrella()
+        val _example = exampleProvider.examples.get(index)
+
         _example.also {example ->
 
             ResultManager.INSTANCE.let {manager ->

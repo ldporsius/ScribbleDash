@@ -100,48 +100,16 @@ class AndroidDrawExampleProvider private constructor(
             )
         }
     }
-    override val examplesMultiplePaths: List<List<AndroidDrawPath>> by lazy {
+   /* override val examplesMultiplePaths: List<List<AndroidDrawPath>> by lazy {
         examplesResources.map {
             resourceToDrawPaths(it)
         }
-    }
+    }*/
 
     fun getByResId(resId: Int): AndroidDrawPath{
         return SimpleDrawPath(
             path = flattenPaths(resourceToDrawPaths(resId).map { it.path })
         )
-    }
-
-    private fun resourceToDrawPath(resource: Int): AndroidDrawPath{
-        try {
-            val parsedPathData = parseVectorDrawable(
-                context,
-                resource)
-
-            val parsedPath = parsedPathData.map {pd ->
-                PathParser.createPathFromPathData(pd.pathData)
-            }.map{
-                SimpleDrawPath(
-                    path = it
-                )
-            }
-
-            val combinedPath = Path().apply {
-                parsedPath.forEach {
-                    addPath(it.path)
-                }
-            }
-            return SimpleDrawPath(
-                path = combinedPath
-            )
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-
-        return SimpleDrawPath(
-            path = PathParser.createPathFromPathData("M0,0 L100,100")
-        )
-
     }
 
     private fun resourceToDrawPaths(resource: Int): List<AndroidDrawPath>{

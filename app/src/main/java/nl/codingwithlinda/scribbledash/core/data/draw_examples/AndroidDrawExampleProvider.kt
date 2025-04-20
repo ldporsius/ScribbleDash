@@ -1,8 +1,10 @@
 package nl.codingwithlinda.scribbledash.core.data.draw_examples
 
 import android.app.Application
+import android.graphics.Path
 import androidx.core.graphics.PathParser
 import nl.codingwithlinda.scribbledash.R
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.flattenPaths
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.parseVectorDrawable
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
@@ -83,9 +85,31 @@ class AndroidDrawExampleProvider private constructor(
     }
 
     override val examples: List<AndroidDrawPath> by lazy {
-        examplesResources.map {
-            resourceToDrawPath(it)
+       val paths =  examplesResources.map {
+            resourceToDrawPaths(it)
         }
+
+        val flattened = paths.map {
+            flattenPaths(it.map { it.path })
+
+        }
+
+        flattened.map {
+            SimpleDrawPath(
+                path = it
+            )
+        }
+    }
+    override val examplesMultiplePaths: List<List<AndroidDrawPath>> by lazy {
+        examplesResources.map {
+            resourceToDrawPaths(it)
+        }
+    }
+
+    fun getByResId(resId: Int): AndroidDrawPath{
+        return SimpleDrawPath(
+            path = flattenPaths(resourceToDrawPaths(resId).map { it.path })
+        )
     }
 
     private fun resourceToDrawPath(resource: Int): AndroidDrawPath{
@@ -96,20 +120,19 @@ class AndroidDrawExampleProvider private constructor(
 
             val parsedPath = parsedPathData.map {pd ->
                 PathParser.createPathFromPathData(pd.pathData)
-            }.let {
-                android.graphics.Path().apply {
-                    it.forEach { path ->
-                        addPath(path)
-                    }
+            }.map{
+                SimpleDrawPath(
+                    path = it
+                )
+            }
+
+            val combinedPath = Path().apply {
+                parsedPath.forEach {
+                    addPath(it.path)
                 }
             }
-            if (parsedPath.isEmpty)
-                return SimpleDrawPath(
-                    path = PathParser.createPathFromPathData("M0,0 L100,100")
-                )
-
             return SimpleDrawPath(
-                path = parsedPath
+                path = combinedPath
             )
         }catch (e: Exception){
             e.printStackTrace()
@@ -118,6 +141,30 @@ class AndroidDrawExampleProvider private constructor(
         return SimpleDrawPath(
             path = PathParser.createPathFromPathData("M0,0 L100,100")
         )
+
+    }
+
+    private fun resourceToDrawPaths(resource: Int): List<AndroidDrawPath>{
+        try {
+            val parsedPathData = parseVectorDrawable(
+                context,
+                resource)
+
+            val parsedPaths = parsedPathData.map {pd ->
+                PathParser.createPathFromPathData(pd.pathData)
+            }.map {parsedPath ->
+                SimpleDrawPath(
+                path = parsedPath
+            )
+            }
+
+            return parsedPaths
+
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+
+        return emptyList()
 
     }
 }

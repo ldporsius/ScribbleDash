@@ -1,7 +1,6 @@
 package nl.codingwithlinda.scribbledash.feature_game.show_example.presentation
 
 import android.graphics.Matrix
-import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,12 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.toAndroidRectF
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -152,7 +147,7 @@ fun DrawExampleScreen(
 @Composable
 private fun PreviewDrawExampleScreen() {
     val context = LocalContext.current
-    val drawRes = R.drawable.castle
+    val drawRes = R.drawable.eye
     val path = testExampleDrawable(context, drawRes)
     ScribbleDashTheme {
         DrawExampleScreen(

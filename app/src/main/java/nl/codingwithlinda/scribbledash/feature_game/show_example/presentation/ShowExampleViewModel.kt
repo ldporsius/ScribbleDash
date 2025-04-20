@@ -8,10 +8,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state.DrawExampleUiState
 
 class ShowExampleViewModel(
@@ -36,13 +38,15 @@ class ShowExampleViewModel(
 
     init {
         val index = (0 until exampleProvider.examples.size).random()
-        exampleProvider.examples.get(index).also {example ->
+        //val _example = exampleProvider.examples.get(index)
+        val _example = forceUmbrella()
+        _example.also {example ->
 
             ResultManager.INSTANCE.let {manager ->
                 manager.getLastResult()?.let {lastResult ->
                     manager.updateResult(
                         lastResult.copy(
-                            examplePath = example
+                            examplePath = listOf( example)
                     )
                     )
                 }
@@ -52,6 +56,17 @@ class ShowExampleViewModel(
                     drawPaths = listOf(example.path)
                 )
             }
+
+
+
         }
+    }
+
+    fun getGlasses(): AndroidDrawPath {
+        return exampleProvider.getByResId(R.drawable.glasses)
+    }
+
+    fun forceUmbrella(): AndroidDrawPath {
+       return exampleProvider.getByResId(R.drawable.umbrella)
     }
 }

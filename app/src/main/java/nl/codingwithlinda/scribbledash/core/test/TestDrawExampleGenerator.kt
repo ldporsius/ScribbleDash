@@ -6,6 +6,22 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.parseVectorD
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 
+fun testExampleDrawableMultiPath(
+    context: Context,
+    @DrawableRes drawableResId: Int
+
+): List<AndroidDrawPath>{
+    val xmlPathData = parseVectorDrawable(context, drawableResId)
+
+    val parsedPaths = xmlPathData.map {pd ->
+        androidx.core.graphics.PathParser.createPathFromPathData(pd.pathData)
+    }.map{path ->
+        SimpleDrawPath(
+            path = path
+        )
+    }
+    return parsedPaths
+}
 fun testExampleDrawable(
     context: Context,
     @DrawableRes drawableResId: Int

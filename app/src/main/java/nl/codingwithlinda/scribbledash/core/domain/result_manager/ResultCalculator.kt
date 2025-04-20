@@ -20,9 +20,8 @@ class ResultCalculator {
 
         val extraStrokeWidth = drawResult.level.toStrokeWidthFactor() * strokeWidthUser
 
-        val aspectRatio = aspectRatio(drawResult.examplePath.path, combinedPath(drawResult.userPath.map { it.path }))
-        val bmExample = listOf( drawResult.examplePath).toBitmap(
-            requiredSize = 500 * aspectRatio.roundToInt(),
+        val bmExample = drawResult.examplePath.toBitmap(
+            requiredSize = 500,
             maxStrokeWidth = extraStrokeWidth.toFloat(),
             basisStrokeWidth = extraStrokeWidth.toFloat(),
 
@@ -40,8 +39,6 @@ class ResultCalculator {
         canvas.drawBitmap(bmUser, 0f, 0f, null)
         printDebug(debugBitmap)
 
-        if(!areSameSize(bmExample, bmUser)) return -1
-
 
         val pixelMatches = pixelMatch(bmExample, bmUser)
 
@@ -56,9 +53,14 @@ class ResultCalculator {
 //        println("visibleUserPixels = $visibleUserPixels")
 
         val accuracy = correct.toFloat() / visibleUserPixels.toFloat()
-//        println("accuracy = $accuracy")
+        println("accuracy = $accuracy")
 
-        return (accuracy * 100).roundToInt()
+        return try {
+            (accuracy * 100).roundToInt()
+        }catch (e: Exception){
+            e.printStackTrace()
+            -1
+        }
     }
 
     private fun combinedPath(paths: List<Path>): Path{
@@ -70,20 +72,20 @@ class ResultCalculator {
     }
     private fun aspectRatio(pExample: Path, pUser: Path): Float{
         val rectExample = android.graphics.RectF()
+
         pExample.computeBounds(rectExample, true)
+
+        println("--ResultCalculator-- rectExample.width = ${rectExample.width()}, rectExample.height = ${rectExample.height()}")
+
         val rectUser = android.graphics.RectF()
         pUser.computeBounds(rectUser, true)
+        println("--ResultCalculator-- rectUser.width = ${rectUser.width()}, rectUser.height = ${rectUser.height()}")
+
         val ratioExample = rectExample.width() / rectExample.height()
         val ratioUser = rectUser.width() / rectUser.height()
         return ratioUser / ratioExample
     }
-    private fun areSameSize(bmExample: Bitmap, bmUser: Bitmap): Boolean{
-        println("bmExample.width = ${bmExample.width}, bmExample.height = ${bmExample.height}")
-        println("bmUser.width = ${bmUser.width}, bmUser.height = ${bmUser.height}")
-        val sameSize = bmExample.width == bmUser.width && bmExample.height == bmUser.height
 
-        return sameSize
-    }
     private fun GameLevel.toStrokeWidthFactor(): Int{
         return when(this){
             GameLevel.BEGINNER -> 15

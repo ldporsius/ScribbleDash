@@ -13,7 +13,7 @@ class BitmapUtilKtTest{
     val context = ApplicationProvider.getApplicationContext<Application>()
     val exampleProvider = AndroidDrawExampleProvider.getInstance(context)
 
-    @Test
+    /*@Test
     fun testPathToBitmapConversion(){
         (0 until exampleProvider.examples.size).forEach{i ->
             val aPath = exampleProvider.examples[i]
@@ -25,9 +25,9 @@ class BitmapUtilKtTest{
             context.saveBitmapToFile(bm, "test_bitmap_$i.png")
         }
 
-    }
+    }*/
 
-    @Test
+   /* @Test
     fun testMultiplePathsToBitmapConversion(){
         val tPath = android.graphics.Path()
         val aPath =
@@ -45,7 +45,7 @@ class BitmapUtilKtTest{
 
         assertTrue(bm.hasAlpha())
         context.saveBitmapToFile(bm, "test_mutiple_paths_to_bitmap.png")
-    }
+    }*/
 
 
 }

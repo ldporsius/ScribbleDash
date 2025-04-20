@@ -6,6 +6,6 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 data class DrawResult(
     val id: String,
     val level: GameLevel,
-    val examplePath: AndroidDrawPath = SimpleDrawPath(),
+    val examplePath: List<AndroidDrawPath> = emptyList(),
     val userPath: List<AndroidDrawPath> = emptyList()
 )

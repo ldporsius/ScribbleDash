@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Path
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmap
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
@@ -52,38 +53,34 @@ class ResultCalculator {
         val visibleUserPixels = visibleUserPixelCount(bmUser)
 //        println("visibleUserPixels = $visibleUserPixels")
 
-        val accuracy = correct.toFloat() / visibleUserPixels.toFloat()
-        println("accuracy = $accuracy")
+        val accuracy = (correct.toFloat() / visibleUserPixels.toFloat()) * 100
+        println("-- in resultcalculator --. accuracy = $accuracy")
 
+        val missingLengthPenalty = getMissingLengthPenalty(
+           drawResult
+        )
+
+        println("-- in resultcalculator -- . missingLengthPenalty = $missingLengthPenalty")
+
+        //Final Score (%) = Coverage (%) - Missing Length Penalty (%)
         return try {
-            (accuracy * 100).roundToInt()
+            (accuracy - missingLengthPenalty).roundToInt().coerceAtLeast(0)
         }catch (e: Exception){
             e.printStackTrace()
             -1
         }
     }
 
-    private fun combinedPath(paths: List<Path>): Path{
-        val combinedPath = Path()
-        paths.forEach {
-            combinedPath.addPath(it)
+    private fun getTotalPathLenght(paths: List<Path>): Float{
+        return paths.fold(0f) { acc, path ->
+            getPathLength(path) + acc
         }
-        return combinedPath
     }
-    private fun aspectRatio(pExample: Path, pUser: Path): Float{
-        val rectExample = android.graphics.RectF()
+    private fun getPathLength(path: Path): Float
+    {
+        val pathMeasure = android.graphics.PathMeasure(path, false)
+        return pathMeasure.length
 
-        pExample.computeBounds(rectExample, true)
-
-        println("--ResultCalculator-- rectExample.width = ${rectExample.width()}, rectExample.height = ${rectExample.height()}")
-
-        val rectUser = android.graphics.RectF()
-        pUser.computeBounds(rectUser, true)
-        println("--ResultCalculator-- rectUser.width = ${rectUser.width()}, rectUser.height = ${rectUser.height()}")
-
-        val ratioExample = rectExample.width() / rectExample.height()
-        val ratioUser = rectUser.width() / rectUser.height()
-        return ratioUser / ratioExample
     }
 
     private fun GameLevel.toStrokeWidthFactor(): Int{
@@ -110,7 +107,6 @@ class ResultCalculator {
 
            val toIgnore = isTransparentExample && isTransparentUser
            val isMatch = !isTransparentExample && !isTransparentUser
-           //val isUserOnly = isTransparentExample && !isTransparentUser
 
            if(toIgnore) PixelMatch.IGNORE
            else if(isMatch) PixelMatch.MATCH
@@ -130,5 +126,22 @@ class ResultCalculator {
         IGNORE,
         USER_ONLY,
         MATCH,
+    }
+
+    private val pathLengthMinPercent = 0.7f
+
+    private fun getMissingLengthPenalty(drawResult: DrawResult): Float{
+        //Missing Length Penalty (%) = 100 - (Total User Path
+        //Length / Total Example Path Length * 100)
+        val lengthE = getTotalPathLenght(drawResult.examplePath.map { it.path })
+        val lengthU = getTotalPathLenght(drawResult.userPath.map { it.path })
+        val deservesPenalty = lengthU / lengthE < pathLengthMinPercent
+        val penalty = 100 - (lengthU / lengthE) * 100
+
+
+        println(" -- in resultcalculator -- . lengthE = $lengthE, lengthU = $lengthU, deservesPenalty = $deservesPenalty, penalty = $penalty")
+
+        return if(deservesPenalty) penalty
+        else 0f
     }
 }

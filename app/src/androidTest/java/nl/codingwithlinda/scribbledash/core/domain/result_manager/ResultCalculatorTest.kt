@@ -1,6 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.domain.result_manager
 
 import android.app.Application
+import android.graphics.Path
 import androidx.test.core.app.ApplicationProvider
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
@@ -66,6 +67,47 @@ class ResultCalculatorTest{
         }
 
         assertEquals(100, accuracy)
+
+    }
+
+    private fun getPathLength(path: Path): Float
+    {
+        val pathMeasure = android.graphics.PathMeasure(path, true)
+        return pathMeasure.length
+
+    }
+    @Test
+    fun testHalfLenghtPath_pathLengthPenaltyIsApplied(){
+        val userPath = provider.getByResId(R.drawable.eye)
+
+        val examplePath = List(2){
+            userPath
+        }
+
+        examplePath.onEach {
+            println("-- in test half length path --. examplePath.size = ${getPathLength(it.path)}")
+
+        }
+        examplePath.fold(0f) { acc, androidDrawPath ->
+            getPathLength(androidDrawPath.path) + acc
+        }.also {
+            println("-- in test half length path --. total length = $it")
+
+        }
+        val drawResult = DrawResult(
+            id = "",
+            level = GameLevel.BEGINNER,
+            examplePath = examplePath,
+            userPath = listOf(userPath)
+        )
+        val accuracy = calculator.calculateResult(
+            drawResult,
+            strokeWidthUser = 1
+        ){
+            context.saveBitmapToFile(it, "test_calculate_result_eye.png")
+        }
+
+        assertEquals(50, accuracy)
 
     }
 

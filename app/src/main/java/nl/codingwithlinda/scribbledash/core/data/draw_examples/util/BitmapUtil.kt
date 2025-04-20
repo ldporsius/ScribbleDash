@@ -53,8 +53,6 @@ fun normalisedPath(
     path.transform(Matrix().apply {
         this.setRectToRect(rect,
             dstRect, Matrix.ScaleToFit.FILL)
-        //preScale(scaleMin, scaleMin, 0f, 0f)
-        //     postTranslate(dx, dy)
 
     }
     )
@@ -90,19 +88,10 @@ private fun flattenPath(path: Path): Path{
     // Create a PathMeasure to analyze your original path
     val originalPath = path
 
-// Add your paths here as in your original VectorDrawable
-//    originalPath.moveTo(20f, 50f)
-//    originalPath.quadTo(50f, 20f, 80f, 50f)
-//    originalPath.quadTo(50f, 80f, 20f, 50f)
-
-
-// Add your circles too
     val pathMeasure: PathMeasure = PathMeasure(originalPath, false)
-
 
 // Create a new path that will hold our approximation
     val approximatePath = Path()
-
 
 // The distance increment - smaller values give better approximation
     val distanceIncrement = 1.0f // adjust based on your needs
@@ -169,11 +158,9 @@ fun List<AndroidDrawPath>.toBitmap(
     val inset = basic_inset + extra_inset
     val requiredNSize = maxSize.toInt() * sizeFactor
 
-
     val nPath = normalisedPath(combinedPath, requiredNSize.toInt(), maxStrokeWidth)
 
     nPath.computeBounds(boundingBox, true)
-
 
     val bm = Bitmap.createBitmap(
         (boundingBox.width() + maxStrokeWidth * 2).toInt(),
@@ -191,32 +178,8 @@ fun List<AndroidDrawPath>.toBitmap(
 
     canvas.drawPath(nPath, paint)
 
-    canvas.drawRect(boundingBox, paint.apply {
-        color = android.graphics.Color.GREEN
-        style = android.graphics.Paint.Style.STROKE
-        strokeWidth = 2f
-    })
-
-//    val sx = requiredSize.toFloat() / bm.width.toFloat()
-//    val sy = requiredSize.toFloat() / bm.height.toFloat()
-    // println("sx = $sx, sy = $sy")
-
-    //val minScale = minOf(sx, sy)
-
-//    val dstWidth = minScale * bm.width
-//    val dstHeight = minScale * bm.height
-
     println("bitmap from list paths: boundingbox w = ${boundingBox.width()}, boundingbox h = ${boundingBox.height()}")
     println("bitmap from list paths: bm w = ${bm.width}, bm h = ${bm.height}")
-
-  /*  try {
-        val scaledBitmap = Bitmap.createScaledBitmap(bm, dstWidth.toInt(), dstHeight.toInt(), false)
-        println("scaledBitmap w = ${scaledBitmap.width}, scaledBitmap h = ${scaledBitmap.height}")
-        return scaledBitmap
-    }catch (e:Exception)
-    {
-        e.printStackTrace()
-    }*/
 
    return bm
 }
@@ -238,7 +201,6 @@ fun List<AndroidDrawPath>.toBitmapUiOnly(
         setTranslate(
             -boundingBox.left, -boundingBox.top
         )
-
     }
     )
 

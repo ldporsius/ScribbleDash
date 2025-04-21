@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -32,13 +31,14 @@ import androidx.navigation.compose.navigation
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.navigation.nav_graphs.GameNavGraph
-import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.ChartNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.StatisticsNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.RootNavRoute
 import nl.codingwithlinda.scribbledash.core.presentation.util.toUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.feature_home.presentation.HomeScreen
+import nl.codingwithlinda.scribbledash.feature_statistics.presentation.StatisticsScreen
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundLight
 
 @Composable
@@ -58,7 +58,7 @@ fun ScribbleDashApp(
             val navController = rememberNavController()
             val destinations = listOf(
                 Destination(
-                    route = ChartNavRoute,
+                    route = StatisticsNavRoute,
                     selectedIcon = ImageVector.vectorResource(R.drawable.chart),
                     unselectedIcon = ImageVector.vectorResource(R.drawable.chart),
                     label = UiText.StringResource(R.string.chart)
@@ -122,8 +122,8 @@ fun ScribbleDashApp(
                         )
                     }
 
-                    composable<ChartNavRoute> {
-                        Text(text = "Chart")
+                    composable<StatisticsNavRoute> {
+                        StatisticsScreen()
                     }
 
                 }

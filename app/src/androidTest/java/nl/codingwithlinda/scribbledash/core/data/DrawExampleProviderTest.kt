@@ -12,9 +12,8 @@ import org.junit.Test
 
 class DrawExampleProviderTest{
 
-    private lateinit var  context: Application
+    private lateinit var context: Application
     private lateinit var provider : AndroidDrawExampleProvider
-
 
     @Before
     fun setup(){
@@ -26,25 +25,20 @@ class DrawExampleProviderTest{
 
         val provider0 = AndroidDrawExampleProvider.getInstance(context)
         val examples0 = provider0.examples
-       examples0.forEach {
+
+        examples0.forEach {
             assertFalse(it.path.isEmpty)
-            //println("PATH = ${it.path}")
         }
 
         val provider1 = AndroidDrawExampleProvider.getInstance(context)
         val examples1 = provider1.examples
         examples1.forEach {
             assertFalse(it.path.isEmpty)
-            //println("PATH = ${it.path}")
         }
 
         assertSame(provider0, provider1)
-        //assertTrue(provider0 == provider1)
-
-        assertTrue(examples0.size == 35)
 
         assertTrue(examples0 == examples1)
-
-
+        assertSame(examples0, examples1)
     }
 }

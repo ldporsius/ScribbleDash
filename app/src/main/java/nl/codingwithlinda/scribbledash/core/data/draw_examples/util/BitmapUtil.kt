@@ -74,50 +74,6 @@ fun combinedPath(paths: List<Path>): Path{
     return combinedPath
 }
 
-fun flattenPaths(paths: List<Path>): Path{
-    val combinedPath = Path()
-    paths.forEach { path ->
-       flattenPath(path).also {
-           combinedPath.addPath(it)
-       }
-    }
-    return combinedPath
-}
-private fun flattenPath(path: Path): Path{
-
-    // Create a PathMeasure to analyze your original path
-    val originalPath = path
-
-    val pathMeasure: PathMeasure = PathMeasure(originalPath, false)
-
-// Create a new path that will hold our approximation
-    val approximatePath = Path()
-
-// The distance increment - smaller values give better approximation
-    val distanceIncrement = 1.0f // adjust based on your needs
-    val pathLength: Float = pathMeasure.length
-    var distance = 0f
-
-    val coordinates = FloatArray(2)
-    val tangent = FloatArray(2)
-
-
-// First point
-    pathMeasure.getPosTan(0f, coordinates, tangent)
-    approximatePath.moveTo(coordinates[0], coordinates[1])
-
-
-// Sample points along the path
-    while (distance < pathLength) {
-        distance += distanceIncrement
-        if (distance > pathLength) distance = pathLength
-
-        pathMeasure.getPosTan(distance, coordinates, tangent)
-        approximatePath.lineTo(coordinates[0], coordinates[1])
-    }
-    return approximatePath
-}
-
 
 fun AndroidDrawPath.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitmap{
 

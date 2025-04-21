@@ -1,10 +1,14 @@
 package nl.codingwithlinda.scribbledash.core.data.draw_examples.util
 
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider.XMLPathData
 import org.xmlpull.v1.XmlPullParser
 
-
-
+// Data class to store path information
+data class XMLPathData(
+    val pathData: String,
+    val strokeWidth: Float,
+    val fillColor: String,
+    val strokeColor: String
+)
 fun parseVectorDrawable(context: android.content.Context, resourceId: Int): List<XMLPathData> {
     val resources = context.resources
     val parser = resources.getXml(resourceId)
@@ -67,11 +71,6 @@ fun parseVectorDrawable(context: android.content.Context, resourceId: Int): List
             }
             eventType = parser.next()
         }
-
-        // Now you have all vector data parsed
-        //println("Vector size: ${width}x${height}, viewport: ${viewportWidth}x${viewportHeight}")
-        //println("Number of paths in vector drawable $resourceId: ${paths.size}")
-        //paths.forEach { println(it) }
 
         return paths
 

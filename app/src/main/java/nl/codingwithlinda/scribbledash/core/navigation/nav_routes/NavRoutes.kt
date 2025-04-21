@@ -29,4 +29,4 @@ object GameResultNavRoute : NavRoute
 
 ////////////////////////////////////
 @Serializable
-object ChartNavRoute : NavRoute
+object StatisticsNavRoute : NavRoute

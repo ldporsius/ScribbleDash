@@ -11,6 +11,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,14 +30,14 @@ fun StatisticsItem(
     modifier: Modifier = Modifier
 ) {
 
-    ElevatedCard(
+    OutlinedCard (
         modifier = modifier
             .shadow(
                 elevation = 4.dp,
                 shape = CardDefaults.elevatedShape
             )
         ,
-        colors = CardDefaults.elevatedCardColors().copy(
+        colors = CardDefaults.outlinedCardColors().copy(
             containerColor = surfaceHigh
         )
 
@@ -61,7 +62,7 @@ fun StatisticsItem(
             }
             Text(
                 statisticInfo.info,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .weight(1f)
@@ -69,7 +70,7 @@ fun StatisticsItem(
 
             Text(
                 statisticInfo.value,
-                style = MaterialTheme.typography.displayMedium
+                style = MaterialTheme.typography.headlineLarge
             )
 
         }

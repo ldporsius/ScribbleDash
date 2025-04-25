@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.core.navigation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.navigation.destinations.Destination
@@ -40,6 +42,8 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.feature_home.presentation.HomeScreen
 import nl.codingwithlinda.scribbledash.feature_statistics.presentation.StatisticsScreen
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundLight
+import nl.codingwithlinda.scribbledash.ui.theme.primary
+import nl.codingwithlinda.scribbledash.ui.theme.tertiaryContainer
 
 @Composable
 fun ScribbleDashApp(
@@ -61,12 +65,14 @@ fun ScribbleDashApp(
                     route = StatisticsNavRoute,
                     selectedIcon = ImageVector.vectorResource(R.drawable.chart),
                     unselectedIcon = ImageVector.vectorResource(R.drawable.chart),
+                    selectedColor = tertiaryContainer,
                     label = UiText.StringResource(R.string.chart)
                 ),
                 Destination(
                     route = HomeNavRoute,
                     selectedIcon = ImageVector.vectorResource(R.drawable.home),
                     unselectedIcon = Icons.Outlined.Home,
+                    selectedColor = primary,
                     label = UiText.StringResource(R.string.home)
                 )
             )
@@ -93,9 +99,10 @@ fun ScribbleDashApp(
                                     Image(
                                         imageVector = destination.selectedIcon,
                                         contentDescription = destination.label.asString(),
+                                        modifier = Modifier.size(32.dp),
                                         colorFilter = ColorFilter.tint(
                                             if (selected) {
-                                                MaterialTheme.colorScheme.primary
+                                                destination.selectedColor
                                             } else {
                                                 MaterialTheme.colorScheme.onSurface
                                             }

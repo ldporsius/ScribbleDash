@@ -14,7 +14,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
-import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
@@ -23,8 +22,6 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameExampleNav
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
-import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
-import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
@@ -36,7 +33,6 @@ import nl.codingwithlinda.scribbledash.feature_game.result.presentation.GameResu
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.state.GameResultAction
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.DrawExampleScreen
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.ShowExampleViewModel
-import kotlin.random.Random
 
 
 fun NavGraphBuilder.GameNavGraph(
@@ -140,12 +136,10 @@ fun NavGraphBuilder.GameNavGraph(
                     }
                 )
 
-                val hasResult = ResultManager.INSTANCE.getLastResult()
-
-
+                val lastResult = ResultManager.INSTANCE.getLastResult()
 
                 AnimatedContent(
-                    targetState = hasResult,
+                    targetState = lastResult,
                     label = "hasResult"
                 ) {
                     if (it != null) {

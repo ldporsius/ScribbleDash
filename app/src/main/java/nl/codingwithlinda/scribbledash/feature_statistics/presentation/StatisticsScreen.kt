@@ -3,7 +3,9 @@ package nl.codingwithlinda.scribbledash.feature_statistics.presentation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,16 +21,20 @@ fun StatisticsScreen() {
 
     val staticContent = fakeListStatisticInfo()
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+    ) {
         Text(
             text = "Statistics",
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.labelLarge
         )
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(16.dp)
+            contentPadding = PaddingValues(vertical = 16.dp)
         ) {
             items(staticContent.size) { index ->
                 StatisticsItem(

@@ -13,6 +13,6 @@ fun fakeStatisticInfo(icon: Int, iconBackgroundColor: Color) =
         )
 
 fun fakeListStatisticInfo() = listOf(
-    fakeStatisticInfo(R.drawable.hourglass, Color.Blue),
-    fakeStatisticInfo(R.drawable.lightning, Color.Cyan)
+    fakeStatisticInfo(R.drawable.hourglass, Color.Blue.copy(.1f)),
+    fakeStatisticInfo(R.drawable.lightning, Color.Cyan.copy(.1f))
 )

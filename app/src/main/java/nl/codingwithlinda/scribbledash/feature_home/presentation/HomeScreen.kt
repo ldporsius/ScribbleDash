@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,15 +41,16 @@ fun HomeScreen(
             modifier = Modifier.align(Alignment.Start)
         )
 
-        Spacer(modifier = Modifier.height(150.dp))
+        Spacer(modifier = Modifier.weight(1f))
         Text(text = "Start drawing!",
             style = MaterialTheme.typography.displayMedium,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Text(text = "Select game mode",
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
         )
+
         gameModes.forEach { gameMode ->
             OutlinedCard(
                 onClick = {
@@ -56,7 +58,8 @@ fun HomeScreen(
                 },
                 modifier = Modifier
                     .width(380.dp)
-                    .height(112.dp)
+                    .height(128.dp)
+                    .padding(bottom = 8.dp)
                 ,
                 border = BorderStroke(width = 8.dp, color = gameMode.color)
             ) {
@@ -69,20 +72,23 @@ fun HomeScreen(
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = Modifier
                             .weight(1f)
-                            .padding(start = 48.dp, end = 48.dp),
+                            .padding(start = 22.dp, end = 8.dp),
                         color = MaterialTheme.colorScheme.onBackground,
                     )
                     Image(
                         painter = painterResource(id = gameMode.imageResourceId),
                         contentDescription = gameMode.title.asString(),
                         modifier = Modifier
-                            .aspectRatio(1f, true)
-                            .height(112.dp)
+                            .fillMaxHeight()
+                            //.aspectRatio(1f, true)
+
                         ,
                         contentScale = ContentScale.FillHeight
                     )
                 }
             }
         }
+
+        Spacer(modifier = Modifier.weight(1f))
     }
 }

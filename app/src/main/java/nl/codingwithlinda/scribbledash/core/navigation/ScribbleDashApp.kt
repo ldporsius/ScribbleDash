@@ -124,6 +124,7 @@ fun ScribbleDashApp(
                         HomeScreen(
                             gameModes = GameMode.entries.map { it.toUi() },
                             actionOnGameMode = {
+                                //todo save game mode
                                 rootNavController.navigate(GameNavRoute)
                             }
                         )

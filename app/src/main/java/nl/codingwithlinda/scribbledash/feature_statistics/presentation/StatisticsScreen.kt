@@ -28,7 +28,8 @@ fun StatisticsScreen() {
     ) {
         Text(
             text = "Statistics",
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
         LazyColumn(

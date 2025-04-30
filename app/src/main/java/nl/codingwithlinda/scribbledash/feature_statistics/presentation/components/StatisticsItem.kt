@@ -7,13 +7,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -30,49 +34,54 @@ fun StatisticsItem(
     modifier: Modifier = Modifier
 ) {
 
-    OutlinedCard (
-        modifier = modifier
-            .shadow(
-                elevation = 4.dp,
-                shape = CardDefaults.elevatedShape
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
+        OutlinedCard(
+            modifier = modifier
+                .shadow(
+                    elevation = 4.dp,
+                    shape = CardDefaults.elevatedShape
+                ),
+            colors = CardDefaults.outlinedCardColors().copy(
+                containerColor = surfaceHigh,
+                contentColor = LocalContentColor.current
             )
-        ,
-        colors = CardDefaults.outlinedCardColors().copy(
-            containerColor = surfaceHigh
-        )
 
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(8.dp),
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
         ) {
-            Box(
+            Row(
                 modifier = Modifier
-                    .background(
-                        statisticInfo.iconBackgroundColor,
-                        shape = MaterialTheme.shapes.small
-                    )
-                    .padding(8.dp)
+                    .padding(8.dp),
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = statisticInfo.icon),
-                    contentDescription = null
+                Box(
+                    modifier = Modifier
+                        .size(52.dp)
+                        .background(
+                            statisticInfo.iconBackgroundColor,
+                            shape = MaterialTheme.shapes.small
+                        )
+                        .padding(8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = statisticInfo.icon),
+                        contentDescription = null
+                    )
+                }
+                Text(
+                    statisticInfo.info,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(1f)
                 )
+
+                Text(
+                    statisticInfo.value,
+                    style = MaterialTheme.typography.headlineLarge,
+
+                )
+
             }
-            Text(
-                statisticInfo.info,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .weight(1f)
-            )
-
-            Text(
-                statisticInfo.value,
-                style = MaterialTheme.typography.headlineLarge
-            )
-
         }
     }
 }

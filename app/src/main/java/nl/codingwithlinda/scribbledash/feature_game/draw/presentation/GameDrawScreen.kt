@@ -20,6 +20,7 @@ import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.GameDrawBottomBar
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.OneRoundWonderTopBar
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.UserDrawCanvas
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
@@ -40,16 +41,12 @@ fun GameDrawScreen(
             brush = backgroundGradient
         )
     ) {
-        IconButton(
-            onClick = { actionOnClose() },
-            modifier = Modifier.align(Alignment.TopEnd)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "close"
-            )
-        }
-
+        OneRoundWonderTopBar(
+            actionOnClose = actionOnClose,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+        )
         Column(
             modifier = Modifier
                 .fillMaxWidth()

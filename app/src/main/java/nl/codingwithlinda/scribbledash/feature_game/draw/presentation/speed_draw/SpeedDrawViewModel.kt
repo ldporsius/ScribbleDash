@@ -76,9 +76,10 @@ class SpeedDrawViewModel(
 
     private fun startNewExample(){
         exampleIndex.update {current ->
-            val update = maxOf(-1, examples.lastIndex - current)
+            val nextIndex = current + 1
+            val update = if (nextIndex >= examples.size) 0 else nextIndex
             println("SPEED DRAW VIEWMODEL update: $update")
-            update - 1
+            update
         }
 
         ResultManager.INSTANCE.getLastResult()?.let {

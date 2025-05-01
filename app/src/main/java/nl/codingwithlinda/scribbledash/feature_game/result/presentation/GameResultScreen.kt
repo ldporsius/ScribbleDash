@@ -49,7 +49,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawableMultiPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.CustomColoredButton
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.state.GameResultAction
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient

@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding

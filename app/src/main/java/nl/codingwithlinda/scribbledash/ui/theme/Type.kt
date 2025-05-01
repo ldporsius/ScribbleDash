@@ -14,6 +14,12 @@ val fontBagelFatOneFamily = FontFamily(fontBagelFatOne)
 val fontOutfit = Font(R.font.outfit)
 val fontOutfitFamily = FontFamily(fontOutfit)
 
+val headlineXSmall = TextStyle(
+    fontFamily = fontBagelFatOneFamily,
+    fontSize = 14.sp,
+    lineHeight = 18.sp,
+    letterSpacing = .5.sp
+)
 // Set of Material typography styles to start with
 val Typography = Typography(
     displayLarge = TextStyle(

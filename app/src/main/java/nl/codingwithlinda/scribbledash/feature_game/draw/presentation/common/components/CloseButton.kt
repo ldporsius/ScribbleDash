@@ -20,7 +20,7 @@ fun CloseButton(
 ) {
     IconButton(
         onClick = { actionOnClose() },
-        modifier = modifier
+        modifier = Modifier
             .size(32.dp)
             .border(
                 width = 2.dp,

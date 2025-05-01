@@ -1,8 +1,11 @@
 package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,23 +71,30 @@ fun NavGraphBuilder.GameNavGraph(
                             ShowExampleViewModel(
                                 exampleProvider = appModule.drawExampleProvider,
                                 navToDraw = {
-                                    gameNavController.navigate(GameDrawNavRoute)
+                                    gameNavController.navigate(GameDrawNavRoute){
+                                        popUpTo(GameLevelNavRoute){
+                                            inclusive = true
+                                        }
+                                    }
                                 }
                             )
                         }
                     }
                 )
 
-                DrawExampleScreen(
-                    uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
-                    topbar = {
-                        OneRoundWonderTopBar(
-                            actionOnClose = {
-                                navToHome()
-                            }
-                        )
-                    }
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+
+                    OneRoundWonderTopBar(
+                        actionOnClose = {
+                            navToHome()
+                        }
+                    )
+                    DrawExampleScreen(
+                        uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+                    )
+                }
             }
 
             composable<GameDrawNavRoute> {

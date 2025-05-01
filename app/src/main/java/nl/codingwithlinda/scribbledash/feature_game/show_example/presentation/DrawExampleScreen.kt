@@ -39,8 +39,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 @Composable
 fun DrawExampleScreen(
     uiState: DrawExampleUiState,
-    topbar: @Composable () -> Unit,
-   // actionOnClose: () -> Unit,
+
 ) {
     val gridColor = MaterialTheme.colorScheme.onSurface
     var tMatrix by remember {
@@ -52,8 +51,6 @@ fun DrawExampleScreen(
             brush = backgroundGradient
         )
     ) {
-
-        topbar()
 
         Column(
             modifier = Modifier
@@ -148,9 +145,6 @@ private fun PreviewDrawExampleScreen() {
             uiState = DrawExampleUiState(
                 drawPaths = listOf(path.path)
             ),
-           topbar = {
-
-           }
         )
 
     }

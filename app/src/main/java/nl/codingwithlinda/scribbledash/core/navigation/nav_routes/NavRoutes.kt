@@ -21,11 +21,18 @@ object GameLevelNavRoute : NavRoute
 @Serializable
 object GameExampleNavRoute : NavRoute
 
+/////////////One Round Wonder//////////////////////
 @Serializable
 object GameDrawNavRoute : NavRoute
 
 @Serializable
 object GameResultNavRoute : NavRoute
+/////////////Speed draw /////////////////////////////
+@Serializable
+object SpeedDrawNavRoute : NavRoute
+
+@Serializable
+object SpeedDrawResultNavRoute : NavRoute
 
 ////////////////////////////////////
 @Serializable

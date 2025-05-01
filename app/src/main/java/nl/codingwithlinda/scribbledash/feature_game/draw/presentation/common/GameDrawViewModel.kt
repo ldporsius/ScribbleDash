@@ -97,8 +97,6 @@ class GameDrawViewModel(
                         canRedo = careTaker.canRedo(),
                     )
                 }
-
-                //println("VIEWMODEL CAN REDO : ${careTaker.canRedo()}")
             }
 
             DrawAction.Save -> {

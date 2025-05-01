@@ -17,6 +17,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCa
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.SpeedDrawScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.SpeedDrawViewModel
 
@@ -63,7 +64,10 @@ fun NavGraphBuilder.speedDrawNavGraph(
           exampleUiState = viewModel.exampleUiState.collectAsStateWithLifecycle().value,
           gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
           onAction = gameDrawViewModel::handleAction,
-          onDone = viewModel::onDone,
+          onDone = {
+              gameDrawViewModel.handleAction(DrawAction.Clear)
+              viewModel.onDone()
+          },
           actionOnClose = navToHome,
 
       )

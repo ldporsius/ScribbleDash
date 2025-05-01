@@ -2,8 +2,11 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_dra
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.UserDrawCanvas
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
@@ -21,11 +24,14 @@ fun SpeedDrawScreen(
     actionOnClose: () -> Unit,
     modifier: Modifier = Modifier) {
 
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         SpeedDrawTopBar(
             uiState = topBarUiState,
             actionOnClose = actionOnClose,
-            modifier = modifier
+            modifier = Modifier.fillMaxWidth()
+                .padding(16.dp)
         )
 
         AnimatedContent(topBarUiState.drawState, label = "") { drawState ->

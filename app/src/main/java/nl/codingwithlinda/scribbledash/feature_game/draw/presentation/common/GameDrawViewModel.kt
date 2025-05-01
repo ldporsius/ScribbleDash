@@ -35,7 +35,7 @@ class GameDrawViewModel(
 
     private fun canUndo() = countUndoes < 5 && offsets.value.isNotEmpty()
 
-    val coloredPaths: Flow<List<AndroidDrawPath>> = offsets.map { list ->
+    private val coloredPaths: Flow<List<AndroidDrawPath>> = offsets.map { list ->
        list.map {
            offsetParser.parseOffset(
                pathDrawer = pathDrawer,

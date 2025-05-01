@@ -24,7 +24,8 @@ fun SpeedDrawTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         SpeedDrawCounter(
-            timeLeft = uiState.timeLeft
+            timeLeft = uiState.timeLeft,
+            textColor = uiState.timeLeftColor()
         )
 
         GameSuccessCounter(

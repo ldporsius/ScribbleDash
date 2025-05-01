@@ -56,7 +56,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
           gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
           onAction = gameDrawViewModel::handleAction,
           actionOnClose = navToHome,
-          modifier = Modifier
+
       )
 
     }

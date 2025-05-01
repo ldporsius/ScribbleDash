@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
@@ -20,7 +21,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.surfaceHigh
 @Composable
 fun SpeedDrawCounter(
     timeLeft: String,
-    modifier: Modifier = Modifier
+    textColor: Color
 ) {
 
     Box(modifier = Modifier
@@ -33,6 +34,7 @@ fun SpeedDrawCounter(
     ) {
         Text(timeLeft,
             style = headlineXSmall,
+            color = textColor
         )
     }
 }
@@ -41,7 +43,10 @@ fun SpeedDrawCounter(
 @Composable
 private fun SpeedDrawCounterPreview() {
     ScribbleDashTheme {
-        SpeedDrawCounter(timeLeft = "2:00")
+        SpeedDrawCounter(
+            timeLeft = "2:00",
+            textColor = MaterialTheme.colorScheme.onSurface
+        )
 
     }
 }

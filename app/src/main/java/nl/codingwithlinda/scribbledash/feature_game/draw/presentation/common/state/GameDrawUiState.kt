@@ -1,8 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state
 
 import androidx.compose.runtime.Immutable
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.ColoredDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 
 @Immutable
 data class GameDrawUiState(

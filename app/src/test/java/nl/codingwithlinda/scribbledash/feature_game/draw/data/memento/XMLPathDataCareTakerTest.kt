@@ -1,6 +1,6 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.memento
 
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import org.junit.Assert.*
 import org.junit.Test
 

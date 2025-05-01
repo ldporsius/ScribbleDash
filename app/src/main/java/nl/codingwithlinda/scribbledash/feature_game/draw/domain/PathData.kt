@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.data
+package nl.codingwithlinda.scribbledash.feature_game.draw.domain
 
 import androidx.compose.ui.geometry.Offset
 

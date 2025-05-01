@@ -20,15 +20,17 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
+import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 
 @Composable
 fun UserDrawCanvas(
-    gridColor: Color,
     offsetParser: OffsetParser<AndroidDrawPath>,
     pathDrawer: PathDrawer<AndroidDrawPath>,
     uiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit
 ) {
+
+    val gridColor: Color = onSurface
     Canvas(modifier = Modifier
         .width(360.dp)
         .aspectRatio(1f)

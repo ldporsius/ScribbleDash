@@ -1,8 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.memento
 
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.commands.DrawPathCommandImpl
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.commands.DrawPathCommandImpl2
 
 class PathDataCareTaker2: CareTaker<PathData, List<PathData>> {

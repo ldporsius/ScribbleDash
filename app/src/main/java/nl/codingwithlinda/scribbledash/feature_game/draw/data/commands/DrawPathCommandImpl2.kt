@@ -1,7 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.commands
 
 import nl.codingwithlinda.scribbledash.core.domain.commands.DrawPathCommand
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 
 data class DrawPathCommandImpl2(
     val pathData: List<PathData>,

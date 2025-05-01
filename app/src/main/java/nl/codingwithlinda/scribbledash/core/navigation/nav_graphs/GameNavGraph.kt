@@ -116,8 +116,6 @@ fun NavGraphBuilder.GameNavGraph(
                     },
                     uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
                     onAction = viewModel::handleAction,
-                    pathDrawer = pathDrawer,
-                    offsetParser = offsetParser
                 )
             }
 

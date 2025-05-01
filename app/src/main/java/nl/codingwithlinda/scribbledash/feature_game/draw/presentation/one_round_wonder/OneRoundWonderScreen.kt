@@ -23,13 +23,11 @@ import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 
 @Composable
 fun OneRoundWonderScreen(
-    offsetParser: OffsetParser<AndroidDrawPath>,
-    pathDrawer: PathDrawer<AndroidDrawPath>,
     uiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit,
     actionOnClose: () -> Unit,
 ) {
-    val gridColor = MaterialTheme.colorScheme.onSurface
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(
@@ -55,9 +53,6 @@ fun OneRoundWonderScreen(
             )
 
             UserDrawCanvas(
-                gridColor = gridColor,
-                offsetParser = offsetParser,
-                pathDrawer = pathDrawer,
                 uiState = uiState,
                 onAction = onAction
             )

@@ -20,17 +20,20 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
+import nl.codingwithlinda.scribbledash.ui.theme.onBackground
 import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 
 @Composable
 fun UserDrawCanvas(
-    offsetParser: OffsetParser<AndroidDrawPath>,
-    pathDrawer: PathDrawer<AndroidDrawPath>,
+    //offsetParser: OffsetParser<AndroidDrawPath>,
+    //pathDrawer: PathDrawer<AndroidDrawPath>,
     uiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit
 ) {
 
     val gridColor: Color = onSurface
+    val pathColor: Color = onBackground
+
     Canvas(modifier = Modifier
         .width(360.dp)
         .aspectRatio(1f)
@@ -67,18 +70,16 @@ fun UserDrawCanvas(
             )
         }
 
-        uiState.drawPaths.onEach {
-            val path = offsetParser.parseOffset(pathDrawer, it)
-            val color = Color(it.color)
+        uiState.drawPaths.onEach {path ->
+            //val path = offsetParser.parseOffset(pathDrawer, it)
             drawPath(
                 path = path.path.asComposePath(),
-                color = color,
+                color = pathColor,
                 style = Stroke(width = 2.dp.toPx())
             )
         }
-        uiState.currentPath?.let {
-            val path = offsetParser.parseOffset(pathDrawer, it)
-            val color = Color(it.color)
+        uiState.currentPath?.let { path ->
+            val color = pathColor
             drawPath(
                 path = path.path.asComposePath(),
                 color = color,

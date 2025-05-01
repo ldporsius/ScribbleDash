@@ -29,6 +29,7 @@ fun SpeedDrawScreen(
     exampleUiState: DrawExampleUiState,
     gameDrawUiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit,
+    onDone: () -> Unit,
     actionOnClose: () -> Unit,
     ) {
 
@@ -73,6 +74,7 @@ fun SpeedDrawScreen(
                             GameDrawBottomBar(
                                 uiState = gameDrawUiState,
                                 onAction = onAction,
+                                onDone = onDone,
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }

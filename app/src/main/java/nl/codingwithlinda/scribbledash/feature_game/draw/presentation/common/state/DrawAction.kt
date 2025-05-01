@@ -9,5 +9,5 @@ sealed interface DrawAction {
     data object Redo : DrawAction
     data object Clear : DrawAction
     data object Save : DrawAction
-    data object Done : DrawAction
+    //data object Done : DrawAction
 }

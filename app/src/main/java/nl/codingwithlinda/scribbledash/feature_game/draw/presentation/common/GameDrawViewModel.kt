@@ -158,25 +158,24 @@ class GameDrawViewModel(
                     }
                 }
             }
-
-            DrawAction.Done -> {
-                val result = offsets.value.map {pd->
-                    offsetParser.parseOffset(
-                        pathDrawer = pathDrawer,
-                        pathData = pd
-                    )
-                }
-
-                val newUserResult = ResultManager.INSTANCE.getLastResult()?.copy(
-                    userPath = result
-                )
-                newUserResult?.let {
-                    ResultManager.INSTANCE.updateResult(it)
-                }
-
-                navToResult()
-            }
-
         }
+    }
+
+    fun onDone(){
+        val result = offsets.value.map {pd->
+            offsetParser.parseOffset(
+                pathDrawer = pathDrawer,
+                pathData = pd
+            )
+        }
+
+        val newUserResult = ResultManager.INSTANCE.getLastResult()?.copy(
+            userPath = result
+        )
+        newUserResult?.let {
+            ResultManager.INSTANCE.updateResult(it)
+        }
+
+        navToResult()
     }
 }

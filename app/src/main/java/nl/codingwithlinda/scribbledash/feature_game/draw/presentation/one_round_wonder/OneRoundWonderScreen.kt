@@ -25,6 +25,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 fun OneRoundWonderScreen(
     uiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit,
+    onDone: () -> Unit,
     actionOnClose: () -> Unit,
 ) {
 
@@ -66,6 +67,7 @@ fun OneRoundWonderScreen(
             GameDrawBottomBar(
                 uiState = uiState,
                 onAction = onAction,
+                onDone = onDone,
                 modifier = Modifier.fillMaxWidth()
             )
         }

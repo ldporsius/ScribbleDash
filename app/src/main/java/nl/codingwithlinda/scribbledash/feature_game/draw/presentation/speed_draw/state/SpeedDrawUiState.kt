@@ -7,17 +7,17 @@ import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 
 data class SpeedDrawUiState(
     val drawState: DrawState = DrawState.EXAMPLE,
-    val timeLeftSeconds: Int = 180,
+    val timeLeftSeconds: Int = Int.MAX_VALUE,
     val timeLeft: String = "",
     val successes: String = ""
 ){
 
     fun timeLeftColor(): Color {
-        val isTimeLeft = SpeedDrawTimeController.isTimeBelowLimit(
+        val isTimeScarce = SpeedDrawTimeController.isTimeBelowLimit(
             timeLeft = timeLeftSeconds
         )
 
-        return if (isTimeLeft) onSurface else nl.codingwithlinda.scribbledash.ui.theme.error
+        return if (isTimeScarce) nl.codingwithlinda.scribbledash.ui.theme.error else onSurface
     }
 
 

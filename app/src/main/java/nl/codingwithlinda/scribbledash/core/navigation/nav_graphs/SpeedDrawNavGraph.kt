@@ -28,7 +28,15 @@ fun NavGraphBuilder.speedDrawNavGraph(
 
     composable<SpeedDrawNavRoute> {
 
-        val viewModel = viewModel<SpeedDrawViewModel>()
+        val viewModel = viewModel<SpeedDrawViewModel>(
+            factory = viewModelFactory {
+                initializer {
+                    SpeedDrawViewModel(
+                        exampleProvider = appModule.drawExampleProvider
+                    )
+                }
+            }
+        )
         val pathDrawer = StraightPathDrawer()
         val offsetParser = AndroidOffsetParser
         val careTaker = remember {
@@ -55,6 +63,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
           exampleUiState = viewModel.exampleUiState.collectAsStateWithLifecycle().value,
           gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
           onAction = gameDrawViewModel::handleAction,
+          onDone = viewModel::onDone,
           actionOnClose = navToHome,
 
       )

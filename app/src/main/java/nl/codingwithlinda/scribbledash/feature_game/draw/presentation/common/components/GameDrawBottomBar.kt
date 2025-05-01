@@ -19,6 +19,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.surfaceLowest
 fun GameDrawBottomBar(
     uiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit,
+    onDone: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -54,7 +55,7 @@ fun GameDrawBottomBar(
             text = "Done",
             color = clearButtonColor,
             borderColor = surfaceHigh,
-            onClick = { onAction(DrawAction.Done) }
+            onClick = { onDone() }
         )
     }
 }

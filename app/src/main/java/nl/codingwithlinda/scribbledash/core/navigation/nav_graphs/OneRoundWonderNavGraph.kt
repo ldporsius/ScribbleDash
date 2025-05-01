@@ -108,6 +108,7 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
             },
             uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
             onAction = viewModel::handleAction,
+            onDone = viewModel::onDone
         )
     }
 

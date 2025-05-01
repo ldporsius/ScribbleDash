@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.centerPath
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.combinedPath
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmap
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmapUiOnly
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
@@ -49,9 +48,8 @@ import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
-import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawableMultiPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.CustomColoredButton
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.state.GameResultAction
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient

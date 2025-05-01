@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state
 
 import androidx.compose.ui.geometry.Offset
 

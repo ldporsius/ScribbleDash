@@ -11,7 +11,8 @@ import kotlinx.coroutines.test.setMain
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before

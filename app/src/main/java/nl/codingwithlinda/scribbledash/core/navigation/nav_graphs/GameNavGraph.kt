@@ -25,8 +25,9 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRou
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.GameDrawScreen
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.GameDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderTopBar
 import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevelScreen
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.GameResultScreen
 import nl.codingwithlinda.scribbledash.feature_game.result.presentation.GameResultViewModel
@@ -76,8 +77,12 @@ fun NavGraphBuilder.GameNavGraph(
 
                 DrawExampleScreen(
                     uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
-                    actionOnClose = {
-                        navToHome()
+                    topbar = {
+                        OneRoundWonderTopBar(
+                            actionOnClose = {
+                                navToHome()
+                            }
+                        )
                     }
                 )
             }
@@ -105,7 +110,7 @@ fun NavGraphBuilder.GameNavGraph(
                 val viewModel = viewModel<GameDrawViewModel>(
                     factory = factory
                 )
-                GameDrawScreen(
+                OneRoundWonderScreen(
                     actionOnClose = {
                         navToHome()
                     },

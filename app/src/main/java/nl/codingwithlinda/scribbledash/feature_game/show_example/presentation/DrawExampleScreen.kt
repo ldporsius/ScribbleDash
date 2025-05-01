@@ -39,7 +39,8 @@ import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 @Composable
 fun DrawExampleScreen(
     uiState: DrawExampleUiState,
-    actionOnClose: () -> Unit,
+    topbar: @Composable () -> Unit,
+   // actionOnClose: () -> Unit,
 ) {
     val gridColor = MaterialTheme.colorScheme.onSurface
     var tMatrix by remember {
@@ -51,15 +52,8 @@ fun DrawExampleScreen(
             brush = backgroundGradient
         )
     ) {
-        IconButton(
-            onClick = { actionOnClose() },
-            modifier = Modifier.align(Alignment.TopEnd)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "close"
-            )
-        }
+
+        topbar()
 
         Column(
             modifier = Modifier
@@ -154,7 +148,9 @@ private fun PreviewDrawExampleScreen() {
             uiState = DrawExampleUiState(
                 drawPaths = listOf(path.path)
             ),
-            actionOnClose = {}
+           topbar = {
+
+           }
         )
 
     }

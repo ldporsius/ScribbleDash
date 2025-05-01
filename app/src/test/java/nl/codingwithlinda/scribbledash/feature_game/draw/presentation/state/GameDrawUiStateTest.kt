@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state
 
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 import org.junit.Assert.*
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 
 @Composable
 fun UserDrawCanvas(

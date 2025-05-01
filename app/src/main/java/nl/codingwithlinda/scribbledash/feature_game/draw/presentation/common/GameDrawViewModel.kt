@@ -1,9 +1,5 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common
 
-import androidx.compose.ui.graphics.asComposePath
-import androidx.core.graphics.and
-import androidx.core.graphics.flatten
-import androidx.core.graphics.plus
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,11 +13,10 @@ import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),

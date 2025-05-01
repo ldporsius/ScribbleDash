@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -6,10 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,15 +15,14 @@ import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.GameDrawBottomBar
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.OneRoundWonderTopBar
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components.UserDrawCanvas
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameDrawBottomBar
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.UserDrawCanvas
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 
 @Composable
-fun GameDrawScreen(
+fun OneRoundWonderScreen(
     offsetParser: OffsetParser<AndroidDrawPath>,
     pathDrawer: PathDrawer<AndroidDrawPath>,
     uiState: GameDrawUiState,

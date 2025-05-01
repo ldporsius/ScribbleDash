@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.components
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -6,8 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.DrawAction
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.state.GameDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.CustomColoredButton
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.SmallButton
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundDark
 import nl.codingwithlinda.scribbledash.ui.theme.onBackground
 import nl.codingwithlinda.scribbledash.ui.theme.success

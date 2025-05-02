@@ -13,7 +13,7 @@ data class SpeedDrawUiState(
     val timeLeftSeconds: Int = CountDownSpeedDraw.STARTTIME,
     val successes: Int = 0
 ){
-    fun timeLeft(): String = SpeedDrawTimeLeftUseCase().invoke(timeLeftSeconds)
+    fun timeLeft(): String = SpeedDrawTimeLeftUseCase.invoke(timeLeftSeconds)
     fun timeLeftColor(): Color {
         val isTimeScarce = SpeedDrawTimeController.isTimeBelowLimit(
             timeLeft = timeLeftSeconds

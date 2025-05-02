@@ -12,7 +12,7 @@ import kotlin.math.roundToInt
 
 
 typealias Accuracy = Int
-class ResultCalculator {
+object ResultCalculator {
 
     fun calculateResult(drawResult: DrawResult,
                         strokeWidthUser: Int,
@@ -54,13 +54,13 @@ class ResultCalculator {
 //        println("visibleUserPixels = $visibleUserPixels")
 
         val accuracy = (correct.toFloat() / visibleUserPixels.toFloat()) * 100
-        println("-- in resultcalculator --. accuracy = $accuracy")
+        //println("-- in resultcalculator --. accuracy = $accuracy")
 
         val missingLengthPenalty = getMissingLengthPenalty(
            drawResult
         )
 
-        println("-- in resultcalculator -- . missingLengthPenalty = $missingLengthPenalty")
+        //println("-- in resultcalculator -- . missingLengthPenalty = $missingLengthPenalty")
 
         //Final Score (%) = Coverage (%) - Missing Length Penalty (%)
         return try {
@@ -139,7 +139,7 @@ class ResultCalculator {
         val penalty = 100 - (lengthU / lengthE) * 100
 
 
-        println(" -- in resultcalculator -- . lengthE = $lengthE, lengthU = $lengthU, deservesPenalty = $deservesPenalty, penalty = $penalty")
+        //println(" -- in resultcalculator -- . lengthE = $lengthE, lengthU = $lengthU, deservesPenalty = $deservesPenalty, penalty = $penalty")
 
         return if(deservesPenalty) penalty
         else 0f

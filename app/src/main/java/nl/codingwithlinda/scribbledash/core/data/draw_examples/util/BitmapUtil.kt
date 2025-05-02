@@ -16,10 +16,10 @@ fun normalisedPath(
     val rect = RectF()
     path.computeBounds(rect, true)
 
-    println("--In normalisedPath fun--. requiredSize = $requiredSize")
-    println("--In normalisedPath fun--. rect: w = ${rect.width()},h = ${rect.height()}")
-    println("--In normalisedPath fun--. rect: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
-    println("--In normalisedPath fun--. rect: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
+//    println("--In normalisedPath fun--. requiredSize = $requiredSize")
+//    println("--In normalisedPath fun--. rect: w = ${rect.width()},h = ${rect.height()}")
+//    println("--In normalisedPath fun--. rect: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
+//    println("--In normalisedPath fun--. rect: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
 
     //println("--In normalisedPath fun--. inset = $inset")
 
@@ -28,21 +28,21 @@ fun normalisedPath(
     val scaleMin = minOf(sx, sy)
     val aspectRatio = rect.width() / rect.height()
 
-    println("--In normalisedPath fun--. sx = $sx, sy = $sy, scaleMin = $scaleMin")
+   // println("--In normalisedPath fun--. sx = $sx, sy = $sy, scaleMin = $scaleMin")
 
     val dx = requiredSize.toFloat() / 2 - rect.centerX()
     val dy = requiredSize.toFloat() / 2 - rect.centerY()
 
-    println("--In normalisedPath fun--. dx = $dx, dy = $dy")
+    //println("--In normalisedPath fun--. dx = $dx, dy = $dy")
 
     path.transform(Matrix().apply {
         setTranslate(-rect.left, -rect.top)
     }
     )
     path.computeBounds(rect, true)
-    println("--In normalisedPath fun--. rect 2: w = ${rect.width()},h = ${rect.height()}")
-    println("--In normalisedPath fun--. rect 2: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
-    println("--In normalisedPath fun--. rect 2: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
+//    println("--In normalisedPath fun--. rect 2: w = ${rect.width()},h = ${rect.height()}")
+//    println("--In normalisedPath fun--. rect 2: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
+//    println("--In normalisedPath fun--. rect 2: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
 
     val dstRect = RectF(
         inset,
@@ -59,9 +59,9 @@ fun normalisedPath(
 
     path.computeBounds(rect, true)
 
-    println("--In normalisedPath fun--. rect 3: w = ${rect.width()},h = ${rect.height()}")
-    println("--In normalisedPath fun--. rect 3: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
-    println("--In normalisedPath fun--. rect 3: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
+//    println("--In normalisedPath fun--. rect 3: w = ${rect.width()},h = ${rect.height()}")
+//    println("--In normalisedPath fun--. rect 3: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
+//    println("--In normalisedPath fun--. rect 3: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
 
     return path
 }
@@ -118,26 +118,35 @@ fun List<AndroidDrawPath>.toBitmap(
 
     nPath.computeBounds(boundingBox, true)
 
-    val bm = Bitmap.createBitmap(
-        (boundingBox.width() + maxStrokeWidth * 2).toInt(),
-        (boundingBox.height() + maxStrokeWidth * 2).toInt(),
-        Bitmap.Config.ARGB_8888)
+    try {
+
+        val bm = Bitmap.createBitmap(
+            (boundingBox.width() + maxStrokeWidth * 2).toInt(),
+            (boundingBox.height() + maxStrokeWidth * 2).toInt(),
+            Bitmap.Config.ARGB_8888
+        )
 
 
-    val canvas = android.graphics.Canvas(bm)
-    val paint = android.graphics.Paint().apply {
-        color = paintColor
-        style = android.graphics.Paint.Style.STROKE
-        strokeWidth = basisStrokeWidth
-        isAntiAlias = false
+        val canvas = android.graphics.Canvas(bm)
+        val paint = android.graphics.Paint().apply {
+            color = paintColor
+            style = android.graphics.Paint.Style.STROKE
+            strokeWidth = basisStrokeWidth
+            isAntiAlias = false
+        }
+
+        canvas.drawPath(nPath, paint)
+
+//        println("bitmap from list paths: boundingbox w = ${boundingBox.width()}, boundingbox h = ${boundingBox.height()}")
+//        println("bitmap from list paths: bm w = ${bm.width}, bm h = ${bm.height}")
+
+        return bm
+    }catch (e: Exception){
+        e.printStackTrace()
+
     }
+    return Bitmap.createBitmap(requiredSize, requiredSize, Bitmap.Config.ARGB_8888)
 
-    canvas.drawPath(nPath, paint)
-
-    println("bitmap from list paths: boundingbox w = ${boundingBox.width()}, boundingbox h = ${boundingBox.height()}")
-    println("bitmap from list paths: bm w = ${bm.width}, bm h = ${bm.height}")
-
-   return bm
 }
 
 fun List<AndroidDrawPath>.toBitmapUiOnly(

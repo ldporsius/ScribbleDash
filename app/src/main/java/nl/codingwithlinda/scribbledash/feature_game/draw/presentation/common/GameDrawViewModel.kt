@@ -86,6 +86,7 @@ class GameDrawViewModel(
             }
             DrawAction.Clear -> {
 
+                currentPath = null
                 careTaker.clear()
                 offsets.update {
                     emptyList()
@@ -159,6 +160,7 @@ class GameDrawViewModel(
     }
 
     fun onDone(){
+        currentPath = null
         val result = offsets.value.map {pd->
             offsetParser.parseOffset(
                 pathDrawer = pathDrawer,

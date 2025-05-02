@@ -1,6 +1,5 @@
 package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,6 +22,8 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.Gam
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.result.SpeedDrawResultScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.result.SpeedDrawResultViewModel
 
 fun NavGraphBuilder.speedDrawNavGraph(
     gameNavController: NavHostController,
@@ -41,13 +42,16 @@ fun NavGraphBuilder.speedDrawNavGraph(
                 initializer {
                     SpeedDrawViewModel(
                         exampleProvider = appModule.drawExampleProvider,
-                        resultCalculator = ResultCalculator(),
-                        ratingMapper = RatingMapper(appModule.ratingTextGenerator),
-                        bitmapPrinter = bitmapPrinter,
-                        navToResult = {
-                            gameNavController.navigate(SpeedDrawResultNavRoute)
-                        }
-                    )
+                        resultCalculator = ResultCalculator,
+                            bitmapPrinter = bitmapPrinter,
+                            navToResult = {
+                                gameNavController.navigate(SpeedDrawResultNavRoute){
+                                    popUpTo(SpeedDrawNavRoute){
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        )
                 }
             }
         )
@@ -88,6 +92,18 @@ fun NavGraphBuilder.speedDrawNavGraph(
 
     composable<SpeedDrawResultNavRoute> {
 
-        Text("SpeedDrawResult")
+        val viewModel = viewModel<SpeedDrawResultViewModel>(
+            factory = viewModelFactory {
+                initializer {
+                    SpeedDrawResultViewModel(
+                        ratingMapper = RatingMapper(appModule.ratingTextGenerator)
+                    )
+                }
+            }
+        )
+        SpeedDrawResultScreen(
+            uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+            onClose = navToHome
+        )
     }
 }

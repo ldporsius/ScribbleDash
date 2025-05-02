@@ -15,7 +15,7 @@ import org.junit.Test
 
 class ResultCalculatorTest{
 
-    private val calculator = ResultCalculator()
+    private val calculator = ResultCalculator
     private val context: Application = ApplicationProvider.getApplicationContext<Application>()
     private val provider = AndroidDrawExampleProvider.getInstance(context)
 

@@ -2,6 +2,8 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_dra
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,15 +12,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
-import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
-import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
+import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
+import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.core.domain.util.BitmapPrinter
-import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.speed_draw.usecase.SpeedDrawIsSuccessUseCase
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state.DrawExampleUiState
@@ -26,7 +29,6 @@ import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.st
 class SpeedDrawViewModel(
     private val exampleProvider: AndroidDrawExampleProvider,
     private val resultCalculator: ResultCalculator,
-    private val ratingMapper: RatingMapper,
     private val bitmapPrinter: BitmapPrinter,
     private val navToResult: () -> Unit
 ): ViewModel() {
@@ -48,48 +50,58 @@ class SpeedDrawViewModel(
 
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _exampleUiState.value)
-
+    private var countDownJob: Job? = null
     init {
        resetExampleCountdown()
 
         collectSpeedDrawCountdown()
+
+        countDownJob?.invokeOnCompletion {
+            println("SpeedDrawViewModel countdown finished. $it")
+            navToResult()
+        }
     }
 
+
     private fun collectSpeedDrawCountdown(){
-        _speedDrawCountdown.startCountdown.onEach { count ->
+        countDownJob = _speedDrawCountdown.startCountdown.onEach { count ->
             _topBarUiState.update {
                 it.copy(
                     timeLeftSeconds = count
                 )
             }
             if (count == 0){
-                navToResult()
+                delay(100)
+                countDownJob?.cancel()
             }
-        }.launchIn(viewModelScope)
+        }
+            .launchIn(viewModelScope)
+
     }
 
     fun onDone(){
         _speedDrawCountdown.pause()
 
-        val accuracy = resultCalculator.calculateResult(
-            drawResult = ResultManager.INSTANCE.getLastResult()!!,
-            strokeWidthUser = 4
-        ){
-           bitmapPrinter.printBitmap(it, "speeddraw_${System.currentTimeMillis()}.png")
-        }
+        viewModelScope.launch {
+            val lastResult = ResultManager.INSTANCE.getLastResult() ?: return@launch
+            val accuracy = resultCalculator.calculateResult(
+                drawResult = lastResult,
+                strokeWidthUser = 4
+            ){
+                bitmapPrinter.printBitmap(it, "speeddraw_${System.currentTimeMillis()}.png")
+            }
+            println("SpeedDrawViewModel accuracy: ${accuracy}")
+            GamesManager.INSTANCE.updateLatestGame(GameMode.SPEED_DRAW, listOf(lastResult))
 
-        val rating = RatingFactory.getRating(accuracy)
-        println("SpeedDrawViewModel accuracy: ${accuracy}")
+            val success = SpeedDrawIsSuccessUseCase().invoke(accuracy)
+            val successCount = if(success) 1 else 0
 
-
-        val success = rating.toAccuracyPercent > Oops().toAccuracyPercent
-        val successCount = if(success) 1 else 0
-
-        _topBarUiState.update {
-            it.copy(
-                drawState = DrawState.EXAMPLE,
-                successes = it.successes + successCount
-            )
+            _topBarUiState.update {
+                it.copy(
+                    drawState = DrawState.EXAMPLE,
+                    successes = it.successes + successCount
+                )
+            }
         }
 
         startNewExample()

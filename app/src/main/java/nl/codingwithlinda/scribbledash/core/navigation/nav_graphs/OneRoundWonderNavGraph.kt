@@ -119,7 +119,7 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
     composable<GameResultNavRoute> {
 
         val ratingTextGenerator = appModule.ratingTextGenerator
-        val resultCalculator = ResultCalculator()
+        val resultCalculator = ResultCalculator
 
         val context = LocalContext.current
         val bitmapPrinter = AndroidBitmapPrinter(context)

@@ -30,6 +30,8 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.com
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameSuccessCounter
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
+import nl.codingwithlinda.scribbledash.ui.theme.onBackground
+import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 import nl.codingwithlinda.scribbledash.ui.theme.primary
 import nl.codingwithlinda.scribbledash.ui.theme.surfaceHigh
 
@@ -124,8 +126,19 @@ fun SpeedDrawResultScreen(
 
                     GameSuccessCounter(
                         successes = uiState.successCount.toString(),
-                        backgroundColor = uiState.backgroundColor()
+                        backgroundColor = uiState.backgroundColor(),
+                        foregroundColor = if (uiState.isHighestNumberOfSuccesses) surfaceHigh else onBackground
                     )
+
+                    if (uiState.isHighestNumberOfSuccesses){
+                        Text(
+                            "NEW HIGH!",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = onSurface,
+                            modifier = Modifier
+                        )
+
+                    }
                 }
             }
 
@@ -168,7 +181,9 @@ private fun SpeedDrawResultScreenPreview() {
                     title = UiText.DynamicText("Meh"),
                     text = UiText.StringResource(R.string.feedback_oops_4)
                 ),
-                isTopScore = true
+                isTopScore = true,
+                successCount = 12,
+                isHighestNumberOfSuccesses = true
             ),
             onClose = {}
         )

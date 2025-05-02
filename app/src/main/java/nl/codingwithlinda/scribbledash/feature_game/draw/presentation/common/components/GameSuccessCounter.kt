@@ -18,12 +18,15 @@ import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 import nl.codingwithlinda.scribbledash.ui.theme.headlineXSmall
+import nl.codingwithlinda.scribbledash.ui.theme.onBackground
+import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 import nl.codingwithlinda.scribbledash.ui.theme.surfaceLow
 
 @Composable
 fun GameSuccessCounter(
     successes: String,
-    backgroundColor: Color = surfaceLow
+    backgroundColor: Color = surfaceLow,
+    foregroundColor: Color = onBackground
     ) {
 
     Box(modifier = Modifier
@@ -39,7 +42,8 @@ fun GameSuccessCounter(
         ){
             Text(successes,
                 style = headlineXSmall,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
+                color = foregroundColor
             )
         }
         Image(

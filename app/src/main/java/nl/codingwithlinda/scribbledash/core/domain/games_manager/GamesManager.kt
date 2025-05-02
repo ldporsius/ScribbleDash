@@ -60,19 +60,74 @@ enum class GamesManager {
         return totalAccuracy / (game.drawResults.size)
     }
 
-    fun numberSuccessesForLatestGame(mode: GameMode): Int{
-        val game = gamesForMode(mode).maxBy { it.id }
-        return game.drawResults.count {
+    private fun countSuccesses(drawResults: List<DrawResult>): Int{
+        return drawResults.count {
             ResultCalculator.calculateResult(it, 4){} >= Meh().fromAccuracyPercent
         }
     }
 
-    fun listAccuracies(): Map<GameMode,List<Int>>  = gamesHistory.groupBy { it.gameMode }.mapValues { (_, games) ->
+    fun numberSuccessesForLatestGame(mode: GameMode): Int{
+        val game = gamesForMode(mode).maxBy { it.id }
+        return countSuccesses(game.drawResults)
+    }
+
+    fun numberSuccessesForMode(mode: GameMode): Map<Game, Int>{
+        val games = gamesForMode(mode)
+        val result = games.associateWith { game ->
+           countSuccesses(game.drawResults)
+        }
+        return result
+    }
+
+
+    private fun listAccuracies(): Map<GameMode,List<Int>>  = gamesHistory.groupBy { it.gameMode }.mapValues { (_, games) ->
         games.flatMap { it.drawResults }.map {
             ResultCalculator.calculateResult(it, 4){
-                println("bitmap created: $it")
+                //println("bitmap created: $it")
             }
         }
+    }
+
+    private fun averageAccuracyPerGame(mode: GameMode): Map<Game, Int> {
+        val games = gamesForMode(mode)
+        val result = games.associateWith { game ->
+            game.drawResults.fastSumBy {
+                ResultCalculator.calculateResult(it, 4){}
+            }
+        }
+        return result
+    }
+
+    private fun isHighestScoreForGameMode(mode: GameMode): Boolean{
+        if (gamesForMode(mode).size == 1) return true
+
+        val avgScores = averageAccuracyPerGame(mode)
+
+        println("GAMES MANAGER AVG SCORES: $avgScores")
+
+        val highestScore = avgScores.values.max()
+        val latestScore = averageAccuracyForLatestGame(mode)
+
+        println("GAMES MANAGER HIGHEST SCORE: $highestScore")
+        println("GAMES MANAGER LATEST SCORE: $latestScore")
+
+        val isUniqueHighestScore = avgScores.count { it.value == latestScore } == 1
+        println("GAMES MANAGER IS UNIQUE HIGHEST SCORE: $isUniqueHighestScore")
+
+        return latestScore == highestScore && isUniqueHighestScore
+
+    }
+
+    fun isHighestNumberOfSuccesses(mode: GameMode): Boolean{
+        if (gamesForMode(mode).size == 1) return true
+
+        val avgSuccesses = numberSuccessesForMode(mode)
+        val highestSuccesses = avgSuccesses.values.max()
+        val latestSuccesses = numberSuccessesForLatestGame(mode)
+
+        val isUniqueHighestSuccesses = avgSuccesses.count { it.value == latestSuccesses } == 1
+
+        return isUniqueHighestSuccesses
     }
 
     fun isNewTopScore(mode: GameMode): Boolean{
@@ -83,21 +138,13 @@ enum class GamesManager {
             }
         }}")
 
-        val scores = listAccuracies()[mode] ?: return true
+        val isHighestScoreForGameMode = isHighestScoreForGameMode(mode)
+        val isHighestNumberOfSuccesses = isHighestNumberOfSuccesses(mode)
+        println("GAMES MANAGER HIGHEST SCORE FOR GAME MODE: ${isHighestScoreForGameMode}")
+        println("GAMES MANAGER HIGHEST NUMBER OF SUCCESSES: ${isHighestNumberOfSuccesses}")
 
-        val sortedScores = scores.sortedDescending()
+        return isHighestScoreForGameMode || isHighestNumberOfSuccesses
 
-        println("GAMES MANAGER SORTED SCORES: $sortedScores")
-
-        val latestScore = averageAccuracyForLatestGame(mode)
-        val countLatestScore = sortedScores.count { it == latestScore }
-        val latestScoreIndex = sortedScores.indexOf(latestScore)
-
-        println("GAMES MANAGER LATEST SCORE: $latestScore")
-        println("GAMES MANAGER COUNT LATEST SCORE: $countLatestScore")
-        println("GAMES MANAGER LATEST SCORE INDEX: $latestScoreIndex")
-
-        return latestScoreIndex == 0 && countLatestScore == 1
 
     }
 

@@ -27,12 +27,14 @@ class SpeedDrawResultViewModel(
 
             val numSuccesses = GamesManager.INSTANCE.numberSuccessesForLatestGame(GameMode.SPEED_DRAW)
             val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
+            val isHighestNumberOfSuccesses = GamesManager.INSTANCE.isHighestNumberOfSuccesses(GameMode.SPEED_DRAW)
 
             _uiState.update {
                 it.copy(
                     ratingUi = ratingUi,
                     successCount = numSuccesses,
-                    isTopScore = isTopScore
+                    isTopScore = isTopScore,
+                    isHighestNumberOfSuccesses = isHighestNumberOfSuccesses
                 )
             }
         }

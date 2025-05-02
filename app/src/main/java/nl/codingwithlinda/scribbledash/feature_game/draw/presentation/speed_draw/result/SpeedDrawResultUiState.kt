@@ -8,9 +8,10 @@ import nl.codingwithlinda.scribbledash.ui.theme.topscoreColor
 data class SpeedDrawResultUiState(
     val ratingUi: RatingUi? = null,
     val isTopScore: Boolean = true,
-    val successCount: Int = 0
+    val successCount: Int = 0,
+    val isHighestNumberOfSuccesses: Boolean = false
 ){
-    fun backgrounColor(): Color {
+    fun backgroundColor(): Color {
         return if (isTopScore) {
             topscoreColor
         } else {

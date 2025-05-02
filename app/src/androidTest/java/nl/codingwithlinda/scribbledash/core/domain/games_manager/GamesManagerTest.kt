@@ -33,9 +33,19 @@ class GamesManagerTest{
     }
 
     @Test
-    fun testIsNotTopScoreIfSameScoreTwice(){
+    fun testIsTopScoreIfOnlyOneGameInHistory(){
         GamesManager.INSTANCE.updateLatestGame(GameMode.SPEED_DRAW, listOf(testData))
         GamesManager.INSTANCE.updateLatestGame(GameMode.SPEED_DRAW, listOf(testData))
+
+        val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
+
+        assertTrue(isTopScore)
+    }
+    @Test
+    fun testIsNotTopScoreIfSameScoreTwice() = runBlocking{
+        GamesManager.INSTANCE.addGame(GameMode.SPEED_DRAW, listOf(testData))
+        delay(500)
+        GamesManager.INSTANCE.addGame(GameMode.SPEED_DRAW, listOf(testData))
 
         val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
 
@@ -48,7 +58,6 @@ class GamesManagerTest{
             fakeDrawResultDifferentPaths()))
         delay(100)
         GamesManager.INSTANCE.addGame(GameMode.SPEED_DRAW, listOf(fakeDrawResultSamePaths()))
-
 
         val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
 

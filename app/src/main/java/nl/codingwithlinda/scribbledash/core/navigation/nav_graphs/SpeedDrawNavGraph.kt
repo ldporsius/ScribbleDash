@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
@@ -10,9 +11,13 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
+import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawResultNavRoute
+import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
@@ -29,11 +34,21 @@ fun NavGraphBuilder.speedDrawNavGraph(
 
     composable<SpeedDrawNavRoute> {
 
+        val context = LocalContext.current
+        val bitmapPrinter = remember {
+            AndroidBitmapPrinter(context)
+        }
         val viewModel = viewModel<SpeedDrawViewModel>(
             factory = viewModelFactory {
                 initializer {
                     SpeedDrawViewModel(
-                        exampleProvider = appModule.drawExampleProvider
+                        exampleProvider = appModule.drawExampleProvider,
+                        resultCalculator = ResultCalculator(),
+                        ratingMapper = RatingMapper(appModule.ratingTextGenerator),
+                        bitmapPrinter = bitmapPrinter,
+                        navToResult = {
+                            gameNavController.navigate(SpeedDrawResultNavRoute)
+                        }
                     )
                 }
             }
@@ -49,9 +64,6 @@ fun NavGraphBuilder.speedDrawNavGraph(
                     careTaker = careTaker,
                     offsetParser = offsetParser,
                     pathDrawer = pathDrawer,
-                    navToResult = {
-                        gameNavController.navigate(GameResultNavRoute)
-                    }
                 )
             }
 
@@ -65,12 +77,19 @@ fun NavGraphBuilder.speedDrawNavGraph(
           gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
           onAction = gameDrawViewModel::handleAction,
           onDone = {
+              gameDrawViewModel.onDone()
               gameDrawViewModel.handleAction(DrawAction.Clear)
+
               viewModel.onDone()
           },
           actionOnClose = navToHome,
 
       )
 
+    }
+
+    composable<SpeedDrawResultNavRoute> {
+
+        Text("SpeedDrawResult")
     }
 }

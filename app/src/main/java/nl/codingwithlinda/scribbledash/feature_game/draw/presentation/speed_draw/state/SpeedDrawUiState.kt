@@ -9,7 +9,7 @@ data class SpeedDrawUiState(
     val drawState: DrawState = DrawState.EXAMPLE,
     val timeLeftSeconds: Int = Int.MAX_VALUE,
     val timeLeft: String = "",
-    val successes: String = ""
+    val successes: Int = 0
 ){
 
     fun timeLeftColor(): Color {

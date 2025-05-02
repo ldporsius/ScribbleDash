@@ -92,9 +92,6 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                     careTaker = careTaker,
                     offsetParser = offsetParser,
                     pathDrawer = pathDrawer,
-                    navToResult = {
-                        gameNavController.navigate(GameResultNavRoute)
-                    }
                 )
             }
 
@@ -108,7 +105,10 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
             },
             uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
             onAction = viewModel::handleAction,
-            onDone = viewModel::onDone
+            onDone = {
+                viewModel.onDone()
+                gameNavController.navigate(GameResultNavRoute)
+            }
         )
     }
 

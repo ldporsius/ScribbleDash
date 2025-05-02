@@ -8,7 +8,6 @@ enum class ResultManager {
     INSTANCE;
 
     private val results = mutableListOf<DrawResult>()
-    val resultsList: List<DrawResult> = results.toList()
 
     var gameMode: GameMode? = null
         set(value) {

@@ -20,18 +20,6 @@ class GameResultViewModel(
 
     private val ratingMapper = RatingMapper(ratingTextGenerator)
 
-    private val accuracy = MutableStateFlow<Int>(-1)
-
-    private fun getRandomRating(): Rating {
-        val accuracy = (0 .. 100).random()
-
-        this.accuracy.value = accuracy
-
-        val rating = ratingFactory.getRating(accuracy)
-
-        return rating
-    }
-
     private fun calculateAccuracy(drawResult: DrawResult): Int{
        val accuracy = resultCalculator.calculateResult(
             drawResult,

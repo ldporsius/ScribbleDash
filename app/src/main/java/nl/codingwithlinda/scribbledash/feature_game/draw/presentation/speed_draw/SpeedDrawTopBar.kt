@@ -29,7 +29,7 @@ fun SpeedDrawTopBar(
         )
 
         GameSuccessCounter(
-            successes = uiState.successes
+            successes = uiState.successes.toString()
         )
 
         CloseButton(

@@ -26,7 +26,6 @@ class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
     private val offsetParser: OffsetParser<AndroidDrawPath>,
     private val pathDrawer: PathDrawer<AndroidDrawPath>,
-    private val navToResult: () -> Unit
 ): ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())
@@ -174,6 +173,5 @@ class GameDrawViewModel(
             ResultManager.INSTANCE.updateResult(it)
         }
 
-        navToResult()
     }
 }

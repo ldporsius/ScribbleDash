@@ -31,9 +31,9 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.Strai
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderTopBar
-import nl.codingwithlinda.scribbledash.feature_game.result.presentation.GameResultScreen
-import nl.codingwithlinda.scribbledash.feature_game.result.presentation.GameResultViewModel
-import nl.codingwithlinda.scribbledash.feature_game.result.presentation.state.GameResultAction
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.DrawExampleScreen
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.ShowExampleViewModel
 
@@ -107,7 +107,11 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
             onAction = viewModel::handleAction,
             onDone = {
                 viewModel.onDone()
-                gameNavController.navigate(GameResultNavRoute)
+                gameNavController.navigate(GameResultNavRoute){
+                    popUpTo(GameLevelNavRoute){
+                        inclusive = true
+                    }
+                }
             }
         )
     }
@@ -153,7 +157,13 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                                     navToHome()
                                 }
                                 GameResultAction.TryAgain -> {
-                                    gameNavController.navigate(GameLevelNavRoute)
+                                    gameNavController.navigate(GameLevelNavRoute){
+                                        this.launchSingleTop = true
+                                        popUpTo(GameLevelNavRoute){
+                                            inclusive = false
+                                        }
+
+                                    }
                                 }
                             }
                         }

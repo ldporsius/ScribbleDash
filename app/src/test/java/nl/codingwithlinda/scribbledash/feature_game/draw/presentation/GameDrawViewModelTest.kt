@@ -35,7 +35,6 @@ class GameDrawViewModelTest {
             careTaker = careTaker,
             offsetParser = offsetParser,
             pathDrawer = pathDrawer,
-            navToResult = {}
         )
     }
     @After
@@ -199,11 +198,5 @@ class GameDrawViewModelTest {
             cancelAndConsumeRemainingEvents()
         }
     }
-
-
-
-
-
-
 
 }

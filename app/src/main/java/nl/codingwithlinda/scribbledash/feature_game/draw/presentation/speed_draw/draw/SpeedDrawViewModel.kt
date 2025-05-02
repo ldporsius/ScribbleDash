@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
-import nl.codingwithlinda.scribbledash.core.domain.model.Rating
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
@@ -21,7 +20,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.state.SpeedDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state.DrawExampleUiState
 
 class SpeedDrawViewModel(
@@ -60,7 +59,6 @@ class SpeedDrawViewModel(
         _speedDrawCountdown.startCountdown.onEach { count ->
             _topBarUiState.update {
                 it.copy(
-                    timeLeft = count.toString(),
                     timeLeftSeconds = count
                 )
             }

@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameDrawBottomBar
@@ -19,7 +18,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.com
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.state.SpeedDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.DrawExampleScreen
 import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state.DrawExampleUiState
 

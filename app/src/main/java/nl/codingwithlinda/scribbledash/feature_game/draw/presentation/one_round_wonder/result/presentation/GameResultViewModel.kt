@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.result.presentation
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

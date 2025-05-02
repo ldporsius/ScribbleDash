@@ -2,7 +2,6 @@ package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -14,7 +13,6 @@ import androidx.navigation.compose.composable
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
-import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawResultNavRoute
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
@@ -23,8 +21,8 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.Andr
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.SpeedDrawScreen
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.SpeedDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawViewModel
 
 fun NavGraphBuilder.speedDrawNavGraph(
     gameNavController: NavHostController,

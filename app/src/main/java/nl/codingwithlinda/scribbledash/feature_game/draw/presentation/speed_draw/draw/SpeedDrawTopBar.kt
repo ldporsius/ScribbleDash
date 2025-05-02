@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CloseButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameSuccessCounter
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.state.SpeedDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 
 @Composable
@@ -24,7 +24,7 @@ fun SpeedDrawTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         SpeedDrawCounter(
-            timeLeft = uiState.timeLeft,
+            timeLeft = uiState.timeLeft(),
             textColor = uiState.timeLeftColor()
         )
 
@@ -44,7 +44,7 @@ fun SpeedDrawTopBar(
 private fun SpeedDrawTopBarPreview() {
 
     val uiState = SpeedDrawUiState(
-        timeLeft = "2:00"
+       timeLeftSeconds = 120
     )
     ScribbleDashTheme {
         SpeedDrawTopBar(

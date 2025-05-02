@@ -34,6 +34,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.onBackground
 import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 import nl.codingwithlinda.scribbledash.ui.theme.primary
 import nl.codingwithlinda.scribbledash.ui.theme.surfaceHigh
+import nl.codingwithlinda.scribbledash.ui.theme.surfaceLow
 
 @Composable
 fun SpeedDrawResultScreen(
@@ -86,7 +87,10 @@ fun SpeedDrawResultScreen(
                 ElevatedCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    colors = CardDefaults.elevatedCardColors().copy(
+                        containerColor = surfaceLow
+                    )
 
 
                 ) {

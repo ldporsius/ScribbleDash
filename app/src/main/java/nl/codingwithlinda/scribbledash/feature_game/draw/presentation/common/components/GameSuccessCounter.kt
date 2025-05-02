@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.surfaceLow
 @Composable
 fun GameSuccessCounter(
     successes: String,
+    backgroundColor: Color = surfaceLow
     ) {
 
     Box(modifier = Modifier
@@ -31,7 +33,7 @@ fun GameSuccessCounter(
 
         Box(modifier = Modifier
             .size(width = 60.dp, height = 28.dp)
-            .background(color = surfaceLow, shape = RoundedCornerShape(50))
+            .background(color = backgroundColor, shape = RoundedCornerShape(50))
             .align(androidx.compose.ui.Alignment.CenterEnd),
             contentAlignment = androidx.compose.ui.Alignment.Center
         ){
@@ -57,7 +59,10 @@ fun GameSuccessCounter(
 private fun GameSuccessCounterPreview() {
 
     ScribbleDashTheme {
-        GameSuccessCounter(successes = "2")
+        GameSuccessCounter(
+            successes = "2",
+            backgroundColor = surfaceLow
+        )
 
     }
 }

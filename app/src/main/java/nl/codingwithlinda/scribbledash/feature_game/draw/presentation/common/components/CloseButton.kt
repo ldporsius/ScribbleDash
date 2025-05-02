@@ -16,12 +16,11 @@ import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 @Composable
 fun CloseButton(
     actionOnClose: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     IconButton(
         onClick = { actionOnClose() },
         modifier = Modifier
-            .size(32.dp)
+            .size(48.dp)
             .border(
                 width = 2.dp,
                 color = onSurface,
@@ -31,6 +30,7 @@ fun CloseButton(
         Icon(
             imageVector = Icons.Rounded.Close,
             contentDescription = "close",
+            modifier = Modifier.size(24.dp),
             tint = onSurface
         )
     }

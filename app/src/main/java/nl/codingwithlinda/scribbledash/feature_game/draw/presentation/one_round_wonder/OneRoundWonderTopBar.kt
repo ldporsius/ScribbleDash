@@ -32,7 +32,7 @@ fun OneRoundWonderTopBar(
 
        CloseButton(
            actionOnClose = actionOnClose,
-           modifier = Modifier
+
        )
     }
 

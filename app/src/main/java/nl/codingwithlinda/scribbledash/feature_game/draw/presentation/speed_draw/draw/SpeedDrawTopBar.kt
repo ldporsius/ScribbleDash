@@ -34,7 +34,6 @@ fun SpeedDrawTopBar(
 
         CloseButton(
             actionOnClose = { actionOnClose() },
-            modifier = Modifier.size(48.dp)
         )
     }
 }

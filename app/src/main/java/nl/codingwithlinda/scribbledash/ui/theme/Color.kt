@@ -28,3 +28,5 @@ val backgroundGradient = Brush.verticalGradient(
 val oneRoundWonderColor = Color(0xFF0dd280)
 val speedDrawColor = Color(0xFF238cff)
 val endlessModeColor = Color(0xFFfa852c)
+
+val topscoreColor = Color(0xFFED6363)

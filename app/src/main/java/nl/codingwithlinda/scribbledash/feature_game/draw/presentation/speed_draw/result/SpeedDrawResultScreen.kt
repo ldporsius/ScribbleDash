@@ -39,7 +39,8 @@ import nl.codingwithlinda.scribbledash.ui.theme.surfaceLow
 @Composable
 fun SpeedDrawResultScreen(
     uiState: SpeedDrawResultUiState,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onDrawAgain: () -> Unit
 ) {
 
     uiState.ratingUi ?: return
@@ -166,7 +167,7 @@ fun SpeedDrawResultScreen(
             text = "Draw again",
             color = primary,
             borderColor = Color.White,
-            onClick = onClose,
+            onClick = onDrawAgain,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -189,7 +190,8 @@ private fun SpeedDrawResultScreenPreview() {
                 successCount = 12,
                 isHighestNumberOfSuccesses = true
             ),
-            onClose = {}
+            onClose = {},
+            onDrawAgain = {}
         )
 
     }

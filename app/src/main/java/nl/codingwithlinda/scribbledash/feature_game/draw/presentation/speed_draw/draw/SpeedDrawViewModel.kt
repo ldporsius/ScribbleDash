@@ -50,6 +50,7 @@ class SpeedDrawViewModel(
 
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _exampleUiState.value)
+
     private var countDownJob: Job? = null
     init {
        resetExampleCountdown()
@@ -76,7 +77,6 @@ class SpeedDrawViewModel(
             }
         }
             .launchIn(viewModelScope)
-
     }
 
     fun onDone(){

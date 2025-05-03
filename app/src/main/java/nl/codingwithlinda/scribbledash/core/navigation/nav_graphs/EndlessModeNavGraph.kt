@@ -14,6 +14,7 @@ import androidx.navigation.navigation
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessHostNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessRootNavRoute
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
@@ -64,15 +65,20 @@ fun NavGraphBuilder.endlessModeNavGraph(
                     EndlessDrawScreen(
                         topBarUiState = endlessDrawViewModel.endlessUiState.collectAsStateWithLifecycle().value,
                         exampleUiState = endlessDrawViewModel.exampleUiState.collectAsStateWithLifecycle().value,
-                        gameDrawUiState = gameDrawViewModel.uiState.value,
+                        gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
                         onAction = gameDrawViewModel::handleAction,
-                        onDone = {},
+                        onDone = {
+                            navController.navigate(EndlessResultNavRoute)
+                        },
                         actionOnClose = {}
                     )
                 }
+
+                composable<EndlessResultNavRoute> {
+
+                    Text(text = "Endless Result")
+                }
             }
-
         }
-
     }
 }

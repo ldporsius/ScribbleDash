@@ -4,6 +4,10 @@ import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 
+/*
+// Usage:
+
+ */
 enum class ResultManager {
     INSTANCE;
 

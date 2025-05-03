@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
@@ -40,4 +41,9 @@ class SpeedDrawResultViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
+    fun startNewGame() {
+        viewModelScope.launch {
+            gamesManager.addGame(GameMode.SPEED_DRAW, emptyList())
+        }
+    }
 }

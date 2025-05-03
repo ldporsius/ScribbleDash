@@ -107,6 +107,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
             uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
             onClose = navToHome,
             onDrawAgain = {
+                viewModel.startNewGame()
                 gameNavController.navigate(SpeedDrawNavRoute) {
                     popUpTo(SpeedDrawResultNavRoute) {
                         inclusive = true

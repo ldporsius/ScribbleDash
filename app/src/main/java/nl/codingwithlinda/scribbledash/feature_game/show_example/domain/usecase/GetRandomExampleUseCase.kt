@@ -9,9 +9,10 @@ class SaveRandomExampleUseCase(
 
     fun example(){
         val index = (0 until exampleProvider.examples.size).random()
-        val example = exampleProvider.examples.get(index)
+        val example = exampleProvider.examples[index]
 
         ResultManager.INSTANCE.let { manager ->
+
             manager.getLastResult()?.let {lastResult ->
                 manager.updateResult(
                     lastResult.copy(

@@ -35,24 +35,16 @@ fun NavGraphBuilder.GameNavGraph(
                             level = level
                         )
                         ResultManager.INSTANCE.gameMode?.let { gameMode ->
-
                             when (gameMode) {
                                 GameMode.ONE_ROUND_WONDER -> {
                                     gameNavController.navigate(GameExampleNavRoute)
-
                                 }
-
                                 GameMode.SPEED_DRAW -> {
                                     gameNavController.navigate(SpeedDrawNavRoute)
-
                                 }
-
                                 GameMode.ENDLESS_MODE -> {
-
                                     gameNavController.navigate(EndlessRootNavRoute)
-
                                 }
-
                             }
                         }
                     }

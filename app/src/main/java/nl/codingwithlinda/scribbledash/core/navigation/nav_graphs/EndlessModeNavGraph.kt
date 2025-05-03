@@ -2,6 +2,7 @@ package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -18,6 +19,8 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCa
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawViewModel
 
 
 fun NavGraphBuilder.endlessModeNavGraph(
@@ -48,7 +51,24 @@ fun NavGraphBuilder.endlessModeNavGraph(
                     val gameDrawViewModel = viewModel<GameDrawViewModel>(
                         factory = factory
                     )
-                    Text("Endless Draw screen")
+
+                    val endlessDrawViewModel = viewModel<EndlessDrawViewModel>(
+                        factory = viewModelFactory {
+                            initializer {
+                                EndlessDrawViewModel(
+                                    exampleProvider = appModule.drawExampleProvider
+                                )
+                            }
+                        }
+                    )
+                    EndlessDrawScreen(
+                        topBarUiState = endlessDrawViewModel.endlessUiState.collectAsStateWithLifecycle().value,
+                        exampleUiState = endlessDrawViewModel.exampleUiState.collectAsStateWithLifecycle().value,
+                        gameDrawUiState = gameDrawViewModel.uiState.value,
+                        onAction = gameDrawViewModel::handleAction,
+                        onDone = {},
+                        actionOnClose = {}
+                    )
                 }
             }
 

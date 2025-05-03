@@ -34,8 +34,8 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
-import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.DrawExampleScreen
-import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.ShowExampleViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.DrawExampleScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.ShowExampleViewModel
 
 fun NavGraphBuilder.oneRoundWonderNavGraph(
     gameNavController: NavHostController,

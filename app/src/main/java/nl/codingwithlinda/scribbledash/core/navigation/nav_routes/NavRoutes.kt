@@ -34,6 +34,20 @@ object SpeedDrawNavRoute : NavRoute
 @Serializable
 object SpeedDrawResultNavRoute : NavRoute
 
-////////////////////////////////////
+/////////////Endless mode///////////////////////
+@Serializable
+object EndlessRootNavRoute : NavRoute
+@Serializable
+object EndlessHostNavRoute : NavRoute
+
+@Serializable
+object EndlessDrawNavRoute : NavRoute
+
+@Serializable
+object EndlessResultNavRoute : NavRoute
+
+@Serializable
+object EndlessGameOverNavRoute : NavRoute
+
 @Serializable
 object StatisticsNavRoute : NavRoute

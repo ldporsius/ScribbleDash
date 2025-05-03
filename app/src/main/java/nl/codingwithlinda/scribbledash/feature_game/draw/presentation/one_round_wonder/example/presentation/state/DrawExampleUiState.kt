@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state
 
 import android.graphics.Path
 import androidx.compose.ui.graphics.Color

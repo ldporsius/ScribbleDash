@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameExampleNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
@@ -34,6 +35,7 @@ fun NavGraphBuilder.GameNavGraph(
                             level = level
                         )
                         ResultManager.INSTANCE.gameMode?.let { gameMode ->
+
                             when (gameMode) {
                                 GameMode.ONE_ROUND_WONDER -> {
                                     gameNavController.navigate(GameExampleNavRoute)
@@ -47,6 +49,7 @@ fun NavGraphBuilder.GameNavGraph(
 
                                 GameMode.ENDLESS_MODE -> {
 
+                                    gameNavController.navigate(EndlessRootNavRoute)
 
                                 }
 
@@ -67,9 +70,11 @@ fun NavGraphBuilder.GameNavGraph(
                 appModule = appModule,
                 navToHome = navToHome
             )
+            endlessModeNavGraph(
+                appModule = appModule
+            )
 
         }
-
 
 
     }

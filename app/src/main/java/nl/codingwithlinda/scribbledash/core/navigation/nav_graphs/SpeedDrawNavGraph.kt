@@ -88,7 +88,6 @@ fun NavGraphBuilder.speedDrawNavGraph(
           actionOnClose = navToHome,
 
       )
-
     }
 
     composable<SpeedDrawResultNavRoute> {

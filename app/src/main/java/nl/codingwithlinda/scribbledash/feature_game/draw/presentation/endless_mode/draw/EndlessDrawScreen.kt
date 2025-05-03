@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
@@ -18,20 +18,19 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.com
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.state.EndlessUiState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.DrawExampleScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
 
 @Composable
-fun SpeedDrawScreen(
-    topBarUiState: SpeedDrawUiState,
+fun EndlessDrawScreen(
+    topBarUiState: EndlessUiState,
     exampleUiState: DrawExampleUiState,
     gameDrawUiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit,
     onDone: () -> Unit,
     actionOnClose: () -> Unit,
-    ) {
-
+) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

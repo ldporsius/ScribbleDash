@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.show_example.presentation
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.show_example.presentation.state.DrawExampleUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
 
 class ShowExampleViewModel(
     private val exampleProvider: AndroidDrawExampleProvider,
@@ -58,13 +58,5 @@ class ShowExampleViewModel(
             }
 
         }
-    }
-
-    fun getGlasses(): AndroidDrawPath {
-        return exampleProvider.getByResId(R.drawable.glasses)
-    }
-
-    fun forceUmbrella(): AndroidDrawPath {
-       return exampleProvider.getByResId(R.drawable.umbrella)
     }
 }

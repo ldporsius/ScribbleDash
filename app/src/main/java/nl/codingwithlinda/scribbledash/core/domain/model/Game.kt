@@ -2,7 +2,8 @@ package nl.codingwithlinda.scribbledash.core.domain.model
 
 data class Game(
     val id: String,
+    val dateCreated: Long,
     val gameMode: GameMode,
-    val drawResults: List<DrawResult>
+    val scores: List<Int>
 
 )

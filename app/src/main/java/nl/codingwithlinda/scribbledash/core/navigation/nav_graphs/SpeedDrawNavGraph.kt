@@ -44,6 +44,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
                         exampleProvider = appModule.drawExampleProvider,
                         resultCalculator = ResultCalculator,
                             bitmapPrinter = bitmapPrinter,
+                            gamesManager = appModule.gamesManager,
                             navToResult = {
                                 gameNavController.navigate(SpeedDrawResultNavRoute){
                                     popUpTo(SpeedDrawNavRoute){
@@ -96,7 +97,8 @@ fun NavGraphBuilder.speedDrawNavGraph(
             factory = viewModelFactory {
                 initializer {
                     SpeedDrawResultViewModel(
-                        ratingMapper = RatingMapper(appModule.ratingTextGenerator)
+                        ratingMapper = RatingMapper(appModule.ratingTextGenerator),
+                        gamesManager = appModule.gamesManager
                     )
                 }
             }

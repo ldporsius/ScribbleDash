@@ -9,7 +9,7 @@ class SpeedDrawTimeLeftUseCaseTest{
     fun `test time left calculation - 120 seconds is rendered ok`(){
         val twoMinutes = 120
 
-        val timeLeft = SpeedDrawTimeLeftUseCase().invoke(twoMinutes)
+        val timeLeft = SpeedDrawTimeLeftUseCase.invoke(twoMinutes)
 
         assertEquals("02:00", timeLeft)
 

@@ -13,20 +13,21 @@ import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 
 class SpeedDrawResultViewModel(
-    private val ratingMapper: RatingMapper
+    private val ratingMapper: RatingMapper,
+    private val gamesManager: GamesManager
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(SpeedDrawResultUiState())
 
     val uiState = _uiState
         .onStart {
-            val avg = GamesManager.INSTANCE.averageAccuracyForLatestGame(GameMode.SPEED_DRAW)
+            val avg = gamesManager.averageAccuracyForLatestGame(GameMode.SPEED_DRAW)
             val rating = RatingFactory.getRating(avg)
             val ratingUi = ratingMapper.toUi(rating, avg)
 
-            val numSuccesses = GamesManager.INSTANCE.numberSuccessesForLatestGame(GameMode.SPEED_DRAW)
-            val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
-            val isHighestNumberOfSuccesses = GamesManager.INSTANCE.isHighestNumberOfSuccesses(GameMode.SPEED_DRAW)
+            val numSuccesses = gamesManager.numberSuccessesForLatestGame(GameMode.SPEED_DRAW)
+            val isTopScore = gamesManager.isNewTopScore(GameMode.SPEED_DRAW)
+            val isHighestNumberOfSuccesses = gamesManager.isHighestNumberOfSuccesses(GameMode.SPEED_DRAW)
 
             _uiState.update {
                 it.copy(

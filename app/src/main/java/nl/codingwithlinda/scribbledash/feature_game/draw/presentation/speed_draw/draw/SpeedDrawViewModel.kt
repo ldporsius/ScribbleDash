@@ -30,6 +30,7 @@ class SpeedDrawViewModel(
     private val exampleProvider: AndroidDrawExampleProvider,
     private val resultCalculator: ResultCalculator,
     private val bitmapPrinter: BitmapPrinter,
+    private val gamesManager: GamesManager,
     private val navToResult: () -> Unit
 ): ViewModel() {
     private val _exampleCountdown = CountDownTimer()
@@ -91,7 +92,7 @@ class SpeedDrawViewModel(
                 bitmapPrinter.printBitmap(it, "speeddraw_${System.currentTimeMillis()}.png")
             }
             println("SpeedDrawViewModel accuracy: ${accuracy}")
-            GamesManager.INSTANCE.updateLatestGame(GameMode.SPEED_DRAW, listOf(lastResult))
+            gamesManager.updateLatestGame(GameMode.SPEED_DRAW, listOf(lastResult))
 
             val success = SpeedDrawIsSuccessUseCase().invoke(accuracy)
             val successCount = if(success) 1 else 0

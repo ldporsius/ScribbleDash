@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ScribbleDash"
 include(":app")
- 
+include(":room_persistence")

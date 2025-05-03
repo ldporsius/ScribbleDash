@@ -1,7 +1,10 @@
 package nl.codingwithlinda.scribbledash.core.domain.games_manager
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.test.fakeDrawResultDifferentPaths
 import nl.codingwithlinda.scribbledash.core.test.fakeDrawResultSamePaths
@@ -12,54 +15,63 @@ import org.junit.Test
 
 class GamesManagerTest{
 
-    private val testData = fakeDrawResultSamePaths()
+    private val appContext = ApplicationProvider.getApplicationContext<Application>()
 
+    private val testData = fakeDrawResultSamePaths()
+    private lateinit var appModule: AndroidAppModule
+
+    private lateinit var gamesManager: GamesManager
     @Before
     fun setup(){
-
+        appModule = AndroidAppModule(appContext)
+        gamesManager = GamesManager(
+            appModule.gamesAccess
+        )
     }
 
     @After
     fun tearDown(){
-        GamesManager.INSTANCE.clear()
+        runBlocking {
+            gamesManager.clear()
+        }
     }
     @Test
-    fun testIsTopScore(){
-        GamesManager.INSTANCE.updateLatestGame(GameMode.SPEED_DRAW, listOf(testData))
+    fun testIsTopScore() = runBlocking{
+        gamesManager.updateLatestGame(GameMode.SPEED_DRAW, listOf(testData))
 
-        val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
+        val isTopScore = gamesManager.isNewTopScore(GameMode.SPEED_DRAW)
 
         assertTrue(isTopScore)
     }
 
     @Test
-    fun testIsTopScoreIfOnlyOneGameInHistory(){
-        GamesManager.INSTANCE.updateLatestGame(GameMode.SPEED_DRAW, listOf(testData))
-        GamesManager.INSTANCE.updateLatestGame(GameMode.SPEED_DRAW, listOf(testData))
+    fun testIsTopScoreIfOnlyOneGameInHistory() = runBlocking{
+        gamesManager.updateLatestGame(GameMode.SPEED_DRAW, listOf(testData))
+        gamesManager.updateLatestGame(GameMode.SPEED_DRAW, listOf(testData))
 
-        val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
+        val isTopScore = gamesManager.isNewTopScore(GameMode.SPEED_DRAW)
 
         assertTrue(isTopScore)
     }
     @Test
     fun testIsNotTopScoreIfSameScoreTwice() = runBlocking{
-        GamesManager.INSTANCE.addGame(GameMode.SPEED_DRAW, listOf(testData))
+        gamesManager.addGame(GameMode.SPEED_DRAW, listOf(testData))
         delay(500)
-        GamesManager.INSTANCE.addGame(GameMode.SPEED_DRAW, listOf(testData))
+        gamesManager.addGame(GameMode.SPEED_DRAW, listOf(testData))
 
-        val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
+        val isTopScore = gamesManager.isNewTopScore(GameMode.SPEED_DRAW)
 
         assertFalse(isTopScore)
     }
 
     @Test
     fun testIsTopScoreIfTwoDifferent() = runBlocking{
-        GamesManager.INSTANCE.addGame(GameMode.SPEED_DRAW, listOf(
+        gamesManager.addGame(GameMode.SPEED_DRAW, listOf(
             fakeDrawResultDifferentPaths()))
         delay(100)
-        GamesManager.INSTANCE.addGame(GameMode.SPEED_DRAW, listOf(fakeDrawResultSamePaths()))
+        gamesManager.addGame(GameMode.SPEED_DRAW, listOf(fakeDrawResultSamePaths()))
 
-        val isTopScore = GamesManager.INSTANCE.isNewTopScore(GameMode.SPEED_DRAW)
+        val isTopScore = gamesManager.isNewTopScore(GameMode.SPEED_DRAW)
 
         assertTrue(isTopScore)
     }

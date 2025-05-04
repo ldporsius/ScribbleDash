@@ -16,6 +16,11 @@ object ResultCalculator {
 
     fun calculateResult(drawResult: DrawResult,
                         strokeWidthUser: Int,
+                        ): Accuracy{
+        return calculateResult(drawResult, strokeWidthUser){}
+    }
+    fun calculateResult(drawResult: DrawResult,
+                        strokeWidthUser: Int,
                         printDebug: (Bitmap) -> Unit): Accuracy{
 
 

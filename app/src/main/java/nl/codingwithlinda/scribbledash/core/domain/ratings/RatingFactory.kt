@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.core.domain.ratings
 
+import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.model.Rating
 
 object RatingFactory {
@@ -14,4 +15,12 @@ object RatingFactory {
             else -> UnknownRating()
         }
     }
+    fun getSuccessLimit(mode: GameMode): Int{
+        return when(mode){
+            GameMode.ONE_ROUND_WONDER -> Oops().fromAccuracyPercent
+            GameMode.SPEED_DRAW -> Meh().fromAccuracyPercent
+            GameMode.ENDLESS_MODE -> Good().fromAccuracyPercent
+        }
+    }
+
 }

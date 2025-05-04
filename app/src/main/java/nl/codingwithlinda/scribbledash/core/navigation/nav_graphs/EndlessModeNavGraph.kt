@@ -13,19 +13,26 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessDrawNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessGameOverNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessHostNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessRootNavRoute
+import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.game_over.EndlessGameOverScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.game_over.EndlessGameOverViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.result.EndlessModeResultScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.result.EndlessResultViewModel
 
 
 fun NavGraphBuilder.endlessModeNavGraph(
-    appModule: AndroidAppModule
+    appModule: AndroidAppModule,
+    onNavHome: () -> Unit
 ){
 
     navigation<EndlessRootNavRoute>( startDestination = EndlessHostNavRoute){
@@ -57,7 +64,8 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         factory = viewModelFactory {
                             initializer {
                                 EndlessDrawViewModel(
-                                    exampleProvider = appModule.drawExampleProvider
+                                    exampleProvider = appModule.drawExampleProvider,
+                                    gamesManager = appModule.gamesManager
                                 )
                             }
                         }
@@ -68,6 +76,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
                         onAction = gameDrawViewModel::handleAction,
                         onDone = {
+                            gameDrawViewModel.onDone()
                             navController.navigate(EndlessResultNavRoute)
                         },
                         actionOnClose = {}
@@ -76,9 +85,68 @@ fun NavGraphBuilder.endlessModeNavGraph(
 
                 composable<EndlessResultNavRoute> {
 
-                    Text(text = "Endless Result")
+                    val viewModel = viewModel<EndlessResultViewModel>(
+                        factory = viewModelFactory {
+                            initializer {
+                                EndlessResultViewModel(
+                                    gamesManager = appModule.gamesManager,
+                                    ratingMapper = RatingMapper(appModule.ratingTextGenerator)
+                                )
+                            }
+                        }
+                    )
+                    EndlessModeResultScreen(
+                        endlessResultUiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+                        onClose = {
+                            navController.popBackStack()
+                            onNavHome()
+                        },
+                        onFinish = {
+                            navController.navigate(EndlessGameOverNavRoute){
+                                popUpTo(EndlessDrawNavRoute){
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        onNext = {
+                           navController.navigate(EndlessDrawNavRoute){
+                               popUpTo(EndlessDrawNavRoute){
+                                   inclusive = true
+                               }
+                           }
+                        }
+                    )
                 }
+
+                composable<EndlessGameOverNavRoute> {
+
+                    val viewModel = viewModel<EndlessGameOverViewModel>(
+                        factory = viewModelFactory {
+                            initializer {
+                                EndlessGameOverViewModel(
+                                    gamesManager = appModule.gamesManager,
+                                    ratingMapper = RatingMapper(appModule.ratingTextGenerator)
+                                )
+                            }
+                        }
+                    )
+
+                    EndlessGameOverScreen(
+                        uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+                        onClose = onNavHome,
+                        onDrawAgain = {
+                            navController.navigate(EndlessDrawNavRoute){
+                                popUpTo(EndlessDrawNavRoute){
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    )
+                }
+
             }
         }
+
+
     }
 }

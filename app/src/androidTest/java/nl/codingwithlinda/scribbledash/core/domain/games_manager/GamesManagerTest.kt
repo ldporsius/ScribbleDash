@@ -89,4 +89,17 @@ class GamesManagerTest{
 
         assertTrue(numSuccess == 2)
     }
+
+    @Test
+    fun testNumberSuccessesIsLimitedToGameMode() = runBlocking{
+        gamesManager.addGame(GameMode.SPEED_DRAW, listOf(
+            fakeDrawResultSamePaths()))
+        delay(100)
+        gamesManager.addGame(GameMode.ENDLESS_MODE, listOf(fakeDrawResultSamePaths()))
+        gamesManager.updateLatestGame(GameMode.ENDLESS_MODE, listOf(fakeDrawResultSamePaths()))
+
+        val numSuccessSpeed = gamesManager.numberSuccessesForLatestGame(GameMode.SPEED_DRAW)
+        val numSuccessEndless = gamesManager.numberSuccessesForLatestGame(GameMode.ENDLESS_MODE)
+        assertTrue(numSuccessSpeed == 1 && numSuccessEndless == 2)
+    }
 }

@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.result
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.game_over
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,7 +38,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.surfaceHigh
 import nl.codingwithlinda.scribbledash.ui.theme.surfaceLow
 
 @Composable
-fun SpeedDrawResultScreen(
+fun EndlessGameOverScreen(
     uiState: FinalResultUiState,
     onClose: () -> Unit,
     onDrawAgain: () -> Unit
@@ -67,7 +67,7 @@ fun SpeedDrawResultScreen(
             )
         }
 
-        Text("Time's up!")
+        Text("Game over!")
 
 
         ConstraintLayout {
@@ -177,9 +177,9 @@ fun SpeedDrawResultScreen(
 
 @Preview
 @Composable
-private fun SpeedDrawResultScreenPreview() {
+private fun EndlessGameOverScreenPreview() {
     ScribbleDashTheme {
-        SpeedDrawResultScreen(
+        EndlessGameOverScreen(
             uiState = FinalResultUiState(
                 ratingUi = RatingUi(
                     rating = Meh(),

@@ -14,10 +14,10 @@
       <SelectionState runConfigName="GamesManagerTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testIsTopScoreIfTwoDifferent()">
+      <SelectionState runConfigName="testNumberSuccessesIsLimitedToGame()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testNumberSuccessesIsLimitedToGame()">
+      <SelectionState runConfigName="testNumberSuccessesIsLimitedToGameMode()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

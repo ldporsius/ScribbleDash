@@ -1,13 +1,11 @@
 package nl.codingwithlinda.scribbledash.core.domain.games_manager
 
-import androidx.compose.ui.util.fastSumBy
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import nl.codingwithlinda.scribbledash.core.domain.local_cache.LocalCacheAccess
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.Game
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
-import nl.codingwithlinda.scribbledash.core.domain.ratings.Meh
+import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import java.util.Date
 import kotlin.math.roundToInt
@@ -58,21 +56,17 @@ class GamesManager(
         return totalAccuracy.roundToInt()
     }
 
-    private fun countSuccesses(drawResults: List<DrawResult>): Int{
-        return drawResults.count {
-            ResultCalculator.calculateResult(it, 4){} >= Meh().fromAccuracyPercent
-        }
-    }
-
     suspend fun numberSuccessesForLatestGame(mode: GameMode): Int{
         val game = gamesForMode(mode).maxByOrNull { it.id } ?: return 0
-        return game.scores.count { it >= Meh().fromAccuracyPercent }
+        val successLimit = RatingFactory.getSuccessLimit(mode)
+        return game.scores.count { it >= successLimit }
     }
 
     suspend fun numberSuccessesForMode(mode: GameMode): Map<Game, Int>{
         val games = gamesForMode(mode)
         val result = games.associateWith { game ->
-            game.scores.count { it >= Meh().fromAccuracyPercent }
+            val successLimit = RatingFactory.getSuccessLimit(mode)
+            game.scores.count { it >= successLimit }
         }
         return result
     }
@@ -118,7 +112,6 @@ class GamesManager(
         if (gamesForMode(mode).size == 1) return true
 
         val avgSuccesses = numberSuccessesForMode(mode)
-//        val highestSuccesses = avgSuccesses.values.max()
         val latestSuccesses = numberSuccessesForLatestGame(mode)
 
         val isUniqueHighestSuccesses = avgSuccesses.count { it.value == latestSuccesses } == 1

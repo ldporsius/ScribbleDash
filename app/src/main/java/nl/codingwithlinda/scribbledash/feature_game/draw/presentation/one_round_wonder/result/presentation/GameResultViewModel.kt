@@ -14,7 +14,6 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerato
 class GameResultViewModel(
     private val resultCalculator: ResultCalculator,
     private val ratingTextGenerator: RatingTextGenerator,
-    private val ratingFactory: RatingFactory,
     private val bitmapPrinter: BitmapPrinter
 ): ViewModel() {
 
@@ -32,9 +31,8 @@ class GameResultViewModel(
 
     fun getRatingUi(drawResult: DrawResult): RatingUi {
         val accuracy = calculateAccuracy(drawResult)
-        val rating = ratingFactory.getRating(accuracy)
         println("GameResultViewModel.getRatingUi() accuracy: ${accuracy}")
 
-        return ratingMapper.toUi(rating, accuracy)
+        return ratingMapper.toUi(accuracy)
     }
 }

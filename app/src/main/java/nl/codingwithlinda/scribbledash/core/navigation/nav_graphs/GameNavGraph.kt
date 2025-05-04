@@ -63,11 +63,9 @@ fun NavGraphBuilder.GameNavGraph(
                 navToHome = navToHome
             )
             endlessModeNavGraph(
-                appModule = appModule
+                appModule = appModule,
+                onNavHome = navToHome
             )
-
         }
-
-
     }
 }

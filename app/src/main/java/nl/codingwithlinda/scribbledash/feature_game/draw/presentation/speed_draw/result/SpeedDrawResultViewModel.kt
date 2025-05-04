@@ -10,21 +10,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
-import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.FinalResultUiState
 
 class SpeedDrawResultViewModel(
     private val ratingMapper: RatingMapper,
     private val gamesManager: GamesManager
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(SpeedDrawResultUiState())
+    private val _uiState = MutableStateFlow(FinalResultUiState())
 
     val uiState = _uiState
         .onStart {
             val avg = gamesManager.averageAccuracyForLatestGame(GameMode.SPEED_DRAW)
-            val rating = RatingFactory.getRating(avg)
-            val ratingUi = ratingMapper.toUi(rating, avg)
+            val ratingUi = ratingMapper.toUi(avg)
 
             val numSuccesses = gamesManager.numberSuccessesForLatestGame(GameMode.SPEED_DRAW)
             val isTopScore = gamesManager.isNewTopScore(GameMode.SPEED_DRAW)

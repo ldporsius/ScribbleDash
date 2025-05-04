@@ -43,8 +43,6 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
     navToHome: () -> Unit
 ) {
 
-    val ratingFactory = RatingFactory
-
     composable<GameExampleNavRoute> {
 
         val viewModel = viewModel<ShowExampleViewModel>(
@@ -128,7 +126,6 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                 initializer {
                     GameResultViewModel(
                         ratingTextGenerator = ratingTextGenerator,
-                        ratingFactory = ratingFactory,
                         resultCalculator = resultCalculator,
                         bitmapPrinter = bitmapPrinter
                     )

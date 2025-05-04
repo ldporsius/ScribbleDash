@@ -1,10 +1,10 @@
 package nl.codingwithlinda.scribbledash.core.presentation.util
 
-import nl.codingwithlinda.scribbledash.core.domain.model.Rating
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Good
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Great
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Meh
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
+import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.domain.ratings.UnknownRating
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Woohoo
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
@@ -14,9 +14,9 @@ class RatingMapper(
     private val ratingTextGenerator: RatingTextGenerator
 ) {
     fun toUi(
-        rating: Rating,
         accuracyPercent: Int
     ): RatingUi {
+        val rating = RatingFactory.getRating(accuracyPercent)
         return when (rating) {
             is UnknownRating -> rating.toUi(accuracyPercent)
             is Oops -> rating.toUi(accuracyPercent)

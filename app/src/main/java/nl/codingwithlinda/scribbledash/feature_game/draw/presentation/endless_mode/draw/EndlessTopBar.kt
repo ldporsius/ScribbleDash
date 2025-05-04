@@ -17,8 +17,8 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 
 @Composable
-fun SpeedDrawTopBar(
-    uiState: EndlessUiState,
+fun EndlessTopBar(
+    numberSuccess: Int,
     actionOnClose: () -> Unit,
     modifier: Modifier = Modifier) {
     Row(
@@ -29,7 +29,7 @@ fun SpeedDrawTopBar(
 
         Spacer(modifier = Modifier.size(16.dp))
         GameSuccessCounter(
-            successes = uiState.numberSuccess.toString()
+            successes = numberSuccess.toString()
         )
 
         CloseButton(

@@ -34,8 +34,8 @@ fun EndlessDrawScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        SpeedDrawTopBar(
-            uiState = topBarUiState,
+        EndlessTopBar(
+            numberSuccess = topBarUiState.numberSuccess,
             actionOnClose = actionOnClose,
             modifier = Modifier.fillMaxWidth()
                 .padding(16.dp)

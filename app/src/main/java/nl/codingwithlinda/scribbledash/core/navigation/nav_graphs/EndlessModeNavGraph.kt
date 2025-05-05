@@ -79,7 +79,10 @@ fun NavGraphBuilder.endlessModeNavGraph(
                             gameDrawViewModel.onDone()
                             navController.navigate(EndlessResultNavRoute)
                         },
-                        actionOnClose = {}
+                        actionOnClose = {
+                            navController.popBackStack()
+                            onNavHome()
+                        }
                     )
                 }
 

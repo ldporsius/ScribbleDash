@@ -146,7 +146,11 @@ fun ScribbleDashApp(
             GameNavGraph(
                 appModule = appModule,
                 navToHome = {
-                    rootNavController.navigate(RootNavRoute)
+                    rootNavController.navigate(RootNavRoute){
+                        popUpTo(RootNavRoute){
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }

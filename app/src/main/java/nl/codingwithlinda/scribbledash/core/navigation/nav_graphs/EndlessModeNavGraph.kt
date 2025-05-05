@@ -76,7 +76,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
                         onAction = gameDrawViewModel::handleAction,
                         onDone = {
-                            gameDrawViewModel.onDone()
+                            endlessDrawViewModel.onDone()
                             navController.navigate(EndlessResultNavRoute)
                         },
                         actionOnClose = {

@@ -74,9 +74,7 @@ class GamesManager(
 
     private fun listAccuracies(drawResults: List<DrawResult>): List<Int> {
         return drawResults.map {
-            ResultCalculator.calculateResult(it, 4){
-                //println("bitmap created: $it")
-            }
+            ResultCalculator.calculateResult(it, 4)
         }
     }
 

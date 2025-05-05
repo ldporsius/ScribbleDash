@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,127 +47,130 @@ fun EndlessGameOverScreen(
 
     uiState.ratingUi ?: return
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = backgroundGradient)
-            .padding(16.dp)
-        ,
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Surface(
+        contentColor = onBackground,
+
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-            ,
-            horizontalArrangement = Arrangement.End
+                .fillMaxSize()
+                .background(brush = backgroundGradient)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CloseButton(
-                actionOnClose = onClose
-            )
-        }
-
-        Text("Game over!")
-
-
-        ConstraintLayout {
-            val (image, anchor) = createRefs()
-            val guidline = createGuidelineFromTop(16.dp)
-
-
-            ElevatedCard(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
-                ,
-                colors = CardDefaults.elevatedCardColors().copy(
-                    containerColor = surfaceHigh
-                )
-
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.End
             ) {
+                CloseButton(
+                    actionOnClose = onClose
+                )
+            }
+
+            Text(
+                "Game over!",
+                style = MaterialTheme.typography.bodyLarge,
+            )
+
+
+            ConstraintLayout {
+                val (image, anchor) = createRefs()
+                val guidline = createGuidelineFromTop(16.dp)
+
 
                 ElevatedCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
                     colors = CardDefaults.elevatedCardColors().copy(
-                        containerColor = surfaceLow
+                        containerColor = surfaceHigh,
+                        contentColor = onBackground
                     )
-
 
                 ) {
 
-
-                    Text(
-                        uiState.ratingUi.accuracyPercent.toString() + "%",
-                        style = MaterialTheme.typography.displayLarge,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                    )
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        uiState.ratingUi.title.asString(),
-                        style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                    )
-                    Text(
-                        uiState.ratingUi.text.asString(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 48.dp, vertical = 8.dp),
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                    )
-
-                    GameSuccessCounter(
-                        successes = uiState.successCount.toString(),
-                        backgroundColor = uiState.backgroundColor(),
-                        foregroundColor = if (uiState.isHighestNumberOfSuccesses) surfaceHigh else onBackground
-                    )
-
-                    if (uiState.isHighestNumberOfSuccesses){
-                        Text(
-                            "NEW HIGH!",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = onSurface,
-                            modifier = Modifier
+                    ElevatedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        colors = CardDefaults.elevatedCardColors().copy(
+                            containerColor = surfaceLow,
+                            contentColor = onBackground
                         )
 
+
+                    ) {
+                        Text(
+                            uiState.ratingUi.accuracyPercent.toString() + "%",
+                            style = MaterialTheme.typography.displayLarge,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
                     }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            uiState.ratingUi.title.asString(),
+                            style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                        Text(
+                            uiState.ratingUi.text.asString(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = 48.dp, vertical = 8.dp),
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+
+                        GameSuccessCounter(
+                            successes = uiState.successCount.toString(),
+                            backgroundColor = uiState.backgroundColor(),
+                            foregroundColor = if (uiState.isHighestNumberOfSuccesses) surfaceHigh else onBackground
+                        )
+
+                        if (uiState.isHighestNumberOfSuccesses) {
+                            Text(
+                                "NEW HIGH!",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = onSurface,
+                                modifier = Modifier
+                            )
+
+                        }
+                    }
+                }
+
+                if (uiState.isTopScore) {
+                    Image(
+                        painter = painterResource(id = R.drawable.new_high_score),
+                        contentDescription = "top score",
+                        modifier = Modifier.constrainAs(image) {
+                            top.linkTo(guidline)
+                            bottom.linkTo(guidline)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                    )
                 }
             }
 
-            if (uiState.isTopScore){
-                Image(
-                    painter = painterResource(id = R.drawable.new_high_score),
-                    contentDescription = "top score",
-                    modifier = Modifier.constrainAs(image) {
-                        top.linkTo(guidline)
-                        bottom.linkTo(guidline)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                )
-            }
-
-
+            CustomColoredButton(
+                text = "Draw again",
+                color = primary,
+                borderColor = Color.White,
+                onClick = onDrawAgain,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
-
-        CustomColoredButton(
-            text = "Draw again",
-            color = primary,
-            borderColor = Color.White,
-            onClick = onDrawAgain,
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 
 }

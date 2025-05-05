@@ -16,7 +16,7 @@ class SaveRandomExampleUseCase(
             manager.getLastResult()?.let {lastResult ->
                 manager.updateResult(
                     lastResult.copy(
-                        examplePath = listOf( example)
+                        examplePath = listOf(example)
                     )
                 )
             }

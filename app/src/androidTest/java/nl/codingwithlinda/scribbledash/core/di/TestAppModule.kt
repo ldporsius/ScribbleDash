@@ -12,7 +12,7 @@ import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 class TestAppModule: AppModule {
 
     private val appContext = ApplicationProvider.getApplicationContext<Application>()
-    override val drawExampleProvider: DrawExampleProvider
+    override val drawExampleProvider: AndroidDrawExampleProvider
         get() = AndroidDrawExampleProvider.getInstance(appContext)
 
     val testDb = Room.inMemoryDatabaseBuilder<ScribbleDatabase>(appContext).build()

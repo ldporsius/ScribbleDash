@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +17,6 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameResultComparison
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessTopBar
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
 import nl.codingwithlinda.scribbledash.ui.theme.oneRoundWonderColor
 import nl.codingwithlinda.scribbledash.ui.theme.speedDrawColor
 

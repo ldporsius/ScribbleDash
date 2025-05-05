@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.core.domain.result_manager
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 
 /*
 // Usage:
@@ -11,28 +12,31 @@ import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 enum class ResultManager {
     INSTANCE;
 
-    private val results = mutableListOf<DrawResult>()
+    private var result: DrawResult? = null
 
-    var gameMode: GameMode? = null
-        set(value) {
-            field = value
-            results.clear()
-        }
-
-    fun addResult(level: GameLevel) {
-        val result = DrawResult(
+    private fun newResult(level: GameLevel) : DrawResult {
+        return DrawResult(
             id = System.currentTimeMillis().toString(),
             level = level,
         )
-        results.add(result)
+    }
+
+    fun addResult(level: GameLevel) {
+        result = newResult(level)
     }
 
     fun getLastResult(): DrawResult? {
-        return results.lastOrNull()
+        result ?: addResult(GameLevel.BEGINNER)
+        return result
+    }
+
+    fun updateResult(examplePath: List<AndroidDrawPath>){
+        result = result?.copy(
+            examplePath = examplePath
+        )
     }
 
     fun updateResult(result: DrawResult) {
-        results.remove(result)
-        results.add(result)
+        this.result = result
     }
 }

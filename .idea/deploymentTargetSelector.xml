@@ -8,9 +8,6 @@
       <SelectionState runConfigName="testIsTopScore()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testIsNotTopScoreIfSameScoreTwice()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="GamesManagerTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
@@ -18,6 +15,9 @@
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="testNumberSuccessesIsLimitedToGameMode()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testEndlessDrawViewModel()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

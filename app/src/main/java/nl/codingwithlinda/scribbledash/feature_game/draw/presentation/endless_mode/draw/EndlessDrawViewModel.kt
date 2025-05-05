@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
+import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
@@ -38,6 +39,15 @@ class EndlessDrawViewModel(
     }
 
     fun startNewGame(){
+        viewModelScope.launch {
+            val numberSuccesses = gamesManager.numberSuccessesForLatestGame(GameMode.ENDLESS_MODE)
+
+            _endlessUiState.update {
+                it.copy(
+                    numberSuccess = numberSuccesses
+                )
+            }
+        }
         saveRandomExampleUseCase.example()
 
         _exampleUiState.update {
@@ -83,13 +93,7 @@ class EndlessDrawViewModel(
                     listOf(result)
                 )
             }
-           val numberSuccesses = gamesManager.numberSuccessesForLatestGame(GameMode.ENDLESS_MODE)
 
-            _endlessUiState.update {
-                it.copy(
-                    numberSuccess = numberSuccesses
-                )
-            }
         }
     }
 }

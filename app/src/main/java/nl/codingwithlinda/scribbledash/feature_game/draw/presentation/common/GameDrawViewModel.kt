@@ -101,7 +101,6 @@ class GameDrawViewModel(
 
             DrawAction.Save -> {
                 //println("VIEWMODEL SAVES MEMENTO")
-                //println("VIEWMODEL SAVES MEMENTO. canUndo: ${canUndo()}")
 
                 countUndoes = 0
                 currentPath?.let { pathData ->
@@ -117,6 +116,12 @@ class GameDrawViewModel(
                         currentPath = null,
                     )
                 }
+
+                viewModelScope.launch {
+
+                    updateResultManager()
+                }
+
             }
             DrawAction.Undo -> {
                 if (canUndo()) {
@@ -152,7 +157,7 @@ class GameDrawViewModel(
 
                 redoMemento?.let { paths ->
                     offsets.update {
-                        redoMemento
+                        paths
                     }
                 }
             }
@@ -161,6 +166,9 @@ class GameDrawViewModel(
 
     fun onDone(){
         currentPath = null
+    }
+
+    private fun updateResultManager(){
         val result = offsets.value.map {pd->
             offsetParser.parseOffset(
                 pathDrawer = pathDrawer,
@@ -172,8 +180,9 @@ class GameDrawViewModel(
             userPath = result
         )
         newUserResult?.let {
+            println("GAME DRAW VIEWMODEL SAVES USER PATH")
+
             ResultManager.INSTANCE.updateResult(it)
         }
-
     }
 }

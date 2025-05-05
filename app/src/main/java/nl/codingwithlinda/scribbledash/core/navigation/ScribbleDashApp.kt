@@ -38,6 +38,7 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.StatisticsNavR
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.RootNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation
 import nl.codingwithlinda.scribbledash.core.presentation.util.toUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.feature_home.presentation.HomeScreen
@@ -125,7 +126,7 @@ fun ScribbleDashApp(
                         HomeScreen(
                             gameModes = GameMode.entries.map { it.toUi() },
                             actionOnGameMode = {
-                                ResultManager.INSTANCE.gameMode = it
+                                GameModeNavigation.gameMode = it
                                 rootNavController.navigate(GameNavRoute)
                             }
                         )

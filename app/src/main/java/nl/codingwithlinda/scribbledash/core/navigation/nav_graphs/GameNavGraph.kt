@@ -12,6 +12,7 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameExampleNav
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation
 import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevelScreen
 
 
@@ -34,7 +35,7 @@ fun NavGraphBuilder.GameNavGraph(
                         ResultManager.INSTANCE.addResult(
                             level = level
                         )
-                        ResultManager.INSTANCE.gameMode?.let { gameMode ->
+                        GameModeNavigation.gameMode.let { gameMode ->
                             when (gameMode) {
                                 GameMode.ONE_ROUND_WONDER -> {
                                     gameNavController.navigate(GameExampleNavRoute)

@@ -135,6 +135,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
                         onClose = onNavHome,
                         onDrawAgain = {
+                            viewModel.startNewGame()
                             navController.navigate(EndlessDrawNavRoute){
                                 popUpTo(EndlessDrawNavRoute){
                                     inclusive = true

@@ -106,10 +106,6 @@ fun EndlessGameOverScreen(
                     )
                 }
 
-
-
-
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()

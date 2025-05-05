@@ -13,7 +13,7 @@ fun GameEntity.toDomain(): ScResult<Game, ParseError.GameModeParseError>{
 
     println("GAME ENTITY: $this")
     println("GAME MODE: $gameMode")
-    val scoresJson = scores.split(",").map { it.toInt() }
+    val scoresJson = scores.split(",").mapNotNull { it.toIntOrNull() }
 
     println("SCORES JSON: $scoresJson")
     val game = Game(

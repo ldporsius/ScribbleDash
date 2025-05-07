@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,11 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.core.test.fakeListStatisticInfo
 import nl.codingwithlinda.scribbledash.feature_statistics.presentation.components.StatisticsItem
+import nl.codingwithlinda.scribbledash.feature_statistics.presentation.model.StatisticInfoUi
 
 @Composable
-fun StatisticsScreen() {
-
-    val staticContent = fakeListStatisticInfo()
+fun StatisticsScreen(
+    infos: List<StatisticInfoUi>
+) {
 
     Column(
         modifier = Modifier
@@ -37,9 +39,9 @@ fun StatisticsScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             contentPadding = PaddingValues(vertical = 16.dp)
         ) {
-            items(staticContent.size) { index ->
+            items(infos) { info ->
                 StatisticsItem(
-                    statisticInfo = staticContent[index],
+                    statisticInfo = info,
                     modifier = Modifier.fillMaxWidth()
                 )
             }

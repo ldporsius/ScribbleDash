@@ -30,3 +30,11 @@ val speedDrawColor = Color(0xFF238cff)
 val endlessModeColor = Color(0xFFfa852c)
 
 val topscoreColor = Color(0xFFED6363)
+
+val statisticsColors = listOf(
+    Color(0xFF8E24AA).copy(alpha = 0.1f),
+    Color(0xFF238cff).copy(alpha = 0.1f),
+    Color(0xFFfa852c).copy(alpha = 0.1f),
+    Color(0xFFFDD835).copy(alpha = 0.1f),
+
+)

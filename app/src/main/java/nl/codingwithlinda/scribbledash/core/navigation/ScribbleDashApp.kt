@@ -21,6 +21,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.navigation.destinations.Destination
@@ -43,6 +47,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.toUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.feature_home.presentation.HomeScreen
 import nl.codingwithlinda.scribbledash.feature_statistics.presentation.StatisticsScreen
+import nl.codingwithlinda.scribbledash.feature_statistics.presentation.StatisticsViewModel
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundLight
 import nl.codingwithlinda.scribbledash.ui.theme.primary
 import nl.codingwithlinda.scribbledash.ui.theme.tertiaryContainer
@@ -133,9 +138,18 @@ fun ScribbleDashApp(
                     }
 
                     composable<StatisticsNavRoute> {
-                        StatisticsScreen()
-                    }
+                        val viewModel = viewModel<StatisticsViewModel>(
+                            factory = viewModelFactory {
+                                initializer {
+                                    StatisticsViewModel(appModule.gamesManager)
+                                }
+                            }
+                        )
 
+                        StatisticsScreen(
+                            infos = viewModel.statistics.collectAsStateWithLifecycle().value
+                        )
+                    }
                 }
             }
         }

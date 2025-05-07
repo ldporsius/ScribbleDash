@@ -71,6 +71,10 @@ class GamesManager(
         return result
     }
 
+    suspend fun highestNumberOfSuccessesForMode(mode: GameMode):  Int{
+        return numberSuccessesForMode(mode).values.maxOrNull() ?: 0
+    }
+
 
     private fun listAccuracies(drawResults: List<DrawResult>): List<Int> {
         return drawResults.map {
@@ -84,6 +88,11 @@ class GamesManager(
             game.scores.average().roundToInt()
         }
         return result
+    }
+
+    suspend fun highestAccuracyForGameMode(mode: GameMode): Int {
+        val avgScores = averageAccuracyPerGame(mode)
+        return avgScores.values.maxOrNull() ?: 0
     }
 
     private suspend fun isHighestScoreForGameMode(mode: GameMode): Boolean{

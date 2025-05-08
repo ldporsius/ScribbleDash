@@ -27,13 +27,13 @@ class DrawExampleProviderTest{
         val examples0 = provider0.examples
 
         examples0.forEach {
-            assertFalse(it.path.isEmpty)
+            assertFalse(it.path.isEmpty())
         }
 
         val provider1 = AndroidDrawExampleProvider.getInstance(context)
         val examples1 = provider1.examples
         examples1.forEach {
-            assertFalse(it.path.isEmpty)
+            assertFalse(it.path.isEmpty())
         }
 
         assertSame(provider0, provider1)

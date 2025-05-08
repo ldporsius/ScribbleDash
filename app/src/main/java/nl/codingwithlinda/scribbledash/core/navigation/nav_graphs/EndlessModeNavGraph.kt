@@ -1,6 +1,5 @@
 package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,9 +17,11 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessHostNav
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessRootNavRoute
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawViewModel
@@ -32,17 +33,19 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mo
 
 fun NavGraphBuilder.endlessModeNavGraph(
     appModule: AndroidAppModule,
-    onNavHome: () -> Unit
+    onNavHome: () -> Unit,
+    gameEngine: EndlessGameEngine
 ){
 
     navigation<EndlessRootNavRoute>( startDestination = EndlessHostNavRoute){
         composable<EndlessHostNavRoute>{
             val navController = rememberNavController()
+            val pathDrawer = StraightPathDrawer()
+            val offsetParser = AndroidOffsetParser
 
             NavHost(navController = navController, startDestination = EndlessDrawNavRoute){
                 composable< EndlessDrawNavRoute>{
-                    val pathDrawer = StraightPathDrawer()
-                    val offsetParser = AndroidOffsetParser
+
                     val careTaker = remember {
                         PathDataCareTaker()
                     }
@@ -52,6 +55,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                                 careTaker = careTaker,
                                 offsetParser = offsetParser,
                                 pathDrawer = pathDrawer,
+                                gameEngine = gameEngine
                             )
                         }
 
@@ -64,8 +68,8 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         factory = viewModelFactory {
                             initializer {
                                 EndlessDrawViewModel(
-                                    exampleProvider = appModule.drawExampleProvider,
-                                    gamesManager = appModule.gamesManager
+                                    gamesManager = appModule.gamesManager,
+                                    gameEngine = gameEngine
                                 )
                             }
                         }
@@ -92,6 +96,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         factory = viewModelFactory {
                             initializer {
                                 EndlessResultViewModel(
+                                    gameEngine = gameEngine,
                                     gamesManager = appModule.gamesManager,
                                     ratingMapper = RatingMapper(appModule.ratingTextGenerator)
                                 )

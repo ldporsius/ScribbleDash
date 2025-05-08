@@ -1,13 +1,15 @@
 package nl.codingwithlinda.scribbledash.core.test
 
 import android.graphics.Path
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
+import androidx.compose.ui.geometry.Offset
+import nl.codingwithlinda.scribbledash.core.domain.model.AndroidDrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 
-fun fakeDrawResultSamePaths(): DrawResult{
-    return DrawResult(
+fun fakeDrawResultSamePaths(): AndroidDrawResult{
+    return AndroidDrawResult(
         id = System.currentTimeMillis().toString(),
         level = GameLevel.BEGINNER,
         examplePath = listOf( fakeAndroidDrawPathSquare()),
@@ -15,8 +17,8 @@ fun fakeDrawResultSamePaths(): DrawResult{
     )
 }
 
-fun fakeDrawResultDifferentPaths(): DrawResult{
-    return DrawResult(
+fun fakeDrawResultDifferentPaths(): AndroidDrawResult{
+    return AndroidDrawResult(
         id = System.currentTimeMillis().toString(),
         level = GameLevel.BEGINNER,
         examplePath = listOf( fakeAndroidDrawPathSquare()),
@@ -46,4 +48,14 @@ fun fakePathCircle(): Path{
             0f, 0f, 100f, Path.Direction.CW
         )
     }
+}
+fun fakePathData() = List(10){
+    PathData(
+        id = it.toString(),
+        color = 0,
+        path = fakeOffsets()
+    )
+}
+fun fakeOffsets() = List(10){
+    Offset(it.toFloat(), it.toFloat())
 }

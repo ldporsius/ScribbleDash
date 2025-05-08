@@ -2,14 +2,16 @@ package nl.codingwithlinda.scribbledash.core.domain.result_manager
 
 import android.app.Application
 import android.graphics.Path
+import android.graphics.PathMeasure
 import androidx.test.core.app.ApplicationProvider
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.saveBitmapToFile
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmap
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
+import nl.codingwithlinda.scribbledash.core.domain.model.AndroidDrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -22,7 +24,7 @@ class ResultCalculatorTest{
     @Test
     fun testCalculateResult_samePathAccuracy100(){
         val examplePath = testExampleDrawable(context, R.drawable.eye)
-        val drawResult = DrawResult(
+        val drawResult = AndroidDrawResult(
             id = "",
             level = GameLevel.BEGINNER,
             examplePath = listOf( examplePath),
@@ -41,7 +43,7 @@ class ResultCalculatorTest{
 
     private fun getPathLength(path: Path): Float
     {
-        val pathMeasure = android.graphics.PathMeasure(path, true)
+        val pathMeasure = PathMeasure(path, true)
         return pathMeasure.length
 
     }
@@ -63,7 +65,7 @@ class ResultCalculatorTest{
             println("-- in test half length path --. total length = $it")
 
         }
-        val drawResult = DrawResult(
+        val drawResult = AndroidDrawResult(
             id = "",
             level = GameLevel.BEGINNER,
             examplePath = examplePath,
@@ -83,20 +85,24 @@ class ResultCalculatorTest{
     @Test
     fun testCalculateResult_samePathDifferentStrokeWidthAccuracy100() {
 
-        repeat(35) { i ->
+        repeat(34) { i ->
             val  examplePath= provider.examples[i]
 
-            val origBm = examplePath.toBitmap(500, 2f)
+            val androidPath = coordinatesToPath(examplePath.path)
+            val origBm = listOf( androidPath.path).toBitmap(
+                500, 2f,
+                basisStrokeWidth = 4f,
+            )
             context.saveBitmapToFile(origBm, "orig_bm_$i.png")
 
-            val drawResult = DrawResult(
+            val androidDrawResult = AndroidDrawResult(
                 id = "",
                 level = GameLevel.BEGINNER,
-                examplePath = listOf( examplePath),
-                userPath = listOf(examplePath)
+                examplePath = listOf(androidPath),
+                userPath = listOf(androidPath)
             )
             val accuracy = calculator.calculateResult(
-                drawResult,
+                androidDrawResult,
                 1
             ) {
                 context.saveBitmapToFile(it, "test_calculate_result_$i.png")

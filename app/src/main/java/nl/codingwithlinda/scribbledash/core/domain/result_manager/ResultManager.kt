@@ -1,21 +1,15 @@
 package nl.codingwithlinda.scribbledash.core.domain.result_manager
 
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
-import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
-import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 
-/*
-// Usage:
-
- */
 enum class ResultManager {
     INSTANCE;
 
-    private var result: DrawResult? = null
+    //var level: GameLevel = GameLevel.BEGINNER
 
-    private fun newResult(level: GameLevel) : DrawResult {
-        return DrawResult(
+   /* private var result: AndroidDrawResult? = null
+
+    private fun newResult(level: GameLevel) : AndroidDrawResult {
+        return AndroidDrawResult(
             id = System.currentTimeMillis().toString(),
             level = level,
         )
@@ -25,18 +19,13 @@ enum class ResultManager {
         result = newResult(level)
     }
 
-    fun getLastResult(): DrawResult? {
+    fun getLastResult(): AndroidDrawResult? {
         result ?: addResult(GameLevel.BEGINNER)
         return result
     }
 
-    fun updateResult(examplePath: List<AndroidDrawPath>){
-        result = result?.copy(
-            examplePath = examplePath
-        )
-    }
 
-    fun updateResult(result: DrawResult) {
+    fun updateResult(result: AndroidDrawResult) {
         this.result = result
-    }
+    }*/
 }

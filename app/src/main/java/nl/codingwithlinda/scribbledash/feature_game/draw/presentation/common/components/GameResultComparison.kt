@@ -37,7 +37,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 @Composable
 fun GameResultComparison(
     examplePath: Path,
-    userPath: List<AndroidDrawPath>,
+    userPath: List<Path>,
     checkIcon: @Composable () -> Unit,
     ) {
 

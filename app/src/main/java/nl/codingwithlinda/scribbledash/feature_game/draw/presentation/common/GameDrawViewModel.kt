@@ -19,6 +19,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCa
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.ColoredDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 
@@ -26,6 +27,7 @@ class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
     private val offsetParser: OffsetParser<AndroidDrawPath>,
     private val pathDrawer: PathDrawer<AndroidDrawPath>,
+    private val gameEngine: GameEngine
 ): ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())
@@ -118,8 +120,8 @@ class GameDrawViewModel(
                 }
 
                 viewModelScope.launch {
+                    gameEngine.processUserInput(offsets.value)
 
-                    updateResultManager()
                 }
 
             }
@@ -166,9 +168,13 @@ class GameDrawViewModel(
 
     fun onDone(){
         currentPath = null
+
+        gameEngine.endUserInput {
+
+        }
     }
 
-    private fun updateResultManager(){
+   /* private fun updateResultManager(){
         val result = offsets.value.map {pd->
             offsetParser.parseOffset(
                 pathDrawer = pathDrawer,
@@ -184,5 +190,5 @@ class GameDrawViewModel(
 
             ResultManager.INSTANCE.updateResult(it)
         }
-    }
+    }*/
 }

@@ -21,12 +21,15 @@ import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.core.domain.util.BitmapPrinter
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.speed_draw.usecase.SpeedDrawIsSuccessUseCase
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
 
 class SpeedDrawViewModel(
+    private val gameEngine: GameEngine,
     private val exampleProvider: AndroidDrawExampleProvider,
     private val resultCalculator: ResultCalculator,
     private val bitmapPrinter: BitmapPrinter,
@@ -44,17 +47,17 @@ class SpeedDrawViewModel(
 
     private val _exampleUiState = MutableStateFlow(DrawExampleUiState())
     val exampleUiState = combine( _exampleUiState, exampleIndex){state, index ->
+        state.copy(
+            drawPaths = listOf( examples.get(index).let {
+                coordinatesToPath(it.path).path
+            })
+        )
 
-                state.copy(
-                    drawPaths = listOf( examples.get(index).path)
-                )
-
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _exampleUiState.value)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _exampleUiState.value)
 
     private var countDownJob: Job? = null
     init {
-       resetExampleCountdown()
+        resetExampleCountdown()
 
         collectSpeedDrawCountdown()
 
@@ -86,7 +89,7 @@ class SpeedDrawViewModel(
         _speedDrawCountdown.pause()
 
         viewModelScope.launch {
-            val lastResult = ResultManager.INSTANCE.getLastResult() ?: return@launch
+            val lastResult = gameEngine.getResult()
             val accuracy = resultCalculator.calculateResult(
                 drawResult = lastResult,
                 strokeWidthUser = 4
@@ -119,15 +122,6 @@ class SpeedDrawViewModel(
             update
         }
 
-
-        ResultManager.INSTANCE.getLastResult()?.let {result ->
-            println("SPEED DRAW VIEWMODEL last result: $result")
-            ResultManager.INSTANCE.updateResult(
-                result.copy(
-                    examplePath = listOf(examples.get(exampleIndex.value))
-                )
-            )
-        }
     }
 
     private fun resetExampleCountdown(){

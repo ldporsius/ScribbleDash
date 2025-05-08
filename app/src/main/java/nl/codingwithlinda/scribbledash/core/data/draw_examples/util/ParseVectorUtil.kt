@@ -1,5 +1,8 @@
 package nl.codingwithlinda.scribbledash.core.data.draw_examples.util
 
+import android.graphics.Path
+import android.graphics.PathMeasure
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.PathCoordinates
 import org.xmlpull.v1.XmlPullParser
 
 // Data class to store path information
@@ -83,3 +86,30 @@ fun parseVectorDrawable(context: android.content.Context, resourceId: Int): List
 
     return emptyList()
 }
+
+ fun pathToCoordinates(path: Path): List<PathCoordinates>{
+    val result = mutableListOf<PathCoordinates>()
+    val pathMeasure: PathMeasure = PathMeasure(path, false)
+    val distanceIncrement = 1.0f // adjust based on your needs
+    val pathLength: Float = pathMeasure.length
+    var distance = 0f
+
+    val coordinates = FloatArray(2)
+    val tangent = FloatArray(2)
+
+    while (distance < pathLength) {
+        distance += distanceIncrement
+        if (distance > pathLength) distance = pathLength
+        pathMeasure.getPosTan(distance, coordinates, tangent)
+
+        result.add(
+            PathCoordinates(
+                x = coordinates[0],
+                y = coordinates[1]
+            )
+        )
+    }
+
+    return result
+}
+

@@ -3,12 +3,16 @@ package nl.codingwithlinda.scribbledash.core.data.draw_examples
 import android.app.Application
 import android.graphics.Path
 import android.graphics.PathMeasure
+import androidx.compose.ui.graphics.asComposePath
 import androidx.core.graphics.PathParser
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.parseVectorDrawable
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleCoordinatesDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.CoordinatesDrawPath
 
 
 class AndroidDrawExampleProvider private constructor(
@@ -74,7 +78,7 @@ class AndroidDrawExampleProvider private constructor(
             }
     }
 
-    override val examples: List<AndroidDrawPath> by lazy {
+   /* override val examples: List<AndroidDrawPath> by lazy {
        val paths =  examplesResources.map {
             resourceToDrawPaths(it)
         }
@@ -82,6 +86,7 @@ class AndroidDrawExampleProvider private constructor(
         val flattened = paths.map { drawPaths ->
             flattenPaths(drawPaths.map { it.path })
         }
+
 
         flattened
             .filter {
@@ -92,6 +97,25 @@ class AndroidDrawExampleProvider private constructor(
                 path = it
             )
         }
+    }*/
+    override val examples: List<CoordinatesDrawPath> by lazy {
+        val paths =  examplesResources.map {
+            resourceToDrawPaths(it)
+        }
+
+        val flattened = paths.map { drawPaths ->
+            flattenPaths(drawPaths.map { it.path })
+        }
+
+
+        flattened
+            .filter {
+                !it.isEmpty
+            }
+            .map {
+             val coors = pathToCoordinates(it)
+                SimpleCoordinatesDrawPath(coors)
+            }
     }
 
     fun getByResId(resId: Int): AndroidDrawPath{
@@ -122,6 +146,13 @@ class AndroidDrawExampleProvider private constructor(
 
         return emptyList()
     }
+
+    private fun pathsToCoordinates(paths: List<Path>): List<PathCoordinates>{
+        return paths.flatMap { path ->
+            pathToCoordinates(path)
+        }
+    }
+
 
     private fun flattenPaths(paths: List<Path>): Path {
         val combinedPath = Path()
@@ -170,3 +201,8 @@ class AndroidDrawExampleProvider private constructor(
 
 
 }
+
+data class PathCoordinates(
+    val x: Float,
+    val y: Float
+)

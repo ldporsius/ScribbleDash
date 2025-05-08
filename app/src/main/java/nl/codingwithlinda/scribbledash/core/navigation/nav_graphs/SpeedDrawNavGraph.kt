@@ -18,6 +18,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawScreen
@@ -28,6 +29,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw
 fun NavGraphBuilder.speedDrawNavGraph(
     gameNavController: NavHostController,
     appModule: AndroidAppModule,
+    gameEngine: GameEngine,
     navToHome: () -> Unit
 ) {
 
@@ -41,6 +43,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
             factory = viewModelFactory {
                 initializer {
                     SpeedDrawViewModel(
+                        gameEngine = gameEngine,
                         exampleProvider = appModule.drawExampleProvider,
                         resultCalculator = ResultCalculator,
                             bitmapPrinter = bitmapPrinter,
@@ -67,6 +70,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
                     careTaker = careTaker,
                     offsetParser = offsetParser,
                     pathDrawer = pathDrawer,
+                    gameEngine = gameEngine
                 )
             }
 

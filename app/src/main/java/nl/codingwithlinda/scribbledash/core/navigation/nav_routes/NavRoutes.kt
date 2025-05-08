@@ -1,6 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.navigation.nav_routes
 
 import kotlinx.serialization.Serializable
+import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 
 @Serializable
 object RootNavRoute: NavRoute
@@ -18,10 +19,16 @@ object GameRootNavRoute : NavRoute
 @Serializable
 object GameLevelNavRoute : NavRoute
 
+
+/////////////One Round Wonder//////////////////////
+@Serializable
+object OneRoundRootNavRoute : NavRoute
+@Serializable
+object OneRoundHostNavRoute : NavRoute
+
 @Serializable
 object GameExampleNavRoute : NavRoute
 
-/////////////One Round Wonder//////////////////////
 @Serializable
 object GameDrawNavRoute : NavRoute
 

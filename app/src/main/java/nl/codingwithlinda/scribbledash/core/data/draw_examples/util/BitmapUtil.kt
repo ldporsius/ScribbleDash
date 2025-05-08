@@ -75,26 +75,7 @@ fun combinedPath(paths: List<Path>): Path{
 }
 
 
-fun AndroidDrawPath.toBitmap(requiredSize: Int, _strokeWidth: Float): Bitmap{
-
-    val bm = Bitmap.createBitmap(requiredSize, requiredSize, Bitmap.Config.ARGB_8888)
-
-    val canvas = android.graphics.Canvas(bm)
-    val paint = android.graphics.Paint().apply {
-        color = android.graphics.Color.BLACK
-        style = android.graphics.Paint.Style.STROKE
-        strokeWidth = _strokeWidth
-    }
-
-    val nPath = normalisedPath(path, requiredSize, _strokeWidth)
-
-    canvas.drawPath(nPath, paint)
-
-    return bm
-
-}
-
-fun List<AndroidDrawPath>.toBitmap(
+fun List<Path>.toBitmap(
     requiredSize: Int,
     maxStrokeWidth: Float,
     basisStrokeWidth: Float,
@@ -103,7 +84,7 @@ fun List<AndroidDrawPath>.toBitmap(
 
     val boundingBox = RectF()
 
-    val combinedPath = combinedPath(this.map { it.path })
+    val combinedPath = combinedPath(this)
 
     combinedPath.computeBounds(boundingBox, true)
 
@@ -149,7 +130,7 @@ fun List<AndroidDrawPath>.toBitmap(
 
 }
 
-fun List<AndroidDrawPath>.toBitmapUiOnly(
+fun List<Path>.toBitmapUiOnly(
     requiredSize: Int,
     basisStrokeWidth: Float,
     paintColor: Int = android.graphics.Color.BLACK,
@@ -158,7 +139,7 @@ fun List<AndroidDrawPath>.toBitmapUiOnly(
 
     val combinedPath = android.graphics.Path()
     this.forEach(){
-        combinedPath.addPath(it.path)
+        combinedPath.addPath(it)
     }
     combinedPath.computeBounds(boundingBox, true)
 
@@ -170,7 +151,6 @@ fun List<AndroidDrawPath>.toBitmapUiOnly(
     )
 
     try {
-
 
         val bm = Bitmap.createBitmap(
             boundingBox.width().toInt(),

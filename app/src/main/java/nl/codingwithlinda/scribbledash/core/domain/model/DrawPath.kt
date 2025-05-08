@@ -1,5 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.domain.model
 
 
-interface DrawPath
+interface DrawPath{
+    val path: Any
+}
 

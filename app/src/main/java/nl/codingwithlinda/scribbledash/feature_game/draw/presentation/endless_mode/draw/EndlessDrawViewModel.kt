@@ -12,21 +12,20 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampl
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.core.domain.model.createTypeSafeDrawPath
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
+import nl.codingwithlinda.scribbledash.core.domain.util.ScResult
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.state.EndlessUiState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
-import nl.codingwithlinda.scribbledash.feature_game.show_example.domain.usecase.SaveRandomExampleUseCase
 
 class EndlessDrawViewModel(
-    private val exampleProvider: AndroidDrawExampleProvider,
-    private val gamesManager: GamesManager
+    private val gamesManager: GamesManager,
+    private val gameEngine: EndlessGameEngine
 ): ViewModel() {
-
-    private val saveRandomExampleUseCase = SaveRandomExampleUseCase(exampleProvider)
-
-    private val counter = CountDownTimer()
 
     private val _endlessUiState = MutableStateFlow(EndlessUiState())
     val endlessUiState = _endlessUiState.asStateFlow()
@@ -38,7 +37,7 @@ class EndlessDrawViewModel(
        startNewGame()
     }
 
-    fun startNewGame(){
+    private fun startNewGame(){
         viewModelScope.launch {
             val numberSuccesses = gamesManager.numberSuccessesForLatestGame(GameMode.ENDLESS_MODE)
 
@@ -48,14 +47,12 @@ class EndlessDrawViewModel(
                 )
             }
         }
-        saveRandomExampleUseCase.example()
+        _exampleUiState.update { uiState ->
+            val update = gameEngine.provideExample().examplePath.map {
+               it.path
+            }
 
-        _exampleUiState.update {
-            val update =  ResultManager.INSTANCE.getLastResult()?.examplePath?.map {
-                it.path
-            } ?: emptyList()
-
-            it.copy(
+            uiState.copy(
                 drawPaths = update
             )
         }
@@ -69,7 +66,7 @@ class EndlessDrawViewModel(
     }
 
     private fun collectCountDown(){
-        counter.startCountdown().onEach { count->
+        gameEngine.countDown.onEach { count->
             _exampleUiState.update {
                 it.copy(
                     counter = count
@@ -87,11 +84,23 @@ class EndlessDrawViewModel(
 
     fun onDone(){
         viewModelScope.launch {
-            ResultManager.INSTANCE.getLastResult()?.let { result ->
+            gameEngine.getResult().let { result ->
                 gamesManager.updateLatestGame(
                     GameMode.ENDLESS_MODE,
                     listOf(result)
                 )
+            }
+
+            gameEngine.endUserInput {res ->
+                when(res){
+                    is ScResult.Failure -> {
+                        println("ENDLESS DRAW VM. error: ${res.error}")
+                    }
+                    is ScResult.Success -> {
+                        println("ENDLESS DRAW VM. success")
+                        startNewGame()
+                    }
+                }
             }
 
         }

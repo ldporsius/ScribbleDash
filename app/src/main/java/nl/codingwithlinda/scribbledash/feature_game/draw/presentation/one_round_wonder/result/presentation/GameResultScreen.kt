@@ -42,7 +42,7 @@ import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.centerPath
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmapUiOnly
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
+import nl.codingwithlinda.scribbledash.core.domain.model.AndroidDrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
@@ -56,7 +56,7 @@ import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 
 @Composable
 fun GameResultScreen(
-    result: DrawResult,
+    result: AndroidDrawResult,
     ratingUi: RatingUi,
     onAction: (GameResultAction) -> Unit
 ) {
@@ -173,7 +173,10 @@ fun GameResultScreen(
                         val h = size.height
                         val requiredSize = 100.dp.toPx().toInt()
                         val strokeWidth = 5.dp.toPx()
-                        val bm = result.userPath.toBitmapUiOnly(
+                        val bm = result.userPath.map {
+                            it.path
+                        }.
+                        toBitmapUiOnly(
                             requiredSize = requiredSize,
                             basisStrokeWidth = strokeWidth
                         )
@@ -224,7 +227,7 @@ private fun PreviewGameResultScreen() {
     val expath = testExampleDrawableMultiPath(context, dRes)
     ScribbleDashTheme {
         GameResultScreen(
-            result = DrawResult(
+            result = AndroidDrawResult(
                 id = "",
                 level = GameLevel.MASTER,
                 examplePath = expath,

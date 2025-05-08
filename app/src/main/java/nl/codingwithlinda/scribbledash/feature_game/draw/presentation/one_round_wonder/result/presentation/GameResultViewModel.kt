@@ -1,10 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
-import nl.codingwithlinda.scribbledash.core.domain.model.Rating
-import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
+import nl.codingwithlinda.scribbledash.core.domain.model.AndroidDrawResult
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.domain.util.BitmapPrinter
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
@@ -19,7 +16,7 @@ class GameResultViewModel(
 
     private val ratingMapper = RatingMapper(ratingTextGenerator)
 
-    private fun calculateAccuracy(drawResult: DrawResult): Int{
+    private fun calculateAccuracy(drawResult: AndroidDrawResult): Int{
        val accuracy = resultCalculator.calculateResult(
             drawResult,
             strokeWidthUser = 4
@@ -29,7 +26,7 @@ class GameResultViewModel(
         return accuracy
     }
 
-    fun getRatingUi(drawResult: DrawResult): RatingUi {
+    fun getRatingUi(drawResult: AndroidDrawResult): RatingUi {
         val accuracy = calculateAccuracy(drawResult)
         println("GameResultViewModel.getRatingUi() accuracy: ${accuracy}")
 

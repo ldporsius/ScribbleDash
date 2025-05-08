@@ -8,23 +8,19 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import nl.codingwithlinda.scribbledash.R
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
-import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
-import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
+import nl.codingwithlinda.scribbledash.core.domain.model.createTypeSafeDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.CoordinatesDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
 
 class ShowExampleViewModel(
-    private val exampleProvider: AndroidDrawExampleProvider,
+    private val gameEngine: GameEngine,
     navToDraw: () -> Unit
 ): ViewModel() {
 
-    private val countDownTimer = CountDownTimer()
-
     private val _uiState = MutableStateFlow(DrawExampleUiState())
-    val uiState = _uiState.combine(countDownTimer.startCountdown()){
+    val uiState = _uiState.combine(gameEngine.countDown){
         state, time ->
         state.copy(
             counter = time
@@ -37,26 +33,18 @@ class ShowExampleViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
     init {
-        val index = (0 until exampleProvider.examples.size).random()
-        val _example = exampleProvider.examples.get(index)
 
-        _example.also {example ->
+        val example = gameEngine.provideExample().examplePath.map {
+            createTypeSafeDrawPath<AndroidDrawPath>(it)
+        }.map {
+            it.path
+        }
 
-            ResultManager.INSTANCE.let {manager ->
-                manager.getLastResult()?.let {lastResult ->
-                    manager.updateResult(
-                        lastResult.copy(
-                            examplePath = listOf( example)
-                    )
-                    )
-                }
-            }
             _uiState.update {
                 it.copy(
-                    drawPaths = listOf(example.path)
+                    drawPaths = example
                 )
             }
 
         }
-    }
 }

@@ -5,19 +5,10 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="GamesManagerTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testNumberSuccessesIsLimitedToGame()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testNumberSuccessesIsLimitedToGameMode()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="testEndlessDrawViewModel()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="EndlessGameOverScreenPreview">
+      <SelectionState runConfigName="Tests in 'nl'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

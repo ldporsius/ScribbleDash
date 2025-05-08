@@ -42,7 +42,6 @@ class EndlessDrawViewModelTest{
             gameEngine = gameEngine,
             gamesManager = appModule.gamesManager
         )
-
     }
 
     @Test

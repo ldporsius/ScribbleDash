@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation
 
+import android.graphics.Path
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,7 @@ import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
+import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawableMultiPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
@@ -56,12 +58,11 @@ import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 
 @Composable
 fun GameResultScreen(
-    result: AndroidDrawResult,
+    examplePath: Path,
+    userPath: List<Path>,
     ratingUi: RatingUi,
     onAction: (GameResultAction) -> Unit
 ) {
-
-    val examplePath = combinedPath(result.examplePath.map { it.path }).asComposePath()
 
     var originalWidth by remember {
         mutableStateOf(0f)
@@ -133,9 +134,9 @@ fun GameResultScreen(
                             .width(120.dp)
                             .aspectRatio(1f)
                     ){
-                        centerPath(examplePath.asAndroidPath())
+                        centerPath(examplePath)
                         drawPath(
-                            path = examplePath,
+                            path = examplePath.asComposePath(),
                             color = Color.Black,
                             style = Stroke(width = 2.dp.toPx())
                         )
@@ -173,9 +174,7 @@ fun GameResultScreen(
                         val h = size.height
                         val requiredSize = 100.dp.toPx().toInt()
                         val strokeWidth = 5.dp.toPx()
-                        val bm = result.userPath.map {
-                            it.path
-                        }.
+                        val bm = userPath.
                         toBitmapUiOnly(
                             requiredSize = requiredSize,
                             basisStrokeWidth = strokeWidth
@@ -224,15 +223,11 @@ fun GameResultScreen(
 private fun PreviewGameResultScreen() {
     val context = LocalContext.current
     val dRes = R.drawable.alien
-    val expath = testExampleDrawableMultiPath(context, dRes)
+    val expath = testExampleDrawable(context, dRes)
     ScribbleDashTheme {
         GameResultScreen(
-            result = AndroidDrawResult(
-                id = "",
-                level = GameLevel.MASTER,
-                examplePath = expath,
-                userPath = expath
-            ),
+            examplePath = expath.androidPath,
+            userPath = listOf( expath.androidPath),
             ratingUi = RatingUi(
                 rating = Oops(),
                 accuracyPercent = 100,

@@ -8,9 +8,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import nl.codingwithlinda.scribbledash.core.domain.model.createTypeSafeDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.CoordinatesDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
 
@@ -35,9 +33,7 @@ class ShowExampleViewModel(
     init {
 
         val example = gameEngine.provideExample().examplePath.map {
-            createTypeSafeDrawPath<AndroidDrawPath>(it)
-        }.map {
-            it.path
+            coordinatesToPath(it.path)
         }
 
             _uiState.update {

@@ -3,15 +3,15 @@ package nl.codingwithlinda.scribbledash.core.data.draw_examples
 import android.app.Application
 import android.graphics.Path
 import android.graphics.PathMeasure
-import androidx.compose.ui.graphics.asComposePath
+import androidx.compose.ui.util.fastFlatMap
 import androidx.core.graphics.PathParser
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.parseVectorDrawable
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
+import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleCoordinatesDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.CoordinatesDrawPath
 
 
@@ -65,7 +65,7 @@ class AndroidDrawExampleProvider private constructor(
         R.drawable.train,
         R.drawable.umbrella,
         R.drawable.whale,
-        )
+    )
 
 
     companion object{
@@ -78,53 +78,38 @@ class AndroidDrawExampleProvider private constructor(
             }
     }
 
-   /* override val examples: List<AndroidDrawPath> by lazy {
-       val paths =  examplesResources.map {
-            resourceToDrawPaths(it)
-        }
+    /* override val examples: List<AndroidDrawPath> by lazy {
+        val paths =  examplesResources.map {
+             resourceToDrawPaths(it)
+         }
 
-        val flattened = paths.map { drawPaths ->
-            flattenPaths(drawPaths.map { it.path })
-        }
+         val flattened = paths.map { drawPaths ->
+             flattenPaths(drawPaths.map { it.path })
+         }
 
 
-        flattened
-            .filter {
-                !it.isEmpty
-            }
-            .map {
-            SimpleDrawPath(
-                path = it
-            )
-        }
-    }*/
+         flattened
+             .filter {
+                 !it.isEmpty
+             }
+             .map {
+             SimpleDrawPath(
+                 path = it
+             )
+         }
+     }*/
     override val examples: List<CoordinatesDrawPath> by lazy {
         val paths =  examplesResources.map {
             resourceToDrawPaths(it)
         }
-
-        val flattened = paths.map { drawPaths ->
-            flattenPaths(drawPaths.map { it.path })
-        }
-
-
-        flattened
-            .filter {
-                !it.isEmpty
-            }
-            .map {
-             val coors = pathToCoordinates(it)
+         paths   .map {
+                val coors = it.fastFlatMap{ it.paths }
                 SimpleCoordinatesDrawPath(coors)
             }
     }
 
-    fun getByResId(resId: Int): AndroidDrawPath{
-        return SimpleDrawPath(
-            path = flattenPaths(resourceToDrawPaths(resId).map { it.path })
-        )
-    }
 
-    private fun resourceToDrawPaths(resource: Int): List<AndroidDrawPath>{
+    private fun resourceToDrawPaths(resource: Int): List<DrawPath>{
         try {
             val parsedPathData = parseVectorDrawable(
                 context,
@@ -132,25 +117,23 @@ class AndroidDrawExampleProvider private constructor(
 
             val parsedPaths = parsedPathData.map {pd ->
                 PathParser.createPathFromPathData(pd.pathData)
-            }.map {parsedPath ->
-                SimpleDrawPath(
-                path = parsedPath
-            )
             }
 
-            return parsedPaths
+            val result = parsedPaths.map {parsedPath ->
+                pathToCoordinates(parsedPath)
+
+            }
+
+            return listOf( SimpleDrawPath(
+                result
+            )
+            )
 
         }catch (e: Exception){
             e.printStackTrace()
         }
 
         return emptyList()
-    }
-
-    private fun pathsToCoordinates(paths: List<Path>): List<PathCoordinates>{
-        return paths.flatMap { path ->
-            pathToCoordinates(path)
-        }
     }
 
 
@@ -202,7 +185,3 @@ class AndroidDrawExampleProvider private constructor(
 
 }
 
-data class PathCoordinates(
-    val x: Float,
-    val y: Float
-)

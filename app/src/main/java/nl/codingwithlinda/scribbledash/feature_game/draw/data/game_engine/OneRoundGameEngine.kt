@@ -7,23 +7,18 @@ import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProv
 import nl.codingwithlinda.scribbledash.core.domain.model.CoordinatesDrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
-import nl.codingwithlinda.scribbledash.core.domain.model.createTypeSafeDrawPath
-import nl.codingwithlinda.scribbledash.core.domain.model.createTypeSafeDrawResult
 import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
-import nl.codingwithlinda.scribbledash.core.domain.util.Error
 import nl.codingwithlinda.scribbledash.core.domain.util.ScResult
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.CoordinatesDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleCoordinatesDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 
 class OneRoundGameEngine(
     private val exampleProvider: DrawExampleProvider,
-    private val offsetParser: OffsetParser<AndroidDrawPath>,
-    private val pathDrawer: PathDrawer<AndroidDrawPath>
-): GameEngine {
+    private val offsetParser: OffsetParser,
+
+    ): GameEngine {
     private var level: GameLevel = GameLevel.BEGINNER
 
     private val countDownTimer = CountDownTimer()
@@ -41,10 +36,11 @@ class OneRoundGameEngine(
     override fun provideExample(): DrawResult {
         val example = exampleProvider.examples.random()
 
-        val drawPath = createTypeSafeDrawPath<CoordinatesDrawPath>(example)
-        return createTypeSafeDrawResult<CoordinatesDrawResult>(result).copy(
-            examplePath = listOf( drawPath)
+        result = result.copy(
+            examplePath = listOf(example)
         )
+
+        return result
     }
 
     override val countDown: Flow<Int>
@@ -57,10 +53,13 @@ class OneRoundGameEngine(
 
     override fun processUserInput(userInput: List<PathData>) {
        val paths = userInput.map {
-           offsetParser.parseOffset(pathDrawer, it)
+           offsetParser.parseOffset(it)
        }
+        val userPath = SimpleCoordinatesDrawPath(
+            paths = paths
+        )
         result = result.copy(
-            userPath = paths
+            userPath = result.userPath + listOf(userPath)
         )
     }
 

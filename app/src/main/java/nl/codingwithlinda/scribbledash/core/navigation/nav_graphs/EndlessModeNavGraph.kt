@@ -54,7 +54,6 @@ fun NavGraphBuilder.endlessModeNavGraph(
                             GameDrawViewModel(
                                 careTaker = careTaker,
                                 offsetParser = offsetParser,
-                                pathDrawer = pathDrawer,
                                 gameEngine = gameEngine
                             )
                         }

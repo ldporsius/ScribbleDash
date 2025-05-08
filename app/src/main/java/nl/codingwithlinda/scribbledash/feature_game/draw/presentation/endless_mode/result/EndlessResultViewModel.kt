@@ -52,8 +52,8 @@ class EndlessResultViewModel(
                 _uiState.update {
                     it.copy(
                         ratingUi = ratingUi,
-                        examplePath = combinedPath(result.examplePath.map { it.path }),
-                        userPath = result.userPath.map { it.path },
+                        examplePath = combinedPath(result.examplePath.map { it.androidPath }),
+                        userPath = result.userPath.map { it.androidPath },
                     )
                 }
             }

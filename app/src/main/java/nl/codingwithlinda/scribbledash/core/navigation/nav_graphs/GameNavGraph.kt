@@ -6,9 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
-import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessRootNavRoute
-import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameExampleNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.OneRoundRootNavRoute
@@ -17,7 +15,6 @@ import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevelScreen
 
 
@@ -32,17 +29,14 @@ fun NavGraphBuilder.GameNavGraph(
         NavHost(navController = gameNavController, startDestination = GameLevelNavRoute) {
             val exampleProvider = appModule.drawExampleProvider
 
-            val pathDrawer = StraightPathDrawer()
             val offsetParser = AndroidOffsetParser
             val gameEngine = OneRoundGameEngine(
                 exampleProvider = exampleProvider,
                 offsetParser = offsetParser,
-                pathDrawer = pathDrawer
             )
             val endlessGameEngine = EndlessGameEngine(
                 exampleProvider = exampleProvider,
                 offsetParser = offsetParser,
-                pathDrawer = pathDrawer
             )
             composable<GameLevelNavRoute> {
                 GameLevelScreen(

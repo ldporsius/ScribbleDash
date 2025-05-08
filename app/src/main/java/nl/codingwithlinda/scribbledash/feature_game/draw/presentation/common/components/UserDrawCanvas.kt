@@ -15,9 +15,6 @@ import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 import nl.codingwithlinda.scribbledash.ui.theme.onBackground
@@ -25,8 +22,6 @@ import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 
 @Composable
 fun UserDrawCanvas(
-    //offsetParser: OffsetParser<AndroidDrawPath>,
-    //pathDrawer: PathDrawer<AndroidDrawPath>,
     uiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit
 ) {
@@ -71,9 +66,8 @@ fun UserDrawCanvas(
         }
 
         uiState.drawPaths.onEach {path ->
-            //val path = offsetParser.parseOffset(pathDrawer, it)
             drawPath(
-                path = path.path.asComposePath(),
+                path = path.asComposePath(),
                 color = pathColor,
                 style = Stroke(width = 2.dp.toPx())
             )
@@ -81,7 +75,7 @@ fun UserDrawCanvas(
         uiState.currentPath?.let { path ->
             val color = pathColor
             drawPath(
-                path = path.path.asComposePath(),
+                path = path.paths.asComposePath(),
                 color = color,
                 style = Stroke(width = 2.dp.toPx())
             )

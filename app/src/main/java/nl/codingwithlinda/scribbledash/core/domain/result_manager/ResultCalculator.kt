@@ -5,10 +5,9 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Path
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmap
-import nl.codingwithlinda.scribbledash.core.domain.model.AndroidDrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
-import nl.codingwithlinda.scribbledash.core.domain.model.createTypeSafeDrawResult
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
 import kotlin.math.roundToInt
 
 
@@ -24,20 +23,23 @@ object ResultCalculator {
                         strokeWidthUser: Int,
                         printDebug: (Bitmap) -> Unit): Accuracy{
 
-        val androidResult = createTypeSafeDrawResult<AndroidDrawResult>(drawResult)
 
         val extraStrokeWidth = drawResult.level.toStrokeWidthFactor() * strokeWidthUser
 
-        val bmExample = androidResult.examplePath.map {
-            it.path
-        }.toBitmap(
+        val examplePaths = drawResult.examplePath.map {
+            coordinatesToPath(it.paths)
+        }
+        val userPath = drawResult.userPath.map {
+            coordinatesToPath(it.paths)
+
+        }
+        val bmExample = examplePaths.toBitmap(
             requiredSize = 500,
             maxStrokeWidth = extraStrokeWidth.toFloat(),
             basisStrokeWidth = extraStrokeWidth.toFloat(),
 
         )
-        val bmUser = androidResult.userPath
-            .map { it.path }
+        val bmUser = userPath
             .toBitmap(
             requiredSize = 500,
             maxStrokeWidth = extraStrokeWidth.toFloat(),
@@ -68,7 +70,7 @@ object ResultCalculator {
         //println("-- in resultcalculator --. accuracy = $accuracy")
 
         val missingLengthPenalty = getMissingLengthPenalty(
-           androidResult
+           examplePaths, userPath
         )
 
         //println("-- in resultcalculator -- . missingLengthPenalty = $missingLengthPenalty")
@@ -141,11 +143,11 @@ object ResultCalculator {
 
     private val pathLengthMinPercent = 0.7f
 
-    private fun getMissingLengthPenalty(drawResult: AndroidDrawResult): Float{
+    private fun getMissingLengthPenalty(example: List<Path>, user: List<Path>): Float{
         //Missing Length Penalty (%) = 100 - (Total User Path
         //Length / Total Example Path Length * 100)
-        val lengthE = getTotalPathLenght(drawResult.examplePath.map { it.path })
-        val lengthU = getTotalPathLenght(drawResult.userPath.map { it.path })
+        val lengthE = getTotalPathLenght(example)
+        val lengthU = getTotalPathLenght(user)
         val deservesPenalty = lengthU / lengthE < pathLengthMinPercent
         val penalty = 100 - (lengthU / lengthE) * 100
 

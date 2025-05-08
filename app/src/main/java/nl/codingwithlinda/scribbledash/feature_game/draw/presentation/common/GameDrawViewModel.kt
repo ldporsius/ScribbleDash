@@ -3,30 +3,24 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common
 import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
 import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
-import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.ColoredDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
-    private val offsetParser: OffsetParser<AndroidDrawPath>,
-    private val pathDrawer: PathDrawer<AndroidDrawPath>,
+    private val offsetParser: OffsetParser,
     private val gameEngine: GameEngine
 ): ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
@@ -36,17 +30,16 @@ class GameDrawViewModel(
 
     private fun canUndo() = countUndoes < 5 && offsets.value.isNotEmpty()
 
-    private val coloredPaths: Flow<List<AndroidDrawPath>> = offsets.map { list ->
-       list.map {
-           offsetParser.parseOffset(
-               pathDrawer = pathDrawer,
-               pathData = it
-           )
-       }
-    }
-    val uiState = combine(_uiState, coloredPaths){ state, offsets ->
+
+    val uiState = combine(_uiState, offsets){ state, offsets ->
+        val paths = offsets.map {
+            offsetParser.parseOffset(it)
+        }.let {
+            coordinatesToPath(it)
+        }
+
         state.copy(
-            drawPaths = offsets,
+            drawPaths = listOf(paths),
             canRedo = careTaker.canRedo()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
@@ -75,13 +68,9 @@ class GameDrawViewModel(
                     )
                     currentPath = currentPathCopy
 
-                    val androidPath = offsetParser.parseOffset(
-                        pathDrawer = pathDrawer,
-                        pathData = currentPathCopy
-                    )
                     _uiState.update {
                         it.copy(
-                            currentPath = androidPath
+                            currentPath = currentPathCopy
                         )
                     }
                 }

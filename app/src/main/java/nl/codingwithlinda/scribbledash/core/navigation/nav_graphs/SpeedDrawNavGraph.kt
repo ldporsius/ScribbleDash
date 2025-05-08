@@ -69,7 +69,6 @@ fun NavGraphBuilder.speedDrawNavGraph(
                 GameDrawViewModel(
                     careTaker = careTaker,
                     offsetParser = offsetParser,
-                    pathDrawer = pathDrawer,
                     gameEngine = gameEngine
                 )
             }

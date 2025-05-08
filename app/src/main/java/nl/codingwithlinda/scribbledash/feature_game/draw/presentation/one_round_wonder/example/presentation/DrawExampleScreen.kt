@@ -143,7 +143,7 @@ private fun PreviewDrawExampleScreen() {
     ScribbleDashTheme {
         DrawExampleScreen(
             uiState = DrawExampleUiState(
-                drawPaths = listOf(path.path)
+                drawPaths = listOf(path.androidPath)
             ),
         )
 

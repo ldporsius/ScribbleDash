@@ -1,12 +1,10 @@
 package nl.codingwithlinda.scribbledash.core.domain.offset_parser
 
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
+import nl.codingwithlinda.scribbledash.core.domain.model.PathCoordinates
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathDrawer
 
-interface OffsetParser<T: DrawPath> {
+interface OffsetParser{
     fun parseOffset(
-        pathDrawer: PathDrawer<T>,
         pathData: PathData
-    ): T
+    ): List<PathCoordinates>
 }

@@ -1,16 +1,14 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state
 
+import android.graphics.Path
 import androidx.compose.runtime.Immutable
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.ColoredDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 
 @Immutable
 data class GameDrawUiState(
-    val drawPaths: List<AndroidDrawPath> = emptyList(),
+    val drawPaths: List<Path> = emptyList(),
     val canRedo: Boolean = false,
     val canUndo: Boolean = false,
-    val currentPath: AndroidDrawPath? = null,
+    val currentPath: Path? = null,
 ){
     fun isUndoAvailable() = canUndo
     fun isRedoAvailable() = canRedo

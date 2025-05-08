@@ -49,7 +49,7 @@ class SpeedDrawViewModel(
     val exampleUiState = combine( _exampleUiState, exampleIndex){state, index ->
         state.copy(
             drawPaths = listOf( examples.get(index).let {
-                coordinatesToPath(it.path).path
+                coordinatesToPath(it.path)
             })
         )
 

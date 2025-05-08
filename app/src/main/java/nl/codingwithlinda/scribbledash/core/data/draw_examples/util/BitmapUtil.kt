@@ -3,9 +3,7 @@ package nl.codingwithlinda.scribbledash.core.data.draw_examples.util
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Path
-import android.graphics.PathMeasure
 import android.graphics.RectF
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
 
 fun normalisedPath(
     path: android.graphics.Path,

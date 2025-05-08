@@ -2,7 +2,7 @@ package nl.codingwithlinda.scribbledash.core.data.draw_examples.util
 
 import android.graphics.Path
 import android.graphics.PathMeasure
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.PathCoordinates
+import nl.codingwithlinda.scribbledash.core.domain.model.PathCoordinates
 import org.xmlpull.v1.XmlPullParser
 
 // Data class to store path information

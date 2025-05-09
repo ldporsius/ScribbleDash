@@ -9,8 +9,8 @@ fun coordinatesToPath(coordinates: List<List<PathCoordinates>>): Path{
         val path = Path()
         path.moveTo(coors.first().x, coors.first().y)
 
-        coors.onEach {
-            path.lineTo(it.x, it.y)
+        (1 .. coors.lastIndex).onEach {
+            path.lineTo(coors[it].x, coors[it].y)
         }
 
         pathUnion.addPath(path)

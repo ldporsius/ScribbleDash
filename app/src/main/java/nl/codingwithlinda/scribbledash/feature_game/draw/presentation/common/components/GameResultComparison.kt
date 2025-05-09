@@ -28,8 +28,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.centerPath
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmapUiOnly
+import nl.codingwithlinda.scribbledash.core.data.util.centerPath
+import nl.codingwithlinda.scribbledash.core.data.util.toBitmapUiOnly
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.result.EndlessResultUiState
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 

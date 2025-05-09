@@ -4,10 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Path
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmap
+import nl.codingwithlinda.scribbledash.core.data.util.toBitmap
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
 import kotlin.math.roundToInt
 
 
@@ -26,13 +25,8 @@ object ResultCalculator {
 
         val extraStrokeWidth = drawResult.level.toStrokeWidthFactor() * strokeWidthUser
 
-        val examplePaths = drawResult.examplePath.map {
-            coordinatesToPath(it.paths)
-        }
-        val userPath = drawResult.userPath.map {
-            coordinatesToPath(it.paths)
-
-        }
+        val examplePaths = drawResult.examplePath
+        val userPath = drawResult.userPath
         val bmExample = examplePaths.toBitmap(
             requiredSize = 500,
             maxStrokeWidth = extraStrokeWidth.toFloat(),

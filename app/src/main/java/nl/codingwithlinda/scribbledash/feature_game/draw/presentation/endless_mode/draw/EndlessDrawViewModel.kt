@@ -11,14 +11,14 @@ import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.util.ScResult
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.state.EndlessUiState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
 
 class EndlessDrawViewModel(
     private val gamesManager: GamesManager,
-    private val gameEngine: EndlessGameEngine
+    private val gameEngine: GameEngine
 ): ViewModel() {
 
     private val _endlessUiState = MutableStateFlow(EndlessUiState())
@@ -42,9 +42,7 @@ class EndlessDrawViewModel(
             }
         }
         _exampleUiState.update { uiState ->
-            val update = gameEngine.provideExample().examplePath.map {
-               it.androidPath
-            }
+            val update = gameEngine.provideExample().examplePath
 
             uiState.copy(
                 drawPaths = update

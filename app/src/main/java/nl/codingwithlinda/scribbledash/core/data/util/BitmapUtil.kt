@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.core.data.draw_examples.util
+package nl.codingwithlinda.scribbledash.core.data.util
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -71,7 +71,6 @@ fun combinedPath(paths: List<Path>): Path{
     }
     return combinedPath
 }
-
 
 fun List<Path>.toBitmap(
     requiredSize: Int,

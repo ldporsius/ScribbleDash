@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.data.util.error.GameError
-import nl.codingwithlinda.scribbledash.core.domain.model.CoordinatesDrawResult
+import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
@@ -13,20 +13,21 @@ import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.domain.util.ScResult
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleCoordinatesDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 
 class EndlessGameEngine(
     private val exampleProvider: AndroidDrawExampleProvider,
-    private val offsetParser: OffsetParser,
-
 ): GameEngine {
 
     private var level: GameLevel = GameLevel.BEGINNER
     private val countDownTimer = CountDownTimer()
+    private val pathCreator = StraightPathCreator()
 
-    private var result: CoordinatesDrawResult = CoordinatesDrawResult(
+
+    private var result: DrawResult = DrawResult(
         id = System.currentTimeMillis().toString(),
         level = level,
         examplePath = emptyList(),
@@ -38,10 +39,10 @@ class EndlessGameEngine(
     }
 
     override fun provideExample(): DrawResult {
-        val example = exampleProvider.examples.random()
+        val example = exampleProvider.examples.random().examplePath
 
         result = result.copy(
-            examplePath = listOf(example)
+            examplePath = example
         )
 
         return result
@@ -56,15 +57,13 @@ class EndlessGameEngine(
         }
 
     override fun processUserInput(userInput: List<PathData>) {
-       val paths = userInput.map {
-           offsetParser.parseOffset(it)
-       }
-
-        val userPath = SimpleCoordinatesDrawPath(
-            paths = paths
-        )
+        val paths = userInput.map{
+            pathCreator.drawPath(it.path)
+        }.map {
+            it.path
+        }
         result = result.copy(
-            userPath = result.userPath + listOf(userPath)
+            userPath = result.userPath + paths
         )
     }
 
@@ -81,10 +80,9 @@ class EndlessGameEngine(
             }
         }
 
-
     }
 
-    override fun getResult(): CoordinatesDrawResult {
+    override fun getResult(): DrawResult {
         return result
     }
 

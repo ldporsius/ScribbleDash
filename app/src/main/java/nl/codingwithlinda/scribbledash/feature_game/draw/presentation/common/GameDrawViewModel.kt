@@ -1,6 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common
 
 import android.graphics.Color
+import androidx.compose.ui.graphics.asComposePath
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,9 +11,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
+import nl.codingwithlinda.scribbledash.core.domain.model.SingleDrawPath
 import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
@@ -21,6 +24,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.sta
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
     private val offsetParser: OffsetParser,
+    private val pathDrawer: PathCreator<SingleDrawPath>,
     private val gameEngine: GameEngine
 ): ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
@@ -36,7 +40,7 @@ class GameDrawViewModel(
             offsetParser.parseOffset(it)
         }.let {
             coordinatesToPath(it)
-        }
+        }.asComposePath()
 
         state.copy(
             drawPaths = listOf(paths),
@@ -68,9 +72,10 @@ class GameDrawViewModel(
                     )
                     currentPath = currentPathCopy
 
+                    val drawPath = pathDrawer.drawPath(currentPathCopy.path).path
                     _uiState.update {
                         it.copy(
-                            currentPath = currentPathCopy
+                            currentPath = drawPath.asComposePath()
                         )
                     }
                 }

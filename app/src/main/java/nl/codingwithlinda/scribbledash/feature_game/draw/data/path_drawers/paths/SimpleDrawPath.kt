@@ -2,11 +2,8 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.path
 
 import android.graphics.Path
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
-import nl.codingwithlinda.scribbledash.core.domain.model.PathCoordinates
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
+import nl.codingwithlinda.scribbledash.core.domain.model.SingleDrawPath
 
 data class SimpleDrawPath(
-    override val paths: List<List<PathCoordinates>>,
-): DrawPath {
-   val androidPath: Path = coordinatesToPath(paths)
-}
+    override val path : Path,
+): SingleDrawPath

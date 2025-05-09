@@ -7,4 +7,6 @@ interface OffsetParser{
     fun parseOffset(
         pathData: PathData
     ): List<PathCoordinates>
+
+
 }

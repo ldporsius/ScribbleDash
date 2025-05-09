@@ -17,10 +17,9 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessHostNav
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessRootNavRoute
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawScreen
@@ -34,13 +33,13 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mo
 fun NavGraphBuilder.endlessModeNavGraph(
     appModule: AndroidAppModule,
     onNavHome: () -> Unit,
-    gameEngine: EndlessGameEngine
+    gameEngine: GameEngine
 ){
 
     navigation<EndlessRootNavRoute>( startDestination = EndlessHostNavRoute){
         composable<EndlessHostNavRoute>{
             val navController = rememberNavController()
-            val pathDrawer = StraightPathDrawer()
+            val pathDrawer = StraightPathCreator()
             val offsetParser = AndroidOffsetParser
 
             NavHost(navController = navController, startDestination = EndlessDrawNavRoute){
@@ -54,7 +53,8 @@ fun NavGraphBuilder.endlessModeNavGraph(
                             GameDrawViewModel(
                                 careTaker = careTaker,
                                 offsetParser = offsetParser,
-                                gameEngine = gameEngine
+                                gameEngine = gameEngine,
+                                pathDrawer = pathDrawer
                             )
                         }
 

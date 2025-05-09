@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.graphics.plus
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
@@ -25,7 +24,7 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.OneRoundHostNa
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.OneRoundRootNavRoute
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderScreen
@@ -84,15 +83,18 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                     val careTaker = remember {
                         PathDataCareTaker()
                     }
+                    val pathCreator = remember{
+                        StraightPathCreator()
+                    }
                     val factory = viewModelFactory {
                         initializer {
                             GameDrawViewModel(
                                 careTaker = careTaker,
                                 offsetParser = offsetParser,
-                                gameEngine = gameEngine
+                                gameEngine = gameEngine,
+                                pathDrawer = pathCreator
                             )
                         }
-
                     }
                     val viewModel = viewModel<GameDrawViewModel>(
                         factory = factory
@@ -123,33 +125,21 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                                 GameResultViewModel(
                                     ratingTextGenerator = ratingTextGenerator,
                                     resultCalculator = resultCalculator,
-                                    bitmapPrinter = bitmapPrinter
+                                    bitmapPrinter = bitmapPrinter,
+                                    gameEngine = gameEngine
                                 )
                             }
                         }
                     )
 
-                    val examplePath = gameEngine.getResult().let {
-                       it.examplePath.map {
-                           coordinatesToPath(it.paths)
-                       }
-                    }.reduce { acc, path ->
-                        acc + path
-                    }
-
-                    val userPath = gameEngine.getResult().let {
-                        it.userPath.map {
-                            coordinatesToPath(it.paths)
-                        }
-                    }
 
                     val ratingUi = remember {
-                        viewModel.getRatingUi(gameEngine.getResult())
+                        viewModel.getRatingUi()
                     }
 
                     GameResultScreen(
-                        examplePath = examplePath,
-                        userPath = userPath,
+                        examplePath = viewModel.examplePath,
+                        userPath = viewModel.userPath,
                         ratingUi = ratingUi,
                         onAction = { action ->
                             when (action) {

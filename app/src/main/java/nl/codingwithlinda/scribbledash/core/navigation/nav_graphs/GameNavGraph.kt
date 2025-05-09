@@ -14,7 +14,6 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawNavRo
 import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevelScreen
 
 
@@ -29,14 +28,11 @@ fun NavGraphBuilder.GameNavGraph(
         NavHost(navController = gameNavController, startDestination = GameLevelNavRoute) {
             val exampleProvider = appModule.drawExampleProvider
 
-            val offsetParser = AndroidOffsetParser
             val gameEngine = OneRoundGameEngine(
                 exampleProvider = exampleProvider,
-                offsetParser = offsetParser,
             )
             val endlessGameEngine = EndlessGameEngine(
                 exampleProvider = exampleProvider,
-                offsetParser = offsetParser,
             )
             composable<GameLevelNavRoute> {
                 GameLevelScreen(

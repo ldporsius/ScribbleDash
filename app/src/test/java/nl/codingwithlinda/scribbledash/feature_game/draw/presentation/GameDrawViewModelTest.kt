@@ -8,11 +8,10 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import nl.codingwithlinda.scribbledash.core.application.ScribbleDashApplication.Companion.appModule
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
@@ -28,7 +27,7 @@ class GameDrawViewModelTest {
     private val dispatcher = UnconfinedTestDispatcher()
     private val careTaker = PathDataCareTaker()
     private val offsetParser = AndroidOffsetParser
-    private val pathDrawer = StraightPathDrawer()
+    private val pathDrawer = StraightPathCreator()
     private val exampleProvider = FakeExampleProvider()
 
     private lateinit var gameEngine: GameEngine
@@ -41,8 +40,6 @@ class GameDrawViewModelTest {
 
         gameEngine = OneRoundGameEngine(
             exampleProvider = exampleProvider,
-            offsetParser = offsetParser,
-            pathDrawer = pathDrawer
         )
         viewModel = GameDrawViewModel(
             gameEngine = gameEngine,

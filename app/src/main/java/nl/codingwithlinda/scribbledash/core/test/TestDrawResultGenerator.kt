@@ -3,40 +3,39 @@ package nl.codingwithlinda.scribbledash.core.test
 import android.graphics.Path
 import androidx.compose.ui.geometry.Offset
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
-import nl.codingwithlinda.scribbledash.core.domain.model.CoordinatesDrawResult
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
+import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 
 fun fakeDrawResultSamePaths(): DrawResult {
-    return CoordinatesDrawResult(
+    return DrawResult(
         id = System.currentTimeMillis().toString(),
         level = GameLevel.BEGINNER,
-        examplePath = listOf( fakeAndroidDrawPathSquare()),
-        userPath = listOf( fakeAndroidDrawPathSquare()),
+        examplePath = listOf( fakePathSquare()),
+        userPath = listOf( fakePathSquare()),
     )
 }
 
-fun fakeDrawResultDifferentPaths(): CoordinatesDrawResult{
-    return CoordinatesDrawResult(
+fun fakeDrawResultDifferentPaths(): DrawResult{
+    return DrawResult(
         id = System.currentTimeMillis().toString(),
         level = GameLevel.BEGINNER,
-        examplePath = listOf( fakeAndroidDrawPathSquare()),
-        userPath = listOf( fakeAndroidDrawPathCircle()),
+        examplePath = listOf( fakePathSquare()),
+        userPath = listOf( fakePathCircle()),
     )
 }
 
 
 fun fakeAndroidDrawPathSquare(): DrawPath {
     return SimpleDrawPath(
-        paths = listOf( pathToCoordinates( fakePathSquare()))
+        path = fakePathSquare()
     )
 }
 fun fakeAndroidDrawPathCircle(): DrawPath{
     return SimpleDrawPath(
-        paths = listOf( pathToCoordinates(fakePathCircle())),
+        path = fakePathCircle(),
     )
 }
 fun fakePathSquare(): Path{

@@ -3,16 +3,16 @@ package nl.codingwithlinda.scribbledash.core.data.draw_examples
 import android.app.Application
 import android.graphics.Path
 import android.graphics.PathMeasure
+import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.util.fastFlatMap
 import androidx.core.graphics.PathParser
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.parseVectorDrawable
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
+import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExample
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleCoordinatesDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.CoordinatesDrawPath
 
 
 class AndroidDrawExampleProvider private constructor(
@@ -98,18 +98,18 @@ class AndroidDrawExampleProvider private constructor(
              )
          }
      }*/
-    override val examples: List<CoordinatesDrawPath> by lazy {
+    override val examples: List<DrawExample> by lazy {
         val paths =  examplesResources.map {
             resourceToDrawPaths(it)
         }
-         paths   .map {
-                val coors = it.fastFlatMap{ it.paths }
-                SimpleCoordinatesDrawPath(coors)
+         paths.map { paths1 ->
+             val flattened = paths1.map { flattenPath(it) }
+                DrawExample(flattened)
             }
     }
 
 
-    private fun resourceToDrawPaths(resource: Int): List<DrawPath>{
+    private fun resourceToDrawPaths(resource: Int): List<Path>{
         try {
             val parsedPathData = parseVectorDrawable(
                 context,
@@ -119,15 +119,7 @@ class AndroidDrawExampleProvider private constructor(
                 PathParser.createPathFromPathData(pd.pathData)
             }
 
-            val result = parsedPaths.map {parsedPath ->
-                pathToCoordinates(parsedPath)
-
-            }
-
-            return listOf( SimpleDrawPath(
-                result
-            )
-            )
+            return parsedPaths
 
         }catch (e: Exception){
             e.printStackTrace()

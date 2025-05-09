@@ -1,7 +1,8 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state
 
-import android.graphics.Path
+
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Path
 
 @Immutable
 data class GameDrawUiState(

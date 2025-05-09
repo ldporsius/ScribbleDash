@@ -48,9 +48,7 @@ class SpeedDrawViewModel(
     private val _exampleUiState = MutableStateFlow(DrawExampleUiState())
     val exampleUiState = combine( _exampleUiState, exampleIndex){state, index ->
         state.copy(
-            drawPaths = listOf( examples.get(index).let {
-                coordinatesToPath(it.path)
-            })
+            drawPaths =  examples.get(index).examplePath
         )
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _exampleUiState.value)

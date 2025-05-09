@@ -2,7 +2,7 @@ package nl.codingwithlinda.scribbledash.core.data
 
 import android.content.Context
 import android.graphics.Bitmap
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.saveBitmapToFile
+import nl.codingwithlinda.scribbledash.core.data.util.saveBitmapToFile
 import nl.codingwithlinda.scribbledash.core.domain.util.BitmapPrinter
 
 class AndroidBitmapPrinter(

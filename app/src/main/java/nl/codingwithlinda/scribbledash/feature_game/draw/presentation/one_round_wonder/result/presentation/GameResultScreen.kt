@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -40,17 +39,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.centerPath
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.combinedPath
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.toBitmapUiOnly
-import nl.codingwithlinda.scribbledash.core.domain.model.AndroidDrawResult
-import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
+import nl.codingwithlinda.scribbledash.core.data.util.centerPath
+import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
+import nl.codingwithlinda.scribbledash.core.data.util.toBitmapUiOnly
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
-import nl.codingwithlinda.scribbledash.core.test.testExampleDrawableMultiPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
@@ -226,8 +222,8 @@ private fun PreviewGameResultScreen() {
     val expath = testExampleDrawable(context, dRes)
     ScribbleDashTheme {
         GameResultScreen(
-            examplePath = expath.androidPath,
-            userPath = listOf( expath.androidPath),
+            examplePath = combinedPath(expath.examplePath),
+            userPath = expath.examplePath,
             ratingUi = RatingUi(
                 rating = Oops(),
                 accuracyPercent = 100,

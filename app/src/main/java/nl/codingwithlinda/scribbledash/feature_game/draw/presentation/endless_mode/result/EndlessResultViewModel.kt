@@ -6,16 +6,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.combinedPath
+import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.domain.util.ScResult
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 
 class EndlessResultViewModel(
-    private val gameEngine: EndlessGameEngine,
+    private val gameEngine: GameEngine,
     private val gamesManager: GamesManager,
     private val ratingMapper: RatingMapper
 ): ViewModel() {
@@ -52,8 +53,8 @@ class EndlessResultViewModel(
                 _uiState.update {
                     it.copy(
                         ratingUi = ratingUi,
-                        examplePath = combinedPath(result.examplePath.map { it.androidPath }),
-                        userPath = result.userPath.map { it.androidPath },
+                        examplePath = combinedPath(result.examplePath),
+                        userPath = result.userPath,
                     )
                 }
             }

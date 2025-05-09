@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.core.data.draw_examples.util
+package nl.codingwithlinda.scribbledash.core.data.util
 
 import android.content.Context
 import android.graphics.Bitmap

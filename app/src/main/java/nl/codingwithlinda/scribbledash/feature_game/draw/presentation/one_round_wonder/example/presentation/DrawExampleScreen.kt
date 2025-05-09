@@ -139,11 +139,11 @@ fun DrawExampleScreen(
 private fun PreviewDrawExampleScreen() {
     val context = LocalContext.current
     val drawRes = R.drawable.eye
-    val path = testExampleDrawable(context, drawRes)
+    val path = testExampleDrawable(context, drawRes).examplePath
     ScribbleDashTheme {
         DrawExampleScreen(
             uiState = DrawExampleUiState(
-                drawPaths = listOf(path.androidPath)
+                drawPaths = path
             ),
         )
 

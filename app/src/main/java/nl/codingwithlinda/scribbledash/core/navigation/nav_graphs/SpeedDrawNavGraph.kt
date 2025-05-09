@@ -17,7 +17,7 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawResul
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
@@ -59,7 +59,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
                 }
             }
         )
-        val pathDrawer = StraightPathDrawer()
+        val pathDrawer = StraightPathCreator()
         val offsetParser = AndroidOffsetParser
         val careTaker = remember {
             PathDataCareTaker()
@@ -69,6 +69,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
                 GameDrawViewModel(
                     careTaker = careTaker,
                     offsetParser = offsetParser,
+                    pathDrawer = pathDrawer,
                     gameEngine = gameEngine
                 )
             }

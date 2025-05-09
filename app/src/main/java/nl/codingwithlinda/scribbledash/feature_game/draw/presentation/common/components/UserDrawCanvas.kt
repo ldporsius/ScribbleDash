@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
@@ -67,7 +66,7 @@ fun UserDrawCanvas(
 
         uiState.drawPaths.onEach {path ->
             drawPath(
-                path = path.asComposePath(),
+                path = path,
                 color = pathColor,
                 style = Stroke(width = 2.dp.toPx())
             )
@@ -75,7 +74,7 @@ fun UserDrawCanvas(
         uiState.currentPath?.let { path ->
             val color = pathColor
             drawPath(
-                path = path.paths.asComposePath(),
+                path = path,
                 color = color,
                 style = Stroke(width = 2.dp.toPx())
             )

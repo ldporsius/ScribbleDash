@@ -2,19 +2,12 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_m
 
 import androidx.compose.ui.geometry.Offset
 import app.cash.turbine.test
-import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.runBlocking
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
 import nl.codingwithlinda.scribbledash.core.di.TestAppModule
-import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
-import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
-import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
-import nl.codingwithlinda.scribbledash.core.test.fakeDrawResultSamePaths
-import nl.codingwithlinda.scribbledash.core.test.fakePathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathDrawer
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.AndroidDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import org.junit.Assert.*
@@ -27,13 +20,8 @@ class EndlessDrawViewModelTest{
 
     private val appModule = TestAppModule()
 
-    val offsetParser = AndroidOffsetParser
-    val pathDrawer = StraightPathDrawer()
-
     private val gameEngine = EndlessGameEngine(
         exampleProvider = appModule.drawExampleProvider,
-        offsetParser = offsetParser,
-        pathDrawer = pathDrawer
     )
 
     @Before
@@ -49,7 +37,7 @@ class EndlessDrawViewModelTest{
         viewModel.endlessUiState.test {
 
             val result = gameEngine.provideExample()
-            val userIput = result.examplePath.map { it.path }.map {
+            val userIput = result.examplePath.map {
                 pathToCoordinates(it)
             }.flatten()
                 .map {coor ->

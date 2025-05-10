@@ -92,22 +92,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                             gameDrawViewModel.onDone()
                             navController.navigate(EndlessResultNavRoute)
                         },
-                        modifier = Modifier,
                     )
-                    /*EndlessDrawScreen(
-                        topBarUiState = endlessDrawViewModel.endlessUiState.collectAsStateWithLifecycle().value,
-                        exampleUiState = gameDrawViewModel.exampleUiState.collectAsStateWithLifecycle().value,
-                        gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
-                        onAction = gameDrawViewModel::handleAction,
-                        onDone = {
-                            gameDrawViewModel.onDone()
-                            navController.navigate(EndlessResultNavRoute)
-                        },
-                        actionOnClose = {
-                            navController.popBackStack()
-                            onNavHome()
-                        }
-                    )*/
                 }
 
                 composable<EndlessResultNavRoute> {

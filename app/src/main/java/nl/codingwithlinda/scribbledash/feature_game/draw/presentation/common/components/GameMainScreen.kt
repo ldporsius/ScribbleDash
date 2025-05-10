@@ -22,7 +22,7 @@ fun GameMainScreen(
     gameDrawUiState: GameDrawUiState,
     onAction: (DrawAction) -> Unit,
     onDone: () -> Unit,
-    modifier: Modifier = Modifier) {
+    ) {
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -31,6 +31,7 @@ fun GameMainScreen(
         )
     ) {
         Column(
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center
         ) {
             topBar()

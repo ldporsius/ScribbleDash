@@ -26,7 +26,6 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.Strai
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameMainScreen
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderTopBar
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultViewModel
@@ -100,8 +99,6 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                             initializer {
                                 GameResultViewModel(
                                     ratingTextGenerator = ratingTextGenerator,
-                                    resultCalculator = resultCalculator,
-                                    bitmapPrinter = bitmapPrinter,
                                     gameEngine = gameEngine
                                 )
                             }

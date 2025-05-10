@@ -1,8 +1,10 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -24,21 +26,31 @@ fun UserInputScreen(
     Column(
         modifier =
             modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             ,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
+        Spacer(modifier = Modifier.weight(.3f))
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .weight(1f)) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Time to draw!",
+                    style = MaterialTheme.typography.displayMedium
+                )
 
-        Text(
-            text = "Time to draw!",
-            style = MaterialTheme.typography.displayMedium
-        )
-
-        UserDrawCanvas(
-            uiState = uiState,
-            onAction = onAction
-        )
-        Spacer(modifier = Modifier.weight(1f))
+                UserDrawCanvas(
+                    uiState = uiState,
+                    onAction = onAction
+                )
+            }
+        }
+        Spacer(modifier = Modifier.weight(.3f))
         Box(modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)

@@ -4,10 +4,10 @@ import android.graphics.Color
 import androidx.compose.ui.graphics.asComposePath
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
@@ -24,7 +24,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.Game
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawExampleUiState
 
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
@@ -123,7 +123,6 @@ class GameDrawViewModel(
             }
 
             DrawAction.Save -> {
-                //println("VIEWMODEL SAVES MEMENTO")
 
                 countUndoes = 0
                 currentPath?.let { pathData ->
@@ -139,19 +138,12 @@ class GameDrawViewModel(
                         currentPath = null,
                     )
                 }
-
-                viewModelScope.launch {
-                    gameEngine.processUserInput(offsets.value)
-
-                }
-
             }
             DrawAction.Undo -> {
                 if (canUndo()) {
                     countUndoes++
                     val undoMemento = careTaker.undo()
-                    //println("VIEWMODEL HAS UNDO MEMENTO $undoMemento")
-                    //println("VIEWMODEL HAS UNDO MEMENTOS SIZE: ${undoMemento?.size}")
+
                     undoMemento?.let { paths ->
                         offsets.update {
                             undoMemento
@@ -169,8 +161,7 @@ class GameDrawViewModel(
             DrawAction.Redo -> {
                 countUndoes = countUndoes.minus(1).coerceAtLeast(0)
                 val redoMemento = careTaker.redo()
-                //println("VIEWMODEL HAS REDO MEMENTO $redoMemento")
-                //println("VIEWMODEL HAS REDO MEMENTOS SIZE: ${redoMemento?.size}")
+
                 _uiState.update {
                     it.copy(
                         canUndo = canUndo(),
@@ -188,7 +179,7 @@ class GameDrawViewModel(
     }
 
     fun onDone(){
-        viewModelScope.launch {
+        viewModelScope.launch(NonCancellable) {
             gameEngine.processUserInput(offsets.value)
             gameEngine.onUserInputDone()
         }

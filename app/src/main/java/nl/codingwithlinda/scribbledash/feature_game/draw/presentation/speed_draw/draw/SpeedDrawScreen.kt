@@ -19,8 +19,8 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.sta
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.DrawExampleScreen
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.DrawExampleScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawExampleUiState
 
 @Composable
 fun SpeedDrawScreen(

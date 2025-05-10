@@ -37,9 +37,9 @@ class GamesManager(
             addGame(mode, drawResults)
             return
         }
-        val currentResults = latestGame.scores
+        val currentScores = latestGame.scores
         val newResults = listAccuracies(drawResults)
-        val updatedGame = latestGame.copy(scores = currentResults + newResults)
+        val updatedGame = latestGame.copy(scores = newResults)
 
         gamesAccess.update(updatedGame)
 

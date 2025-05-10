@@ -2,6 +2,7 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine
 
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
+import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
@@ -17,9 +18,15 @@ class SpeedDrawGameEngine(
     override val gameMode: GameMode
         get() = GameMode.SPEED_DRAW
 
+    override fun saveResult(result: DrawResult) {
+        results.removeAll {
+            it.id == result.id
+        }
+        results.add(result)
+    }
     override suspend fun shouldStartNewGame(): Boolean {
         val counter = this.drawingTimeCounter
-        return counter.timer.value == 0
+        return counter.timer.value <= 0
     }
 
     override fun isGameSuccessful(): Boolean {

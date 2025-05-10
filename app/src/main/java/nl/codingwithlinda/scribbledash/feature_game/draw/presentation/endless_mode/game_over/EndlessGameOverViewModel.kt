@@ -11,10 +11,12 @@ import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.FinalResultUiState
 
 class EndlessGameOverViewModel(
-    private val gamesManager: GamesManager,
+    private val gameEngine: GameEngineTemplate,
     private val ratingMapper: RatingMapper
 ): ViewModel() {
 
@@ -22,9 +24,9 @@ class EndlessGameOverViewModel(
 
     val uiState = _uiState
         .onStart {
-            val avgAccuracy = gamesManager.averageAccuracyForLatestGame(GameMode.ENDLESS_MODE)
-            val isTopScore = gamesManager.isNewTopScore(GameMode.ENDLESS_MODE)
-            val numSuccesses = gamesManager.numberSuccessesForLatestGame(GameMode.ENDLESS_MODE)
+            val avgAccuracy = gameEngine.averageAccuracyForLatestGame()
+            val isTopScore = gameEngine.isNewTopScore()
+            val numSuccesses = gameEngine.numberSuccessesForLatestGame()
             _uiState.update {
                 it.copy(
                     ratingUi = ratingMapper.toUi(avgAccuracy),
@@ -35,10 +37,5 @@ class EndlessGameOverViewModel(
             }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
-    fun startNewGame(){
-        viewModelScope.launch {
-            gamesManager.addGame(GameMode.ENDLESS_MODE, emptyList())
-        }
-    }
 
 }

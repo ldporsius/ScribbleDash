@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components
 
 import android.graphics.Matrix
 import androidx.compose.foundation.Canvas
@@ -11,10 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawExampleUiState
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
 import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
 

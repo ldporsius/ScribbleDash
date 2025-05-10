@@ -2,10 +2,7 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine
 
 import android.graphics.Path
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
@@ -16,6 +13,7 @@ import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.model.Rating
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
+import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation.gameMode
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
@@ -32,25 +30,25 @@ abstract class GameEngineTemplate(
     private val resultCalculator = ResultCalculator
     private val ratingFactory = RatingFactory
 
-    private var result = DrawResult(
-        id = System.currentTimeMillis().toString(),
-        level = level,
-        examplePath = emptyList(),
-        userPath = emptyList()
-    )
 
+    protected val results = mutableListOf<DrawResult>()
 
     //template method
     suspend fun start(){
         if (shouldStartNewGame()) {
             startGame()
         }
-        result = createDrawResult()
+        val result = createDrawResult()
+        saveResult(result)
 
         shouldShowExample.update { true }
         emitNewExample()
 
-        countDown.collect()
+        countDownTimer.countdown.collect(){count ->
+            countDown.update {
+                count
+            }
+        }
 
         shouldShowExample.update { false }
     }
@@ -60,8 +58,7 @@ abstract class GameEngineTemplate(
         this.level = level
     }
     val exampleFlow = Channel<Path>()
-    val countDown: Flow<Int>
-            = countDownTimer.countdown
+    val countDown = MutableStateFlow(3)
 
     val shouldShowExample
             = MutableStateFlow(true)
@@ -72,13 +69,14 @@ abstract class GameEngineTemplate(
         }.map {
             it.path
         }
-        result = result.copy(
-            userPath = result.userPath + paths
+        val result = getResult().copy(
+            userPath = paths
         )
-        gamesManager.updateLatestGame(gameMode, listOf(result))
+        saveResult(result)
+        gamesManager.updateLatestGame(gameMode, results)
     }
 
-    fun getResult() = result.copy()
+    fun getResult() = results.lastOrNull() ?: createDrawResult()
 
     fun pauseGame(){
         drawingTimeCounter.pause()
@@ -86,14 +84,12 @@ abstract class GameEngineTemplate(
     fun resumeGame(){
         drawingTimeCounter.resume()
     }
-    suspend fun saveGame(){
-        gamesManager.updateLatestGame(gameMode, listOf(result))
-    }
+
     fun getAccuracy(): Int{
-        return resultCalculator.calculateResult(result, 4)
+        return resultCalculator.calculateResult(getResult(), 4)
     }
     fun getRating() : Rating{
-        val accuracy = resultCalculator.calculateResult(result, 4)
+        val accuracy = resultCalculator.calculateResult(getResult(), 4)
         return ratingFactory.getRating(accuracy)
     }
 
@@ -101,8 +97,16 @@ abstract class GameEngineTemplate(
         return gamesManager.numberSuccessesForLatestGame(gameMode)
     }
 
+    suspend fun averageAccuracyForLatestGame(): Int{
+        return gamesManager.averageAccuracyForLatestGame(gameMode)
+    }
+    suspend fun isNewTopScore(): Boolean{
+        return gamesManager.isNewTopScore(gameMode)
+    }
+
     /////////private functions////////////////////////////////
     private suspend fun startGame(){
+        results.clear()
         gamesManager.addGame(gameMode, emptyList())
     }
     private fun createDrawResult(): DrawResult{
@@ -124,9 +128,10 @@ abstract class GameEngineTemplate(
     }
     private fun saveExample(example: Path): DrawResult {
 
-        result = result.copy(
+        val result = getResult().copy(
             examplePath = listOf(example)
         )
+        saveResult(result)
 
         return result
     }
@@ -134,6 +139,7 @@ abstract class GameEngineTemplate(
 
     //mandatory
     abstract val gameMode: GameMode
+    abstract fun saveResult(result: DrawResult)
     abstract suspend fun shouldStartNewGame(): Boolean
     abstract suspend fun onUserInputDone()
     abstract fun isGameSuccessful(): Boolean

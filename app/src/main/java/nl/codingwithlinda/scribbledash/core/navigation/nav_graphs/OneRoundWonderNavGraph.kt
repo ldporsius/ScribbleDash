@@ -1,6 +1,8 @@
 package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -23,7 +25,9 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.Andr
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameMainScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderTopBar
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
@@ -62,13 +66,19 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                     val viewModel = viewModel<GameDrawViewModel>(
                         factory = factory
                     )
-                    OneRoundWonderScreen(
-                        drawState = viewModel.drawState.collectAsStateWithLifecycle().value,
-                        actionOnClose = {
-                            navToHome()
+
+                    GameMainScreen(
+                        topBar = {
+                            OneRoundWonderTopBar(
+                                actionOnClose = {
+                                    navToHome()
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            )
                         },
-                        uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+                        drawState = viewModel.drawState.collectAsStateWithLifecycle().value,
                         exampleUiState = viewModel.exampleUiState.collectAsStateWithLifecycle().value,
+                        gameDrawUiState = viewModel.uiState.collectAsStateWithLifecycle().value,
                         onAction = viewModel::handleAction,
                         onDone = {
                             viewModel.onDone()

@@ -90,10 +90,7 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                 composable<GameResultNavRoute> {
 
                     val ratingTextGenerator = appModule.ratingTextGenerator
-                    val resultCalculator = ResultCalculator
 
-                    val context = LocalContext.current
-                    val bitmapPrinter = AndroidBitmapPrinter(context)
                     val viewModel = viewModel<GameResultViewModel>(
                         factory = viewModelFactory {
                             initializer {
@@ -119,7 +116,6 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                                 GameResultAction.Close -> {
                                     navToHome()
                                 }
-
                                 GameResultAction.TryAgain -> {
                                     gameNavController.popBackStack()
                                     gameNavController.navigate(GameDrawNavRoute) {

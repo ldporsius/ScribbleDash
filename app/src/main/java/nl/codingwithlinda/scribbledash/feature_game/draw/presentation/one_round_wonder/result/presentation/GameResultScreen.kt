@@ -169,7 +169,7 @@ fun GameResultScreen(
                         val w = size.width
                         val h = size.height
                         val requiredSize = 100.dp.toPx().toInt()
-                        val strokeWidth = 5.dp.toPx()
+                        val strokeWidth = 4.dp.toPx()
                         val bm = userPath.
                         toBitmapUiOnly(
                             requiredSize = requiredSize,
@@ -180,7 +180,7 @@ fun GameResultScreen(
                         drawImage(
                             bm.asImageBitmap(),
                             topLeft = Offset(dx, dy),
-                            style = Stroke(4.dp.toPx())
+                            style = Stroke(2.dp.toPx())
                         )
                     }
                 }

@@ -43,7 +43,7 @@ class GameDrawViewModel(
     private val _exampleUiState = MutableStateFlow(DrawExampleUiState())
     val exampleUiState = combine(_exampleUiState, exampleFlow, gameEngine.countDown){state, example, count ->
         state.copy(
-            drawPaths = listOf(example),
+            drawPath = example,
             counter = count
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _exampleUiState.value)

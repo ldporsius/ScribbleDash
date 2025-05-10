@@ -27,6 +27,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
+import nl.codingwithlinda.scribbledash.core.data.util.centerPath
+import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawExampleUiState
 import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
@@ -38,9 +40,7 @@ fun DrawExampleScreen(
 
     ) {
     val gridColor = MaterialTheme.colorScheme.onSurface
-    var tMatrix by remember {
-        mutableStateOf(Matrix())
-    }
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(
@@ -81,40 +81,16 @@ fun DrawExampleScreen(
                         end = androidx.compose.ui.geometry.Offset( i * gridSpacing, this.size.height),
                     )
                 }
-
-
-
-                uiState.drawPaths.onEach {path ->
-
-                    val bounds = path.asComposePath().getBounds()
-
-                    val sx = this.size.width / bounds.width
-                    val sy = this.size.height / bounds.height
-                    val sxMin = minOf(sx, sy) *.75f
-
-                    val dx = (bounds.left * sxMin)
-                    val dx2 = (this@Canvas.size.width / 2) - (bounds.width * sxMin)/2
-                    val dy = (-bounds.top * sxMin)
-                    val dy2 = (this@Canvas.size.height / 2) - (bounds.height * sxMin)/2
-
-                    tMatrix =  tMatrix.apply {
-                        setScale(sxMin, sxMin)
-                        postTranslate(-dx, dy)
-                        postTranslate(dx2,dy2 )
-
-                    }
-                    path.transform(
-                       tMatrix
-                    )
                     val color = uiState.pathColor
+                    centerPath(uiState.drawPath)
                     drawPath(
-                        path = path.asComposePath(),
+                        path = uiState.drawPath.asComposePath(),
                         color = color,
                         style = Stroke(width = 2.dp.toPx())
                     )
 
                 }
-            }
+
         }
 
         Box(modifier = Modifier
@@ -139,7 +115,7 @@ private fun PreviewDrawExampleScreen() {
     ScribbleDashTheme {
         DrawExampleScreen(
             uiState = DrawExampleUiState(
-                drawPaths = path
+                drawPath = combinedPath(path)
             ),
         )
 

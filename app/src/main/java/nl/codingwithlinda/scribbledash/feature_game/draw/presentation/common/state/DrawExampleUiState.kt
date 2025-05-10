@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
 
 data class DrawExampleUiState(
-    val drawPaths: List<Path> = emptyList(),
+    val drawPath: Path = Path(),
     val pathColor: Color = Color.Black,
     val counter: Int = CountDownTimer.STARTTIME,
 )

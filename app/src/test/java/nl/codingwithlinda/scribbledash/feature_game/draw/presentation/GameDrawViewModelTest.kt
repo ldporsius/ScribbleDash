@@ -8,14 +8,16 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.test_data.FakeExampleProvider
+import nl.codingwithlinda.scribbledash.feature_game.test_data.FakeGamesAccess
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -30,16 +32,19 @@ class GameDrawViewModelTest {
     private val pathDrawer = StraightPathCreator()
     private val exampleProvider = FakeExampleProvider()
 
-    private lateinit var gameEngine: GameEngine
+    private lateinit var gameEngine: GameEngineTemplate
     private lateinit var viewModel: GameDrawViewModel
 
-
+    private val gamesManager = GamesManager(
+        gamesAccess = FakeGamesAccess(),
+    )
     @Before
     fun setup(){
         Dispatchers.setMain(dispatcher)
 
         gameEngine = OneRoundGameEngine(
             exampleProvider = exampleProvider,
+            gamesManager = gamesManager
         )
         viewModel = GameDrawViewModel(
             gameEngine = gameEngine,

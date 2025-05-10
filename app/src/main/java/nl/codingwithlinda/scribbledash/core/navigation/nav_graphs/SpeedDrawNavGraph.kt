@@ -11,14 +11,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
-import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawResultNavRoute
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawScreen
@@ -29,7 +28,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw
 fun NavGraphBuilder.speedDrawNavGraph(
     gameNavController: NavHostController,
     appModule: AndroidAppModule,
-    gameEngine: GameEngine,
+    gameEngine: GameEngineTemplate,
     navToHome: () -> Unit
 ) {
 
@@ -39,16 +38,13 @@ fun NavGraphBuilder.speedDrawNavGraph(
         val bitmapPrinter = remember {
             AndroidBitmapPrinter(context)
         }
-        val viewModel = viewModel<SpeedDrawViewModel>(
+        val speedDrawViewModel = viewModel<SpeedDrawViewModel>(
             factory = viewModelFactory {
                 initializer {
                     SpeedDrawViewModel(
                         gameEngine = gameEngine,
-                        exampleProvider = appModule.drawExampleProvider,
-                        resultCalculator = ResultCalculator,
-                            bitmapPrinter = bitmapPrinter,
-                            gamesManager = appModule.gamesManager,
                             navToResult = {
+                                gameNavController.popBackStack()
                                 gameNavController.navigate(SpeedDrawResultNavRoute){
                                     popUpTo(SpeedDrawNavRoute){
                                         inclusive = true
@@ -79,15 +75,15 @@ fun NavGraphBuilder.speedDrawNavGraph(
             factory = factory
         )
       SpeedDrawScreen(
-          topBarUiState = viewModel.topBarUiState.collectAsStateWithLifecycle().value,
-          exampleUiState = viewModel.exampleUiState.collectAsStateWithLifecycle().value,
+          topBarUiState = speedDrawViewModel.topBarUiState.collectAsStateWithLifecycle().value,
+          exampleUiState = gameDrawViewModel.exampleUiState.collectAsStateWithLifecycle().value,
           gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
           onAction = gameDrawViewModel::handleAction,
           onDone = {
               gameDrawViewModel.onDone()
               gameDrawViewModel.handleAction(DrawAction.Clear)
 
-              viewModel.onDone()
+              speedDrawViewModel.onDone()
           },
           actionOnClose = navToHome,
 

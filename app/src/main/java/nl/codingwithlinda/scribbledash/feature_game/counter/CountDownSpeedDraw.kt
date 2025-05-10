@@ -2,36 +2,48 @@ package nl.codingwithlinda.scribbledash.feature_game.counter
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class CountDownSpeedDraw {
 
     companion object {
-        const val DURATION_SECS = 120
         const val STARTTIME = 120
         const val INTERVAL = 1000L
     }
     private val isPaused = MutableStateFlow<Boolean>(true)
 
     private var currentCount = STARTTIME
-    val startCountdown = flow {
+    private val _timer = MutableStateFlow<Int>(currentCount)
+    val timer = _timer.asStateFlow()
+    suspend fun startCountdown() {
 
-            while (currentCount >= 0 ) {
+        reset()
+        while (currentCount > 0 ) {
 
-                emit(currentCount)
-
-                delay(INTERVAL)
-                if (!isPaused.value) {
-                    currentCount -= 1
-                }
+            delay(INTERVAL)
+            if (!isPaused.value) {
+                currentCount -= 1
+            }
+            _timer.update {
+                currentCount
+            }
         }
     }
 
     fun pause(){
-        isPaused.value = true
+        isPaused.update {
+            true
+        }
     }
 
     fun resume(){
-        isPaused.value = false
+        isPaused.update {
+            false
+        }
+    }
+    fun reset(){
+        currentCount = STARTTIME
+
     }
 }

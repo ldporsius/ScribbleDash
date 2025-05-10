@@ -11,7 +11,7 @@ class CountDownTimer {
         const val INTERVAL = 1000L
     }
 
-    fun startCountdown() = flow<Int> {
+    val countdown = flow<Int> {
         repeat(DURATION_SECS){ i ->
             emit(STARTTIME - i)
             delay(INTERVAL)

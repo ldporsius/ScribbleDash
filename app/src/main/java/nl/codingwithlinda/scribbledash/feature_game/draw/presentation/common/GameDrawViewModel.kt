@@ -7,7 +7,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
@@ -17,15 +20,17 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCa
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.example.presentation.state.DrawExampleUiState
 
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
     private val offsetParser: OffsetParser,
     private val pathDrawer: PathCreator<SingleDrawPath>,
-    private val gameEngine: GameEngine
+    private val gameEngine: GameEngineTemplate
 ): ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())
@@ -34,6 +39,23 @@ class GameDrawViewModel(
 
     private fun canUndo() = countUndoes < 5 && offsets.value.isNotEmpty()
 
+    private val exampleFlow = gameEngine.exampleFlow.receiveAsFlow()
+    private val _exampleUiState = MutableStateFlow(DrawExampleUiState())
+    val exampleUiState = combine(_exampleUiState, exampleFlow, gameEngine.countDown){state, example, count ->
+        state.copy(
+            drawPaths = listOf(example),
+            counter = count
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _exampleUiState.value)
+
+    val drawState = gameEngine.shouldShowExample.transform {
+        if (it){
+            emit(DrawState.EXAMPLE)
+        }
+        else{
+            emit(DrawState.USER_INPUT)
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DrawState.EXAMPLE)
 
     val uiState = combine(_uiState, offsets){ state, offsets ->
         val paths = offsets.map {
@@ -48,6 +70,11 @@ class GameDrawViewModel(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
+    init {
+        viewModelScope.launch {
+            gameEngine.start()
+        }
+    }
 
     fun handleAction(action: DrawAction){
         when(action){
@@ -161,28 +188,12 @@ class GameDrawViewModel(
     }
 
     fun onDone(){
+        viewModelScope.launch {
+            gameEngine.processUserInput(offsets.value)
+            gameEngine.onUserInputDone()
+        }
         currentPath = null
 
-        gameEngine.endUserInput {
-
-        }
     }
 
-   /* private fun updateResultManager(){
-        val result = offsets.value.map {pd->
-            offsetParser.parseOffset(
-                pathDrawer = pathDrawer,
-                pathData = pd
-            )
-        }
-
-        val newUserResult = ResultManager.INSTANCE.getLastResult()?.copy(
-            userPath = result
-        )
-        newUserResult?.let {
-            println("GAME DRAW VIEWMODEL SAVES USER PATH")
-
-            ResultManager.INSTANCE.updateResult(it)
-        }
-    }*/
 }

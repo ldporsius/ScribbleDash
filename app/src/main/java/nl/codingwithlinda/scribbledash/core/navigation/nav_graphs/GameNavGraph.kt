@@ -14,6 +14,8 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawNavRo
 import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.SpeedDrawGameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevelScreen
 
 
@@ -27,29 +29,38 @@ fun NavGraphBuilder.GameNavGraph(
         val gameNavController = rememberNavController()
         NavHost(navController = gameNavController, startDestination = GameLevelNavRoute) {
             val exampleProvider = appModule.drawExampleProvider
-
-            val gameEngine = OneRoundGameEngine(
+            val oneRoundGameEngine = OneRoundGameEngine(
                 exampleProvider = exampleProvider,
+                gamesManager = appModule.gamesManager
             )
+           val speedDrawGameEngine = SpeedDrawGameEngine(
+               exampleProvider = exampleProvider,
+               gamesManager = appModule.gamesManager
+           )
             val endlessGameEngine = EndlessGameEngine(
                 exampleProvider = exampleProvider,
+                gamesManager = appModule.gamesManager
             )
+
             composable<GameLevelNavRoute> {
                 GameLevelScreen(
                     actionOnClose = {
                         navToHome()
                     },
                     actionOnLevel = { level ->
-                        gameEngine.setLevel(level)
+
                         GameModeNavigation.gameMode.let { gameMode ->
                             when (gameMode) {
                                 GameMode.ONE_ROUND_WONDER -> {
+                                    oneRoundGameEngine.setLevel(level)
                                     gameNavController.navigate(OneRoundRootNavRoute)
                                 }
                                 GameMode.SPEED_DRAW -> {
+                                    speedDrawGameEngine.setLevel(level)
                                     gameNavController.navigate(SpeedDrawNavRoute)
                                 }
                                 GameMode.ENDLESS_MODE -> {
+                                    endlessGameEngine.setLevel(level)
                                     gameNavController.navigate(
                                         EndlessRootNavRoute
                                     )
@@ -62,14 +73,14 @@ fun NavGraphBuilder.GameNavGraph(
 
            oneRoundWonderNavGraph(
                appModule = appModule,
-               gameEngine = gameEngine,
+               gameEngine = oneRoundGameEngine,
                navToHome = navToHome
            )
 
             speedDrawNavGraph(
                 gameNavController = gameNavController,
                 appModule = appModule,
-                gameEngine = gameEngine,
+                gameEngine = speedDrawGameEngine,
                 navToHome = navToHome
             )
             endlessModeNavGraph(

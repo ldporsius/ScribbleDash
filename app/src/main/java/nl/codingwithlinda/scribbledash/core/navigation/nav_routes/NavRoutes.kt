@@ -26,8 +26,6 @@ object OneRoundRootNavRoute : NavRoute
 @Serializable
 object OneRoundHostNavRoute : NavRoute
 
-@Serializable
-object GameExampleNavRoute : NavRoute
 
 @Serializable
 object GameDrawNavRoute : NavRoute

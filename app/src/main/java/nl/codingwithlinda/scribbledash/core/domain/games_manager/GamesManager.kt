@@ -53,7 +53,11 @@ class GamesManager(
     suspend fun averageAccuracyForLatestGame(mode: GameMode): Int{
         val game = gamesForMode(mode).maxByOrNull { it.id } ?: return 0
         val totalAccuracy = game.scores.average()
-        return totalAccuracy.roundToInt()
+        return try {
+            totalAccuracy.roundToInt()
+        }catch (e: Exception){
+            0
+        }
     }
 
     suspend fun numberSuccessesForLatestGame(mode: GameMode): Int{
@@ -85,7 +89,11 @@ class GamesManager(
     private suspend fun averageAccuracyPerGame(mode: GameMode): Map<Game, Int> {
         val games = gamesForMode(mode)
         val result = games.associateWith { game ->
-            game.scores.average().roundToInt()
+            try {
+                game.scores.average().roundToInt()
+            }catch (e: Exception){
+                0
+            }
         }
         return result
     }

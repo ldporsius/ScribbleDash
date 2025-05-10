@@ -1,75 +1,29 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.transform
-import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
-import nl.codingwithlinda.scribbledash.core.data.util.error.GameError
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
-import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
-import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
-import nl.codingwithlinda.scribbledash.core.domain.util.ScResult
-import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
+import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
+import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
 class OneRoundGameEngine(
     private val exampleProvider: DrawExampleProvider,
-    ): GameEngine {
-    private var level: GameLevel = GameLevel.BEGINNER
+    private val gamesManager: GamesManager
+): GameEngineTemplate(
+    exampleProvider = exampleProvider,
+    gamesManager = gamesManager
+) {
+    override val gameMode: GameMode
+        get() = GameMode.ONE_ROUND_WONDER
 
-    private val countDownTimer = CountDownTimer()
-    private val pathCreator = StraightPathCreator()
-
-    private var result = DrawResult(
-        id = System.currentTimeMillis().toString(),
-        level = level,
-        examplePath = emptyList(),
-        userPath = emptyList()
-    )
-
-    override fun setLevel(level: GameLevel) {
-       this.level = level
-    }
-    override fun provideExample(): DrawResult {
-        val example = exampleProvider.examples.random().examplePath.let {
-            combinedPath(it)
-        }
-
-        result = result.copy(
-            examplePath = listOf(example)
-        )
-
-        return result
+    override suspend fun shouldStartNewGame(): Boolean {
+       return true
     }
 
-    override val countDown: Flow<Int>
-        get() = countDownTimer.startCountdown()
-
-    override val showExample: Flow<Boolean>
-        get() = countDownTimer.startCountdown().transform {count ->
-            emit(count > 0)
-        }
-
-    override fun processUserInput(userInput: List<PathData>) {
-       val paths = userInput.map{
-          pathCreator.drawPath(it.path)
-       }.map {
-           it.path
-       }
-        result = result.copy(
-            userPath = result.userPath + paths
-        )
+    override fun isGameSuccessful(): Boolean {
+        return true
     }
 
-    override fun endUserInput(callback: (ScResult<Any, GameError>) -> Unit ) {
-        callback.invoke(ScResult.Success(result))
+    override suspend fun onUserInputDone() {
+        //nothing
     }
-
-    override fun getResult(): DrawResult {
-        return result
-    }
-
 }

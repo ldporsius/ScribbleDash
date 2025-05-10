@@ -20,7 +20,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawViewModel
@@ -33,7 +33,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mo
 fun NavGraphBuilder.endlessModeNavGraph(
     appModule: AndroidAppModule,
     onNavHome: () -> Unit,
-    gameEngine: GameEngine
+    gameEngine: GameEngineTemplate
 ){
 
     navigation<EndlessRootNavRoute>( startDestination = EndlessHostNavRoute){
@@ -96,7 +96,6 @@ fun NavGraphBuilder.endlessModeNavGraph(
                             initializer {
                                 EndlessResultViewModel(
                                     gameEngine = gameEngine,
-                                    gamesManager = appModule.gamesManager,
                                     ratingMapper = RatingMapper(appModule.ratingTextGenerator)
                                 )
                             }

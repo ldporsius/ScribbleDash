@@ -10,7 +10,7 @@ import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.feature_statistics.presentation.model.StatisticInfoUi
-import nl.codingwithlinda.scribbledash.ui.theme.statisticsColors
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.statisticsColors
 
 class StatisticsViewModel(
     private val gamesManager: GamesManager

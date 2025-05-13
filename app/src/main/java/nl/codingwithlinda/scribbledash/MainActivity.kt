@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.navigation.ScribbleDashApp
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -48,9 +48,9 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.feature_home.presentation.HomeScreen
 import nl.codingwithlinda.scribbledash.feature_statistics.presentation.StatisticsScreen
 import nl.codingwithlinda.scribbledash.feature_statistics.presentation.StatisticsViewModel
-import nl.codingwithlinda.scribbledash.ui.theme.backgroundLight
-import nl.codingwithlinda.scribbledash.ui.theme.primary
-import nl.codingwithlinda.scribbledash.ui.theme.tertiaryContainer
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundLight
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.primary
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.tertiaryContainer
 
 @Composable
 fun ScribbleDashApp(

@@ -2,8 +2,8 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.st
 
 import androidx.compose.ui.graphics.Color
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
-import nl.codingwithlinda.scribbledash.ui.theme.surfaceLow
-import nl.codingwithlinda.scribbledash.ui.theme.topscoreColor
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.surfaceLow
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.topscoreColor
 
 data class FinalResultUiState(
     val ratingUi: RatingUi? = null,

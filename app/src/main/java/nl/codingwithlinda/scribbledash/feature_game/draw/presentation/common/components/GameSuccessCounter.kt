@@ -16,11 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
-import nl.codingwithlinda.scribbledash.ui.theme.headlineXSmall
-import nl.codingwithlinda.scribbledash.ui.theme.onBackground
-import nl.codingwithlinda.scribbledash.ui.theme.onSurface
-import nl.codingwithlinda.scribbledash.ui.theme.surfaceLow
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.headlineXSmall
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.onBackground
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.onSurface
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.surfaceLow
 
 @Composable
 fun GameSuccessCounter(

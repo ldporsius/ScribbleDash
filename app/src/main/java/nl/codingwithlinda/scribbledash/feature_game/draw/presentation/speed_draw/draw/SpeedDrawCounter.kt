@@ -13,9 +13,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
-import nl.codingwithlinda.scribbledash.ui.theme.headlineXSmall
-import nl.codingwithlinda.scribbledash.ui.theme.surfaceHigh
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.headlineXSmall
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.surfaceHigh
 
 @Composable
 fun SpeedDrawCounter(

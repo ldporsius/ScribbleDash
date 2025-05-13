@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CloseButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameSuccessCounter
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
 
 @Composable
 fun SpeedDrawTopBar(

@@ -31,7 +31,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import nl.codingwithlinda.scribbledash.core.data.util.centerPath
 import nl.codingwithlinda.scribbledash.core.data.util.toBitmapUiOnly
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.result.EndlessResultUiState
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
 
 @Composable
 fun GameResultComparison(

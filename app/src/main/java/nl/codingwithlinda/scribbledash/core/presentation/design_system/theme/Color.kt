@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.ui.theme
+package nl.codingwithlinda.scribbledash.core.presentation.design_system.theme
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color

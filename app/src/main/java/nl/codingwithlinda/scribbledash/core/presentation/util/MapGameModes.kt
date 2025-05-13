@@ -3,10 +3,10 @@ package nl.codingwithlinda.scribbledash.core.presentation.util
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.presentation.model.GameModeUi
-import nl.codingwithlinda.scribbledash.ui.theme.endlessModeColor
-import nl.codingwithlinda.scribbledash.ui.theme.oneRoundWonderColor
-import nl.codingwithlinda.scribbledash.ui.theme.speedDrawColor
-import nl.codingwithlinda.scribbledash.ui.theme.success
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.endlessModeColor
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.oneRoundWonderColor
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.speedDrawColor
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.success
 
 fun GameMode.toUi(): GameModeUi {
     return when (this) {

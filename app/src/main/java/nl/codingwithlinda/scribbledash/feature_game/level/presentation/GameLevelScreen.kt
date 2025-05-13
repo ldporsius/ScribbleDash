@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
-import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundGradient
 
 @Composable
 fun GameLevelScreen(

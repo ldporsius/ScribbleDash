@@ -31,8 +31,8 @@ import nl.codingwithlinda.scribbledash.core.data.util.centerPath
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawExampleUiState
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
-import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundGradient
 
 @Composable
 fun DrawExampleScreen(

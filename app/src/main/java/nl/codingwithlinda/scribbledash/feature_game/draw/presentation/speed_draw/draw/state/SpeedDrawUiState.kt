@@ -6,7 +6,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.speed_draw.Speed
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.speed_draw.usecase.SpeedDrawTimeLeftUseCase
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawCounter
-import nl.codingwithlinda.scribbledash.ui.theme.onSurface
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.onSurface
 
 data class SpeedDrawUiState(
     //val drawState: DrawState = DrawState.EXAMPLE,
@@ -19,7 +19,7 @@ data class SpeedDrawUiState(
             timeLeft = timeLeftSeconds
         )
 
-        return if (isTimeScarce) nl.codingwithlinda.scribbledash.ui.theme.error else onSurface
+        return if (isTimeScarce) nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.error else onSurface
     }
 
 

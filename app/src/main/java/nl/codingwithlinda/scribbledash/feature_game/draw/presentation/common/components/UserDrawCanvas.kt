@@ -16,8 +16,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
-import nl.codingwithlinda.scribbledash.ui.theme.onBackground
-import nl.codingwithlinda.scribbledash.ui.theme.onSurface
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.onBackground
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.onSurface
 
 @Composable
 fun UserDrawCanvas(

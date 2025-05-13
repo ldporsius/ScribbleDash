@@ -49,8 +49,8 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
-import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundGradient
 
 @Composable
 fun GameResultScreen(

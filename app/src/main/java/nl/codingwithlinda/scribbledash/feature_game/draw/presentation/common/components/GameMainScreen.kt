@@ -12,7 +12,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.sta
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawExampleUiState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
-import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundGradient
 
 @Composable
 fun GameMainScreen(

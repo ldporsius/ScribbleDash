@@ -11,7 +11,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import nl.codingwithlinda.scribbledash.ui.theme.onSurface
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.onSurface
 
 @Composable
 fun CloseButton(

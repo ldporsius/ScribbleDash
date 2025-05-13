@@ -17,8 +17,8 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameResultComparison
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessTopBar
-import nl.codingwithlinda.scribbledash.ui.theme.oneRoundWonderColor
-import nl.codingwithlinda.scribbledash.ui.theme.speedDrawColor
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.oneRoundWonderColor
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.speedDrawColor
 
 @Composable
 fun EndlessModeResultScreen(

@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.ui.theme
+package nl.codingwithlinda.scribbledash.core.presentation.design_system.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

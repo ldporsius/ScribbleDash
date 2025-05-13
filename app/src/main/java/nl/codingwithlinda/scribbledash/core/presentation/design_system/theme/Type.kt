@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.ui.theme
+package nl.codingwithlinda.scribbledash.core.presentation.design_system.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

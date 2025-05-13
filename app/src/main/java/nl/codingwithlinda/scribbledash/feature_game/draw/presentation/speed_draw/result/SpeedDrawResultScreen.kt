@@ -29,13 +29,13 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.com
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameSuccessCounter
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.FinalResultUiState
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
-import nl.codingwithlinda.scribbledash.ui.theme.backgroundGradient
-import nl.codingwithlinda.scribbledash.ui.theme.onBackground
-import nl.codingwithlinda.scribbledash.ui.theme.onSurface
-import nl.codingwithlinda.scribbledash.ui.theme.primary
-import nl.codingwithlinda.scribbledash.ui.theme.surfaceHigh
-import nl.codingwithlinda.scribbledash.ui.theme.surfaceLow
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundGradient
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.onBackground
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.onSurface
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.primary
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.surfaceHigh
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.surfaceLow
 
 @Composable
 fun SpeedDrawResultScreen(

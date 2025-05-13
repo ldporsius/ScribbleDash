@@ -14,7 +14,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.com
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.state.EndlessUiState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawCounter
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
-import nl.codingwithlinda.scribbledash.ui.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
 
 @Composable
 fun EndlessTopBar(

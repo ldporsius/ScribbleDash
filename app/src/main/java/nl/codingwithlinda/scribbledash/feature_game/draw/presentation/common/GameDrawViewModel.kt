@@ -58,14 +58,15 @@ class GameDrawViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DrawState.EXAMPLE)
 
     val uiState = combine(_uiState, offsets){ state, offsets ->
-        val paths = offsets.map {
+        val path = offsets.map {
             offsetParser.parseOffset(it)
         }.let {
             coordinatesToPath(it)
         }.asComposePath()
 
+        val paths = if (path.isEmpty) emptyList() else listOf(path)
         state.copy(
-            drawPaths = listOf(paths),
+            drawPaths = paths,
             canRedo = careTaker.canRedo()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)

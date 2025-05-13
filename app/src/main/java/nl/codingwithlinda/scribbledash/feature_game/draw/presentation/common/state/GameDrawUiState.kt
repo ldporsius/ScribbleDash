@@ -13,7 +13,6 @@ data class GameDrawUiState(
 ){
     fun isUndoAvailable() = canUndo
     fun isRedoAvailable() = canRedo
-    fun isClearAvailable() = drawPaths.isNotEmpty() || canRedo
 
 
 }

@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components
+package nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size

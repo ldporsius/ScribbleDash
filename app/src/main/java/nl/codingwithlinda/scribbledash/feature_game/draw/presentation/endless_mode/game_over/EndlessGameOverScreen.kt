@@ -26,8 +26,8 @@ import nl.codingwithlinda.scribbledash.core.domain.ratings.Meh
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CloseButton
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.CustomColoredButton
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons.CloseButton
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons.CustomColoredButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameSuccessCounter
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.FinalResultUiState
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme

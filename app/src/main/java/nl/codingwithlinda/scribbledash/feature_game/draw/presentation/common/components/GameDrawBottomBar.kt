@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons.CustomColoredButton
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons.SmallButton
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundDark
@@ -50,11 +52,12 @@ fun GameDrawBottomBar(
             onClick = { onAction(DrawAction.Redo) }
         )
 
-        val clearButtonColor = if (uiState.isClearAvailable()) success else surfaceLowest
+        val clearButtonColor = if (uiState.drawPaths.isNotEmpty()) success else surfaceLowest
         CustomColoredButton(
             text = "Done",
             color = clearButtonColor,
             borderColor = surfaceHigh,
+            enabled = uiState.drawPaths.isNotEmpty(),
             onClick = { onDone() }
         )
     }

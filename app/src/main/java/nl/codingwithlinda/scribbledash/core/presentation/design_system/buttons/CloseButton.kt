@@ -1,10 +1,9 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components
+package nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

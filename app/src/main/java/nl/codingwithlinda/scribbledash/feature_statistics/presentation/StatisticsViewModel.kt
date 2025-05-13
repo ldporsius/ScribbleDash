@@ -29,7 +29,7 @@ class StatisticsViewModel(
                 icon = R.drawable.hourglass,
                 iconBackgroundColor = statisticsColors[0],
                 info = "Highest Speed Draw accuracy %",
-                value = highestSpeedDrawAccuracy.toString()
+                value = "$highestSpeedDrawAccuracy%"
             )
             val mostMehPlusSpeedInfo = StatisticInfoUi(
                 icon = R.drawable.lightning,
@@ -41,10 +41,10 @@ class StatisticsViewModel(
             val numSuccessEndless = gamesManager.highestNumberOfSuccessesForMode(GameMode.ENDLESS_MODE)
 
             val endlessAccuracyInfo = StatisticInfoUi(
-                icon = R.drawable.game_level_3,
+                icon = R.drawable.star,
                 iconBackgroundColor = statisticsColors[2],
                 info = "Highest Endless Mode accuracy %",
-                value = highestEndlessAccuracy.toString()
+                value = "$highestEndlessAccuracy%"
             )
             val mostDrawingsEndlessInfo = StatisticInfoUi(
                 icon = R.drawable.game_level_3,

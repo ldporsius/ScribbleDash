@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -71,14 +72,15 @@ fun StatisticsItem(
                     statisticInfo.info,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
-                        .padding(start = 8.dp)
+                        .padding(start = 8.dp, end = 16.dp)
                         .weight(1f)
                 )
 
                 Text(
                     statisticInfo.value,
                     style = MaterialTheme.typography.headlineLarge,
-
+                    modifier = Modifier.widthIn(81.dp, 100.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End
                 )
 
             }

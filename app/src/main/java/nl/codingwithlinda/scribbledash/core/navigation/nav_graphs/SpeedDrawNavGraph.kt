@@ -1,7 +1,11 @@
 package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
@@ -19,8 +23,9 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.Andr
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameMainScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawTopBar
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.result.SpeedDrawResultScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.result.SpeedDrawResultViewModel
@@ -74,20 +79,27 @@ fun NavGraphBuilder.speedDrawNavGraph(
         val gameDrawViewModel = viewModel<GameDrawViewModel>(
             factory = factory
         )
-      SpeedDrawScreen(
-          topBarUiState = speedDrawViewModel.topBarUiState.collectAsStateWithLifecycle().value,
-          exampleUiState = gameDrawViewModel.exampleUiState.collectAsStateWithLifecycle().value,
-          gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
-          onAction = gameDrawViewModel::handleAction,
-          onDone = {
-              gameDrawViewModel.onDone()
-              gameDrawViewModel.handleAction(DrawAction.Clear)
 
-              speedDrawViewModel.onDone()
-          },
-          actionOnClose = navToHome,
+        GameMainScreen(
+            topBar = {
+                SpeedDrawTopBar(
+                    uiState = speedDrawViewModel.topBarUiState.collectAsStateWithLifecycle().value,
+                    actionOnClose = navToHome,
+                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                )
+            },
+            drawState = gameDrawViewModel.drawState.collectAsStateWithLifecycle().value,
+            exampleUiState = gameDrawViewModel.exampleUiState.collectAsStateWithLifecycle().value,
+            gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
+            onAction = gameDrawViewModel::handleAction,
+            onDone = {
+                gameDrawViewModel.onDone()
+                gameDrawViewModel.handleAction(DrawAction.Clear)
 
-      )
+                speedDrawViewModel.onDone()
+            }
+        )
+
     }
 
     composable<SpeedDrawResultNavRoute> {

@@ -9,7 +9,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw
 import nl.codingwithlinda.scribbledash.ui.theme.onSurface
 
 data class SpeedDrawUiState(
-    val drawState: DrawState = DrawState.EXAMPLE,
+    //val drawState: DrawState = DrawState.EXAMPLE,
     val timeLeftSeconds: Int = CountDownSpeedDraw.STARTTIME,
     val successes: Int = 0
 ){

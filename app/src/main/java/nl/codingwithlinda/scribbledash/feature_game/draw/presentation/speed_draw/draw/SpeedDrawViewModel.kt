@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
 
 class SpeedDrawViewModel(
@@ -32,12 +31,12 @@ class SpeedDrawViewModel(
         gameEngine.shouldShowExample.onEach { show ->
             if (show) gameEngine.pauseGame() else gameEngine.resumeGame()
 
-            val state = if (show) DrawState.EXAMPLE else DrawState.USER_INPUT
+           /* val state = if (show) DrawState.EXAMPLE else DrawState.USER_INPUT
             _topBarUiState.update {
                 it.copy(
                     drawState = state
                 )
-            }
+            }*/
         }.launchIn(viewModelScope)
 
         collectSpeedDrawCountdown()

@@ -1,7 +1,9 @@
 package nl.codingwithlinda.scribbledash.core.data.draw_examples.util
 
+import android.content.Context
 import android.graphics.Path
 import android.graphics.PathMeasure
+import androidx.core.graphics.PathParser
 import nl.codingwithlinda.scribbledash.core.domain.model.PathCoordinates
 import org.xmlpull.v1.XmlPullParser
 
@@ -90,7 +92,7 @@ fun parseVectorDrawable(context: android.content.Context, resourceId: Int): List
  fun pathToCoordinates(path: Path): List<PathCoordinates>{
     val result = mutableListOf<PathCoordinates>()
     val pathMeasure: PathMeasure = PathMeasure(path, false)
-    val distanceIncrement = 1.0f // adjust based on your needs
+    val distanceIncrement = .5f // adjust based on your needs
     val pathLength: Float = pathMeasure.length
     var distance = 0f
 
@@ -112,4 +114,21 @@ fun parseVectorDrawable(context: android.content.Context, resourceId: Int): List
 
     return result
 }
+fun resourceToDrawPaths(resource: Int, context: Context): List<Path>{
+    try {
+        val parsedPathData = parseVectorDrawable(
+            context,
+            resource)
 
+        val parsedPaths = parsedPathData.map {pd ->
+            PathParser.createPathFromPathData(pd.pathData)
+        }
+
+        return parsedPaths
+
+    }catch (e: Exception){
+        e.printStackTrace()
+    }
+
+    return emptyList()
+}

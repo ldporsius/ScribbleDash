@@ -13,6 +13,8 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
@@ -29,6 +31,9 @@ fun UserDrawCanvas(
     val pathColor: Color = onBackground
 
     Canvas(modifier = Modifier
+        .semantics {
+            contentDescription = "canvas"
+        }
         .width(360.dp)
         .aspectRatio(1f)
         .clipToBounds()
@@ -36,13 +41,15 @@ fun UserDrawCanvas(
         .pointerInput(true){
             this.detectDragGestures(
                 onDragStart = {
+                    println("START: $it")
                     onAction(DrawAction.StartPath(it))
                 },
                 onDragEnd = {
+                    println("END: ")
                     onAction(DrawAction.Save)
                 }
             ) { change, dragAmount ->
-                //println("CHANGE: ${change.position}")
+                println("CHANGE: ${change.position}")
                 //println("DRAG AMOUNT: $dragAmount")
                 onAction(DrawAction.Draw(change.position))
             }

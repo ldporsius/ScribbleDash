@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.update
 class CountDownSpeedDraw {
 
     companion object {
+        const val DEBUG_STARTTIME = 20
         const val STARTTIME = 120
         const val INTERVAL = 1000L
     }

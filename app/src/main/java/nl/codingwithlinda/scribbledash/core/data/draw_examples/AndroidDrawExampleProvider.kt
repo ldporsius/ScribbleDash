@@ -3,16 +3,11 @@ package nl.codingwithlinda.scribbledash.core.data.draw_examples
 import android.app.Application
 import android.graphics.Path
 import android.graphics.PathMeasure
-import androidx.compose.ui.graphics.asComposePath
-import androidx.compose.ui.util.fastFlatMap
 import androidx.core.graphics.PathParser
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.parseVectorDrawable
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExample
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
-import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
 
 
 class AndroidDrawExampleProvider private constructor(
@@ -109,7 +104,7 @@ class AndroidDrawExampleProvider private constructor(
     }
 
 
-    private fun resourceToDrawPaths(resource: Int): List<Path>{
+   private fun resourceToDrawPaths(resource: Int): List<Path>{
         try {
             val parsedPathData = parseVectorDrawable(
                 context,

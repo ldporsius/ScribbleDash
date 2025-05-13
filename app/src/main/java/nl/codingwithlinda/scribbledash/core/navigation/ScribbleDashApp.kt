@@ -73,7 +73,7 @@ fun ScribbleDashApp(
                     selectedIcon = ImageVector.vectorResource(R.drawable.chart),
                     unselectedIcon = ImageVector.vectorResource(R.drawable.chart),
                     selectedColor = tertiaryContainer,
-                    label = UiText.StringResource(R.string.chart)
+                    label = UiText.StringResource(R.string.statistics)
                 ),
                 Destination(
                     route = HomeNavRoute,

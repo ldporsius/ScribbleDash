@@ -19,16 +19,17 @@ class EndlessDrawViewModelTest{
     private lateinit var viewModel: EndlessDrawViewModel
 
     private val appModule = TestAppModule()
+    private val gamesManager = appModule.gamesManager
 
     private val gameEngine = EndlessGameEngine(
         exampleProvider = appModule.drawExampleProvider,
+        gamesManager = gamesManager
     )
 
     @Before
     fun setup(){
         viewModel = EndlessDrawViewModel(
             gameEngine = gameEngine,
-            gamesManager = appModule.gamesManager
         )
     }
 
@@ -36,7 +37,7 @@ class EndlessDrawViewModelTest{
     fun testEndlessDrawViewModel() = runBlocking {
         viewModel.endlessUiState.test {
 
-            val result = gameEngine.provideExample()
+            val result = gameEngine.getResult()
             val userIput = result.examplePath.map {
                 pathToCoordinates(it)
             }.flatten()
@@ -56,12 +57,10 @@ class EndlessDrawViewModelTest{
 
             val initialItem = awaitItem()
 
-            viewModel.onDone()
-
             val finalItem = awaitItem()
 
             println("final emission: $finalItem")
-            assertEquals(initialItem.drawState, DrawState.EXAMPLE)
+            assertEquals(initialItem.numberSuccess, DrawState.EXAMPLE)
             assertEquals(1, finalItem.numberSuccess)
         }
     }

@@ -80,7 +80,7 @@ class GameDrawViewModel(
     fun handleAction(action: DrawAction){
         when(action){
             is DrawAction.StartPath -> {
-
+                println("START PATH")
                 val pathData = PathData(
                     id = System.currentTimeMillis().toString(),
                     color = Color.BLACK,
@@ -101,6 +101,7 @@ class GameDrawViewModel(
                     currentPath = currentPathCopy
 
                     val drawPath = pathDrawer.drawPath(currentPathCopy.path).path
+                    println("DRAW PATH: $drawPath")
                     _uiState.update {
                         it.copy(
                             currentPath = drawPath.asComposePath()

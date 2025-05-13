@@ -1,6 +1,8 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine
 
+import android.graphics.Path
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
+import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
@@ -35,6 +37,11 @@ class EndlessGameEngine(
         return this.getAccuracy() > limit
     }
 
+    override fun getExample(): Path {
+        return exampleProvider.examples.random().examplePath.let {
+            combinedPath(it)
+        }
+    }
     override suspend fun onUserInputDone() {
 
     }

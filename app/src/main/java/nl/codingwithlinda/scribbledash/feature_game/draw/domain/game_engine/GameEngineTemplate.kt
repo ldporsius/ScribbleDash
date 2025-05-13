@@ -119,9 +119,7 @@ abstract class GameEngineTemplate(
     }
 
     private suspend fun emitNewExample(){
-        val example = exampleProvider.examples.random().examplePath.let {
-            combinedPath(it)
-        }
+        val example = getExample()
         exampleFlow.send(example)
 
         saveExample(example)
@@ -139,12 +137,17 @@ abstract class GameEngineTemplate(
 
     //mandatory
     abstract val gameMode: GameMode
+
     abstract fun saveResult(result: DrawResult)
     abstract suspend fun shouldStartNewGame(): Boolean
     abstract suspend fun onUserInputDone()
     abstract fun isGameSuccessful(): Boolean
     //hooks
     open val drawingTimeCounter = CountDownSpeedDraw()
-
+    open fun getExample(): Path{
+        return exampleProvider.examples.random().examplePath.let {
+            combinedPath(it)
+        }
+    }
 
 }

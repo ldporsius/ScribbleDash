@@ -1,6 +1,6 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.domain.speed_draw.usecase
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw
 
-object SpeedDrawTimeLeftUseCase {
+object SpeedDrawTimeLeftFormatter {
 
     operator fun invoke(timeLeft: Int): String {
         val minutes = timeLeft / 60

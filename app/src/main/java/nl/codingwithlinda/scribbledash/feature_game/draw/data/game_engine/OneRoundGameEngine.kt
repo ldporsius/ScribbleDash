@@ -1,5 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine
 
+import android.graphics.Path
+import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
@@ -16,6 +18,11 @@ class OneRoundGameEngine(
     override val gameMode: GameMode
         get() = GameMode.ONE_ROUND_WONDER
 
+    override fun getExample(): Path {
+        return exampleProvider.examples.random().examplePath.let {
+            combinedPath(it)
+        }
+    }
     override fun saveResult(result: DrawResult) {
         results.clear()
         results.add(result)

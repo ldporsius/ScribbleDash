@@ -22,8 +22,12 @@ class TestRobot(
 
     fun waitForNodeWithText(text: String): TestRobot{
 
-        testRule.waitForIdle()
-        testRule.onNodeWithText(text, true, true).assertExists()
+        testRule.waitUntil(
+            timeoutMillis = 5000,
+            condition = {
+                testRule.onNodeWithText(text, true, true).isDisplayed()
+            }
+        )
 
         return this
     }
@@ -55,12 +59,7 @@ class TestRobot(
     fun performDragEvents(events: List<Offset>): TestRobot{
 
         println("EVENTS: $events")
-            testRule.waitUntil(
-                timeoutMillis = 5000,
-                condition = {
-                    testRule.onNodeWithContentDescription("canvas", true, true).isDisplayed()
-                }
-            )
+
 
         testRule.onNodeWithContentDescription("canvas")
             .assertIsDisplayed()
@@ -71,7 +70,7 @@ class TestRobot(
             testRule.onNodeWithContentDescription("canvas")
                 .assertIsDisplayed()
                 .performTouchInput {
-                        moveTo(offset, 10)
+                        moveTo(offset, 0)
                 }
         }
         testRule

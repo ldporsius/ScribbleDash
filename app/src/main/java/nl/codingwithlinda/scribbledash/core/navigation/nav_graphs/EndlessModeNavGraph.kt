@@ -18,6 +18,7 @@ import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessGameOve
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessHostNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessRootNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.util.ViewModelUtil
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
@@ -43,29 +44,11 @@ fun NavGraphBuilder.endlessModeNavGraph(
     navigation<EndlessRootNavRoute>( startDestination = EndlessHostNavRoute){
         composable<EndlessHostNavRoute>{
             val navController = rememberNavController()
-            val pathDrawer = StraightPathCreator()
-            val offsetParser = AndroidOffsetParser
 
             NavHost(navController = navController, startDestination = EndlessDrawNavRoute){
                 composable< EndlessDrawNavRoute>{
 
-                    val careTaker = remember {
-                        PathDataCareTaker()
-                    }
-                    val factory = viewModelFactory {
-                        initializer {
-                            GameDrawViewModel(
-                                careTaker = careTaker,
-                                offsetParser = offsetParser,
-                                gameEngine = gameEngine,
-                                pathDrawer = pathDrawer
-                            )
-                        }
-
-                    }
-                    val gameDrawViewModel = viewModel<GameDrawViewModel>(
-                        factory = factory
-                    )
+                    val gameDrawViewModel = ViewModelUtil.createGameDrawViewModel(gameEngine = gameEngine)
 
                     val endlessDrawViewModel = viewModel<EndlessDrawViewModel>(
                         factory = viewModelFactory {
@@ -77,17 +60,6 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         }
                     )
 
-                    GameDrawRoot(
-                        gameEngine = gameEngine,
-                        gameNavController = navController,
-                        topBar = {
-                            EndlessTopBar(
-                                numberSuccess = endlessDrawViewModel.endlessUiState.collectAsStateWithLifecycle().value.numberSuccess,
-                                actionOnClose = onNavHome,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        },
-                    )
                     GameMainScreen(
                         topBar = {
                             EndlessTopBar(

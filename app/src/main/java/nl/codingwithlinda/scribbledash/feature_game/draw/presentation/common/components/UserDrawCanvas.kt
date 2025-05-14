@@ -38,7 +38,7 @@ fun UserDrawCanvas(
         .aspectRatio(1f)
         .clipToBounds()
         .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
-        .pointerInput(true){
+        .pointerInput(Unit){
             this.detectDragGestures(
                 onDragStart = {
                     println("START: $it")

@@ -12,13 +12,13 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.Game
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 
 object ViewModelUtil {
+    val pathCreator =
+        StraightPathCreator()
+    val offsetParser = AndroidOffsetParser
 
     @Composable
     fun createGameDrawViewModel(gameEngine: GameEngineTemplate): GameDrawViewModel{
         val careTaker = PathDataCareTaker()
-        val offsetParser = AndroidOffsetParser
-        val pathCreator =
-            StraightPathCreator()
 
         val factory = viewModelFactory {
             initializer {

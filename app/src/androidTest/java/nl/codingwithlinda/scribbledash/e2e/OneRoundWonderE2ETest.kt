@@ -7,6 +7,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -19,7 +20,7 @@ import nl.codingwithlinda.scribbledash.core.data.util.toBitmapUiOnly
 import org.junit.Rule
 import org.junit.Test
 
-class StatisticsTest {
+class OneRoundWonderE2ETest {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
@@ -36,14 +37,15 @@ class StatisticsTest {
         }
     }
 
+    private var offsetRemaining: Int = 0
+
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun testStatistics(): Unit = runBlocking {
+    fun testOneRoundWonder(): Unit = runBlocking {
 
-        delay(1000)
-        robot.clickNodeWithContentDescription("home")
+        offsetRemaining = userDrawEvents.flatten().size
 
-        delay(1000)
+        robot.waitForNodeWithContentDescription("home")
 
         robot.clickNodeWithText("round")
         delay(1000)
@@ -61,11 +63,17 @@ class StatisticsTest {
         val bmDrawer = AndroidBitmapPrinter(composeRule.activity)
         bmDrawer.printBitmap(bm, "test_e2e_bitmap.png")
 
-        userDrawEvents.onEach {
-            robot.performDragEvents(it)
+        composeRule.waitUntil(
+            timeoutMillis = 5000,
+            condition = {
+                composeRule.onNodeWithContentDescription("canvas", true, true).isDisplayed()
+            }
+        )
+        println("offsets at start: $offsetRemaining")
+        runBlocking {
+            robot.performDragEvents(userDrawEvents.flatten())
         }
 
-        composeRule.awaitIdle()
         composeRule.waitUntilExactlyOneExists(
             hasText("Done", true, true) and hasClickAction() and isEnabled(),
             timeoutMillis = 5000

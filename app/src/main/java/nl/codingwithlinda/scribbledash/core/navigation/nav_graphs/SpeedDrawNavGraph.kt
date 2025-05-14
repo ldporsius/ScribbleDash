@@ -17,6 +17,7 @@ import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawResultNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.util.ViewModelUtil
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
@@ -57,25 +58,9 @@ fun NavGraphBuilder.speedDrawNavGraph(
                 }
             }
         )
-        val pathDrawer = StraightPathCreator()
-        val offsetParser = AndroidOffsetParser
-        val careTaker = remember {
-            PathDataCareTaker()
-        }
-        val factory = viewModelFactory {
-            initializer {
-                GameDrawViewModel(
-                    careTaker = careTaker,
-                    offsetParser = offsetParser,
-                    pathDrawer = pathDrawer,
-                    gameEngine = gameEngine
-                )
-            }
+       
 
-        }
-        val gameDrawViewModel = viewModel<GameDrawViewModel>(
-            factory = factory
-        )
+        val gameDrawViewModel = ViewModelUtil.createGameDrawViewModel(gameEngine)
 
         GameMainScreen(
             topBar = {

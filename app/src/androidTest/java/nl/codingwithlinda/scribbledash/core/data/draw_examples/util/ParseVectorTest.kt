@@ -4,10 +4,13 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.test.core.app.ApplicationProvider
+import assertk.assert
+import assertk.assertions.isEqualTo
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import org.junit.Test
 import kotlin.math.roundToInt
+
 
 class ParseVectorTest {
 
@@ -16,16 +19,27 @@ class ParseVectorTest {
 
     @Test
     fun testParseXMLDrawables(){
-        val coors = resourceToDrawPaths(R.drawable.alien, context).map {
+        val paths = resourceToDrawPaths(R.drawable.book, context)
+
+        println("paths size: ${paths.size}")
+
+
+        val coors = paths.map {
             pathToCoordinates(it)
         }
-        val bm = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
-        coors.onEach {list ->
-            list.onEach {
-                bm.setPixel(it.x.roundToInt(), it.y.roundToInt(), Color.BLACK)
+        coors.onEachIndexed { index, pathCoordinates ->
+            pathCoordinates.chunked(10).onEach {chunk->
+                println("path $index: ${chunk}")
             }
-        }
+            val bm = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+            pathCoordinates.onEach {coor ->
+                    bm.setPixel(coor.x.roundToInt(), coor.y.roundToInt(), Color.BLACK)
+            }
 
-        bmPrinter.printBitmap(bm, "test_parse_xml.png")
+            bmPrinter.printBitmap(bm, "test_parse_xml_$index.png")
+
+        }
+        assert(coors.size).isEqualTo(paths.size)
+
     }
 }

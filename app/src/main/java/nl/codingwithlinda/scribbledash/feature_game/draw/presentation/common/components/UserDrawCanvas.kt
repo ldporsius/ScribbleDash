@@ -38,7 +38,7 @@ fun UserDrawCanvas(
         .aspectRatio(1f)
         .clipToBounds()
         .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
-        .pointerInput(Unit){
+        .pointerInput(true){
             this.detectDragGestures(
                 onDragStart = {
                     println("START: $it")
@@ -47,9 +47,13 @@ fun UserDrawCanvas(
                 onDragEnd = {
                     println("END: ")
                     onAction(DrawAction.Save)
+                },
+                onDragCancel = {
+                    println("CANCEL: ")
+                    onAction(DrawAction.Save)
                 }
             ) { change, dragAmount ->
-                println("CHANGE: ${change.position}")
+                //println("CHANGE: ${change.position}")
                 //println("DRAG AMOUNT: $dragAmount")
                 onAction(DrawAction.Draw(change.position))
             }

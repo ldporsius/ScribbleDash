@@ -2,9 +2,11 @@ package nl.codingwithlinda.scribbledash.e2e
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertHeightIsAtLeast
+import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -12,7 +14,14 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.DpRect
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.center
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.size
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import kotlinx.coroutines.delay
 import nl.codingwithlinda.scribbledash.MainActivity
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 
@@ -56,22 +65,22 @@ class TestRobot(
 
     }
 
-    fun performDragEvents(events: List<Offset>): TestRobot{
+    suspend fun performDragEvents(events: List<Offset>): Boolean{
 
         println("EVENTS: $events")
 
-
         testRule.onNodeWithContentDescription("canvas")
-            .assertIsDisplayed()
             .performTouchInput {
             down(events.first())
         }
-        events.onEach {offset ->
+        (1 until  events.size).onEach {i ->
+
             testRule.onNodeWithContentDescription("canvas")
                 .assertIsDisplayed()
                 .performTouchInput {
-                        moveTo(offset, 0)
+                        moveTo(events[i] + center, 0)
                 }
+            delay(10)
         }
         testRule
             .onNodeWithContentDescription("canvas")
@@ -79,7 +88,7 @@ class TestRobot(
             .performTouchInput {
             up()
         }
-        return this
+        return true
     }
 
     fun saveScreenshot(name: String){

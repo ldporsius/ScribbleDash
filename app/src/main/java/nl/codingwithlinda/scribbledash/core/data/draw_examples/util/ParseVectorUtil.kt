@@ -92,7 +92,7 @@ fun parseVectorDrawable(context: android.content.Context, resourceId: Int): List
  fun pathToCoordinates(path: Path): List<PathCoordinates>{
     val result = mutableListOf<PathCoordinates>()
     val pathMeasure: PathMeasure = PathMeasure(path, false)
-    val distanceIncrement = .5f // adjust based on your needs
+    val distanceIncrement = 1.0f // adjust based on your needs
     val pathLength: Float = pathMeasure.length
     var distance = 0f
 

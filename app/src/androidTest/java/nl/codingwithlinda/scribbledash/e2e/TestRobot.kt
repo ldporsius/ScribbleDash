@@ -71,7 +71,7 @@ class TestRobot(
             testRule.onNodeWithContentDescription("canvas")
                 .assertIsDisplayed()
                 .performTouchInput {
-                        moveTo(offset, 50)
+                        moveTo(offset, 10)
                 }
         }
         testRule

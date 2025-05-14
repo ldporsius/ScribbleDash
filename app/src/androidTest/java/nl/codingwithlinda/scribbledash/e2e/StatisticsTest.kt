@@ -12,8 +12,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import nl.codingwithlinda.scribbledash.MainActivity
 import nl.codingwithlinda.scribbledash.R
+import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.resourceToDrawPaths
+import nl.codingwithlinda.scribbledash.core.data.util.toBitmapUiOnly
 import org.junit.Rule
 import org.junit.Test
 
@@ -37,7 +39,6 @@ class StatisticsTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun testStatistics(): Unit = runBlocking {
-        //robot.clickNodeWithContentDescription("Statistics")
 
         delay(1000)
         robot.clickNodeWithContentDescription("home")
@@ -55,6 +56,10 @@ class StatisticsTest {
                 composeRule.onNodeWithText("0", substring = true).isDisplayed()
             }
         )
+
+        val bm = example.toBitmapUiOnly(500, 2f)
+        val bmDrawer = AndroidBitmapPrinter(composeRule.activity)
+        bmDrawer.printBitmap(bm, "test_e2e_bitmap.png")
 
         userDrawEvents.onEach {
             robot.performDragEvents(it)

@@ -11,17 +11,13 @@ fun GameEntity.toDomain(): ScResult<Game, ParseError.GameModeParseError>{
 
     val gameMode = stringToGameMode(this.gameMode) ?: return ScResult.Failure(ParseError.GameModeParseError)
 
-    println("GAME ENTITY: $this")
-    println("GAME MODE: $gameMode")
     val scoresJson = scores.split(",").mapNotNull { it.toIntOrNull() }
 
-    println("SCORES JSON: $scoresJson")
     val game = Game(
         id = id,
         dateCreated= this.dateCreated,
         gameMode = gameMode,
         scores = scoresJson
-
     )
 
     return ScResult.Success(game)

@@ -23,6 +23,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCa
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawRoot
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameMainScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawViewModel
@@ -76,6 +77,17 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         }
                     )
 
+                    GameDrawRoot(
+                        gameEngine = gameEngine,
+                        gameNavController = navController,
+                        topBar = {
+                            EndlessTopBar(
+                                numberSuccess = endlessDrawViewModel.endlessUiState.collectAsStateWithLifecycle().value.numberSuccess,
+                                actionOnClose = onNavHome,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        },
+                    )
                     GameMainScreen(
                         topBar = {
                             EndlessTopBar(

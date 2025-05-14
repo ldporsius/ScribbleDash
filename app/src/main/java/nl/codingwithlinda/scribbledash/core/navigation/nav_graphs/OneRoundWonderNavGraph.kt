@@ -3,8 +3,6 @@ package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -13,19 +11,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
-import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.OneRoundHostNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.OneRoundRootNavRoute
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameMainScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawRoot
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.OneRoundWonderTopBar
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.GameResultViewModel
@@ -39,50 +31,19 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
 
     navigation<OneRoundRootNavRoute>(startDestination = OneRoundHostNavRoute) {
         composable<OneRoundHostNavRoute>{
-            val offsetParser = AndroidOffsetParser
 
             val gameNavController = rememberNavController()
             NavHost(navController = gameNavController, startDestination = GameDrawNavRoute) {
 
                 composable<GameDrawNavRoute> {
-
-                    val careTaker = remember {
-                        PathDataCareTaker()
-                    }
-                    val pathCreator = remember{
-                        StraightPathCreator()
-                    }
-                    val factory = viewModelFactory {
-                        initializer {
-                            GameDrawViewModel(
-                                careTaker = careTaker,
-                                offsetParser = offsetParser,
-                                gameEngine = gameEngine,
-                                pathDrawer = pathCreator
-                            )
-                        }
-                    }
-                    val viewModel = viewModel<GameDrawViewModel>(
-                        factory = factory
-                    )
-
-                    GameMainScreen(
+                    GameDrawRoot(
+                        gameEngine = gameEngine,
+                        gameNavController = gameNavController,
                         topBar = {
                             OneRoundWonderTopBar(
-                                actionOnClose = {
-                                    navToHome()
-                                },
+                                actionOnClose = navToHome,
                                 modifier = Modifier.fillMaxWidth()
-                            )
-                        },
-                        drawState = viewModel.drawState.collectAsStateWithLifecycle().value,
-                        exampleUiState = viewModel.exampleUiState.collectAsStateWithLifecycle().value,
-                        gameDrawUiState = viewModel.uiState.collectAsStateWithLifecycle().value,
-                        onAction = viewModel::handleAction,
-                        onDone = {
-                            viewModel.onDone()
-                            gameNavController.popBackStack()
-                            gameNavController.navigate(GameResultNavRoute)
+                                )
                         }
                     )
                 }
@@ -125,7 +86,6 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                             }
                         }
                     )
-
 
                 }
             }

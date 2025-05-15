@@ -40,11 +40,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
                         gameEngine = gameEngine,
                             navToResult = {
                                 gameNavController.popBackStack()
-                                gameNavController.navigate(SpeedDrawResultNavRoute){
-                                    popUpTo(SpeedDrawNavRoute){
-                                        inclusive = true
-                                    }
-                                }
+                                gameNavController.navigate(SpeedDrawResultNavRoute)
                             }
                         )
                 }

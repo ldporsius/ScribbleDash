@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
 
@@ -31,20 +32,10 @@ class SpeedDrawViewModel(
         gameEngine.shouldShowExample.onEach { show ->
             if (show) gameEngine.pauseGame() else gameEngine.resumeGame()
 
-           /* val state = if (show) DrawState.EXAMPLE else DrawState.USER_INPUT
-            _topBarUiState.update {
-                it.copy(
-                    drawState = state
-                )
-            }*/
         }.launchIn(viewModelScope)
 
         collectSpeedDrawCountdown()
 
-        countDownJob?.invokeOnCompletion {
-            println("SpeedDrawViewModel countdown finished. $it")
-            navToResult()
-        }
     }
 
 
@@ -57,13 +48,12 @@ class SpeedDrawViewModel(
                 )
             }
             if (count == 0){
+                gameEngine.setStartTime(CountDownSpeedDraw.STARTTIME)
                 delay(100)
-                countDownJob?.cancel()
+                navToResult()
             }
         }.launchIn(viewModelScope)
     }
-
-
 
     fun onDone(){
         viewModelScope.launch {
@@ -78,6 +68,4 @@ class SpeedDrawViewModel(
             }
         }
     }
-
-
 }

@@ -29,14 +29,8 @@ fun NavGraphBuilder.GameNavGraph(
         NavHost(navController = gameNavController, startDestination = GameLevelNavRoute) {
             val exampleProvider = appModule.drawExampleProvider
             val oneRoundGameEngine = appModule.gameEngine(GameMode.ONE_ROUND_WONDER)
-           val speedDrawGameEngine = SpeedDrawGameEngine(
-               exampleProvider = exampleProvider,
-               gamesManager = appModule.gamesManager
-           )
-            val endlessGameEngine = EndlessGameEngine(
-                exampleProvider = exampleProvider,
-                gamesManager = appModule.gamesManager
-            )
+            val speedDrawGameEngine = appModule.gameEngine(GameMode.SPEED_DRAW)
+            val endlessGameEngine = appModule.gameEngine(GameMode.ENDLESS_MODE)
 
             composable<GameLevelNavRoute> {
                 GameLevelScreen(

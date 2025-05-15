@@ -84,6 +84,9 @@ abstract class GameEngineTemplate(
     fun resumeGame(){
         drawingTimeCounter.resume()
     }
+    fun setStartTime(time: Int){
+        drawingTimeCounter.setStartTime(time)
+    }
 
     fun getAccuracy(): Int{
         return resultCalculator.calculateResult(getResult(), 4)

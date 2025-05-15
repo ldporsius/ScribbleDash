@@ -6,6 +6,7 @@ import android.graphics.PathMeasure
 import androidx.core.graphics.PathParser
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.parseVectorDrawable
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.resourceToDrawPaths
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExample
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 
@@ -73,6 +74,13 @@ class AndroidDrawExampleProvider private constructor(
             }
     }
 
+    override fun getExample(resource: Int): DrawExample {
+        resourceToDrawPaths(resource).map {
+            flattenPath(it)
+        }.let {
+            return DrawExample(it)
+        }
+    }
     /* override val examples: List<AndroidDrawPath> by lazy {
         val paths =  examplesResources.map {
              resourceToDrawPaths(it)

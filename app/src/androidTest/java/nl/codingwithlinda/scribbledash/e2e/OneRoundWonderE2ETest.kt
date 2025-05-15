@@ -33,6 +33,7 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordi
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.resourceToDrawPaths
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.data.util.toBitmapUiOnly
+import nl.codingwithlinda.scribbledash.e2e.util.offsetPath
 import org.junit.Rule
 import org.junit.Test
 
@@ -44,15 +45,6 @@ class OneRoundWonderE2ETest {
 
     private val example by lazy { resourceToDrawPaths(R.drawable.book, composeRule.activity)}
 
-
-    private fun offsetPath(index: Int, xOffset: Float, yOffset: Float): List<Offset> {
-        val result = example[index].let { path ->
-            pathToCoordinates(path, 5f)
-        }.map {
-            Offset(it.x + xOffset, it.y + yOffset)
-        }
-        return result
-    }
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun testOneRoundWonder(): Unit = runBlocking {
@@ -74,10 +66,6 @@ class OneRoundWonderE2ETest {
             }
         )
 
-       /* val bm = example.toBitmapUiOnly(500, 2f)
-        val bmDrawer = AndroidBitmapPrinter(composeRule.activity)
-        bmDrawer.printBitmap(bm, "test_e2e_bitmap.png")
-*/
         composeRule.waitUntil(
             timeoutMillis = 5000,
             condition = {
@@ -115,7 +103,7 @@ class OneRoundWonderE2ETest {
 
             (0 until  example.size).map{i ->
                 robot.performDragEvents(
-                       offsetPath(i, tx, ty)
+                       offsetPath(example[i], tx, ty)
                    )
                 }
         }

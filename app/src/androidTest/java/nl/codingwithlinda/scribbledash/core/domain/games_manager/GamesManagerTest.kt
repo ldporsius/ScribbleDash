@@ -1,9 +1,12 @@
 package nl.codingwithlinda.scribbledash.core.domain.games_manager
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import nl.codingwithlinda.scribbledash.core.di.TestAppModule
+import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.core.test.AndroidTestAppModule
 import nl.codingwithlinda.scribbledash.core.test.fakeDrawResultDifferentPaths
 import nl.codingwithlinda.scribbledash.core.test.fakeDrawResultSamePaths
 import org.junit.After
@@ -14,13 +17,13 @@ import org.junit.Test
 
 class GamesManagerTest{
 
+    private val context = ApplicationProvider.getApplicationContext<Application>()
     private val testData = fakeDrawResultSamePaths()
-    private lateinit var appModule: TestAppModule
-
+    private lateinit var appModule: AppModule
     private lateinit var gamesManager: GamesManager
     @Before
     fun setup(){
-        appModule = TestAppModule()
+        appModule = AndroidTestAppModule(context)
         gamesManager = GamesManager(
             appModule.gamesAccess
         )

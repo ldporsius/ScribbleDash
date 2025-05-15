@@ -1,10 +1,12 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw
 
+import android.app.Application
 import androidx.compose.ui.geometry.Offset
+import androidx.test.core.app.ApplicationProvider
 import app.cash.turbine.test
 import kotlinx.coroutines.runBlocking
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
-import nl.codingwithlinda.scribbledash.core.di.TestAppModule
+import nl.codingwithlinda.scribbledash.core.test.AndroidTestAppModule
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
@@ -14,9 +16,10 @@ import org.junit.Test
 
 class EndlessDrawViewModelTest{
 
+    private val context = ApplicationProvider.getApplicationContext<Application>()
     private lateinit var viewModel: EndlessDrawViewModel
 
-    private val appModule = TestAppModule()
+    private val appModule = AndroidTestAppModule(context)
     private val gamesManager = appModule.gamesManager
 
     private val gameEngine = EndlessGameEngine(

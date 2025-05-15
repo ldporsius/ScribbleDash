@@ -1,6 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine
 
 import android.graphics.Path
+import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
@@ -21,7 +22,7 @@ class TestGameEngine(
     private var index = 3
     override fun getExample(): Path {
 
-        return exampleProvider.examples[index].examplePath.let {
+        return exampleProvider.getExample(R.drawable.eye).examplePath.let {
             combinedPath(it)
         }
     }

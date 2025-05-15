@@ -6,41 +6,23 @@ import android.graphics.Path
 import android.graphics.RectF
 
 fun normalisedPath(
-    path: android.graphics.Path,
+    path: Path,
     requiredSize: Int,
     inset: Float,
-): android.graphics.Path{
+): Path{
 
     val rect = RectF()
     path.computeBounds(rect, true)
 
-//    println("--In normalisedPath fun--. requiredSize = $requiredSize")
-//    println("--In normalisedPath fun--. rect: w = ${rect.width()},h = ${rect.height()}")
-//    println("--In normalisedPath fun--. rect: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
-//    println("--In normalisedPath fun--. rect: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
-
-    //println("--In normalisedPath fun--. inset = $inset")
-
     val sx = requiredSize.toFloat() / (rect.width() )
     val sy = requiredSize.toFloat() / (rect.height())
     val scaleMin = minOf(sx, sy)
-    val aspectRatio = rect.width() / rect.height()
-
-   // println("--In normalisedPath fun--. sx = $sx, sy = $sy, scaleMin = $scaleMin")
-
-    val dx = requiredSize.toFloat() / 2 - rect.centerX()
-    val dy = requiredSize.toFloat() / 2 - rect.centerY()
-
-    //println("--In normalisedPath fun--. dx = $dx, dy = $dy")
 
     path.transform(Matrix().apply {
         setTranslate(-rect.left, -rect.top)
     }
     )
     path.computeBounds(rect, true)
-//    println("--In normalisedPath fun--. rect 2: w = ${rect.width()},h = ${rect.height()}")
-//    println("--In normalisedPath fun--. rect 2: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
-//    println("--In normalisedPath fun--. rect 2: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
 
     val dstRect = RectF(
         inset,
@@ -50,16 +32,10 @@ fun normalisedPath(
     )
     path.transform(Matrix().apply {
         this.setRectToRect(rect,
-            dstRect, Matrix.ScaleToFit.FILL)
+            dstRect, Matrix.ScaleToFit.START)
 
     }
     )
-
-    path.computeBounds(rect, true)
-
-//    println("--In normalisedPath fun--. rect 3: w = ${rect.width()},h = ${rect.height()}")
-//    println("--In normalisedPath fun--. rect 3: left = ${rect.left},top = ${rect.top}, right = ${rect.right}, bottom = ${rect.bottom}")
-//    println("--In normalisedPath fun--. rect 3: centerX = ${rect.centerX()}, centerY = ${rect.centerY()}")
 
     return path
 }
@@ -87,9 +63,9 @@ fun List<Path>.toBitmap(
 
     val maxSize = maxOf(boundingBox.width(), boundingBox.height())
     val sizeFactor = requiredSize / maxSize
-    val basic_inset = basisStrokeWidth/2
-    val extra_inset = (maxStrokeWidth - basisStrokeWidth)/2
-    val inset = basic_inset + extra_inset
+//    val basic_inset = basisStrokeWidth/2
+//    val extra_inset = (maxStrokeWidth - basisStrokeWidth)/2
+//
     val requiredNSize = maxSize.toInt() * sizeFactor
 
     val nPath = normalisedPath(combinedPath, requiredNSize.toInt(), maxStrokeWidth)
@@ -134,7 +110,7 @@ fun List<Path>.toBitmapUiOnly(
 ): Bitmap{
     val boundingBox = RectF()
 
-    val combinedPath = android.graphics.Path()
+    val combinedPath = Path()
     this.forEach(){
         combinedPath.addPath(it)
     }

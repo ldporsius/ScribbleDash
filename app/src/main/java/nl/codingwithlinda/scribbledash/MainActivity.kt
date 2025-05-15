@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import nl.codingwithlinda.scribbledash.core.application.ScribbleDashApplication
 import nl.codingwithlinda.scribbledash.core.application.ScribbleDashDebugApplication
 import nl.codingwithlinda.scribbledash.core.navigation.ScribbleDashApp
@@ -18,11 +19,15 @@ class MainActivity : ComponentActivity() {
             if (BuildConfig.DEBUG){
                 println("MAIN ACTIVITY DEBUG MODE")
                 ScribbleDashDebugApplication.appModule
+
             }else{
                 ScribbleDashApplication.appModule
             }
 
         setContent {
+            LaunchedEffect(true) {
+                appModule.gamesManager.clear()
+            }
             ScribbleDashTheme {
                ScribbleDashApp(appModule)
             }

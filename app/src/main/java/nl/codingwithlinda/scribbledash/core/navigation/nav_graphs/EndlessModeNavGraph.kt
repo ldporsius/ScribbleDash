@@ -2,6 +2,7 @@ package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
@@ -11,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessGameOverNavRoute
@@ -75,12 +77,14 @@ fun NavGraphBuilder.endlessModeNavGraph(
 
                 composable<EndlessResultNavRoute> {
 
+                    val bmPrinter = AndroidBitmapPrinter(LocalContext.current)
                     val viewModel = viewModel<EndlessResultViewModel>(
                         factory = viewModelFactory {
                             initializer {
                                 EndlessResultViewModel(
                                     gameEngine = gameEngine,
-                                    ratingMapper = RatingMapper(appModule.ratingTextGenerator)
+                                    ratingMapper = RatingMapper(appModule.ratingTextGenerator),
+                                    bmPrinter = bmPrinter
                                 )
                             }
                         }

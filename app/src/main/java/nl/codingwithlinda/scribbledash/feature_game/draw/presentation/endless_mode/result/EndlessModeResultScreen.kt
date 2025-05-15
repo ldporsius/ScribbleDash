@@ -29,7 +29,7 @@ fun EndlessModeResultScreen(
 ) {
 
 
-    val ratingUi = endlessResultUiState.ratingUi ?: return
+    endlessResultUiState.ratingUi ?: return
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally

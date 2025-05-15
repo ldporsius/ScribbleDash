@@ -25,11 +25,14 @@ import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.data.util.centerPath
 import nl.codingwithlinda.scribbledash.core.data.util.toBitmapUiOnly
+import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.result.EndlessResultUiState
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
 
@@ -39,6 +42,7 @@ fun GameResultComparison(
     userPath: List<Path>,
     checkIcon: @Composable () -> Unit,
     ) {
+
 
     Row(
         modifier = Modifier

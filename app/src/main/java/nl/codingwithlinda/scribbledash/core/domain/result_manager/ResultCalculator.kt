@@ -2,8 +2,10 @@ package nl.codingwithlinda.scribbledash.core.domain.result_manager
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Path
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import android.graphics.Color as Color2
 import nl.codingwithlinda.scribbledash.core.data.util.toBitmap
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
@@ -12,6 +14,8 @@ import kotlin.math.roundToInt
 
 typealias Accuracy = Int
 object ResultCalculator {
+
+    const val VISIBILITY_TRESHOLD = 128
 
     fun calculateResult(drawResult: DrawResult,
                         strokeWidthUser: Int,
@@ -27,47 +31,55 @@ object ResultCalculator {
 
         val examplePaths = drawResult.examplePath
         val userPath = drawResult.userPath
+
         val bmExample = examplePaths.toBitmap(
             requiredSize = 500,
             maxStrokeWidth = extraStrokeWidth.toFloat(),
             basisStrokeWidth = extraStrokeWidth.toFloat(),
-
         )
+        printDebug(bmExample)
+
         val bmUser = userPath
             .toBitmap(
             requiredSize = 500,
             maxStrokeWidth = extraStrokeWidth.toFloat(),
             basisStrokeWidth =  strokeWidthUser.toFloat(),
-            Color.RED
+            Color.Red.toArgb()
         )
+
+        val userBitmap = Bitmap.createBitmap(bmExample.width, bmExample.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(userBitmap)
+        canvas.drawBitmap(bmUser, 0f, 0f, null)
+        printDebug(userBitmap)
 
         //print out the debug bitmap
         val debugBitmap = bmExample.copy(Bitmap.Config.ARGB_8888, true)
-        val canvas = Canvas(debugBitmap)
-        canvas.drawBitmap(bmUser, 0f, 0f, null)
+        val canvasDebug = Canvas(debugBitmap)
+        canvasDebug.drawBitmap(bmUser, 0f, 0f, null)
         printDebug(debugBitmap)
 
-
-        val pixelMatches = pixelMatch(bmExample, bmUser)
+        val pixelMatches = pixelMatch(bmExample, userBitmap)
 
        // println("pixelMatch result: $pixelMatches")
-        //("count = $count")
+
         val correct = pixelMatches.count { it == PixelMatch.MATCH }
 //        println("ignore = ${pixelMatches.count { it == PixelMatch.IGNORE }}")
-//        println("correct = ${pixelMatches.count { it == PixelMatch.MATCH }}")
+          println("correct = ${pixelMatches.count { it == PixelMatch.MATCH }}")
 //        println("user only = ${pixelMatches.count { it == PixelMatch.USER_ONLY }}")
 
-        val visibleUserPixels = visibleUserPixelCount(bmUser)
-//        println("visibleUserPixels = $visibleUserPixels")
+        val visibleUserPixels = visiblePixelCount(userBitmap)
+        println("visibleUserPixels = $visibleUserPixels")
+        val visibleExamplePixels = visiblePixelCount(bmExample)
+        println("visibleExamplePixels = $visibleExamplePixels")
 
         val accuracy = (correct.toFloat() / visibleUserPixels.toFloat()) * 100
-        //println("-- in resultcalculator --. accuracy = $accuracy")
+        println("-- in resultcalculator --. accuracy = $accuracy")
 
         val missingLengthPenalty = getMissingLengthPenalty(
            examplePaths, userPath
         )
 
-        //println("-- in resultcalculator -- . missingLengthPenalty = $missingLengthPenalty")
+        println("-- in resultcalculator -- . missingLengthPenalty = $missingLengthPenalty")
 
         //Final Score (%) = Coverage (%) - Missing Length Penalty (%)
         return try {
@@ -98,22 +110,33 @@ object ResultCalculator {
         }
     }
 
-    private fun visibleUserPixelCount(bmUser: Bitmap): Int{
-        val pixels = getPixelArray(bmUser)
-        return pixels.count { it != Color.TRANSPARENT }
+    private fun isColorVisible(color: Int, treshHold: Int): Boolean{
+        return Color2.alpha(color) > treshHold
+    }
+    private fun visiblePixelCount(bitmap: Bitmap, treshHold: Int = VISIBILITY_TRESHOLD): Int{
+        val pixels = getPixelArray(bitmap)
+        return pixels.count {
+            Color2.alpha(it) > treshHold
+        }
     }
 
     private fun pixelMatch(bmExample: Bitmap, bmUser: Bitmap): List<PixelMatch>{
         val pixelsExample = getPixelArray(bmExample)
         val pixelsUser = getPixelArray(bmUser)
 
-       val result= pixelsExample.zip(pixelsUser).map { (pixExample, pixUser) ->
+        if(pixelsExample.size != pixelsUser.size) throw Exception("pixel arrays are not the same size")
 
-           val isTransparentUser = pixUser == Color.TRANSPARENT
-           val isTransparentExample = pixExample == Color.TRANSPARENT
+        println("pixelsExample.size = ${pixelsExample.size}, pixelsUser.size = ${pixelsUser.size}")
 
-           val toIgnore = isTransparentExample && isTransparentUser
-           val isMatch = !isTransparentExample && !isTransparentUser
+       val result= pixelsUser.mapIndexed { index, pixUser ->
+
+           val pixExample = pixelsExample.getOrElse(index, {Color2.TRANSPARENT})
+           val isVisibleUser = isColorVisible(pixUser, 128)
+           val isVisibleExample = isColorVisible(pixExample, 128)
+
+           val toIgnore = !isVisibleExample && !isVisibleUser
+           val isMatch = isVisibleExample && isVisibleUser
+           val isUserOnly = isVisibleExample && !isVisibleUser
 
            if(toIgnore) PixelMatch.IGNORE
            else if(isMatch) PixelMatch.MATCH
@@ -122,6 +145,7 @@ object ResultCalculator {
 
         return result
     }
+
 
     private fun getPixelArray(bm: Bitmap): Array<Int>{
         val pixels = IntArray(bm.width * bm.height)

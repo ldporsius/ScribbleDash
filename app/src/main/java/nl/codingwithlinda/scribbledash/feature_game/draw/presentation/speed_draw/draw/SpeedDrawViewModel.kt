@@ -48,7 +48,6 @@ class SpeedDrawViewModel(
                 )
             }
             if (count == 0){
-                gameEngine.setStartTime(CountDownSpeedDraw.STARTTIME)
                 delay(100)
                 navToResult()
             }

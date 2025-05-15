@@ -36,26 +36,25 @@ class AndroidTestAppModule(
     override val gamesManager: GamesManager
         get() = GamesManager(gamesAccess)
 
+    private val testGameEngine = TestGameEngine(
+        exampleProvider = drawExampleProvider,
+        gamesManager = gamesManager
+    )
+    private val speedDrawGameEngine = SpeedDrawGameEngine(
+        exampleProvider = drawExampleProvider,
+        gamesManager = gamesManager
+    )
 
     override fun gameEngine(gameMode: GameMode): GameEngineTemplate {
         return when(gameMode){
             GameMode.ONE_ROUND_WONDER -> {
-                TestGameEngine(
-                    exampleProvider = drawExampleProvider,
-                    gamesManager = gamesManager
-                )
+               testGameEngine
             }
             GameMode.SPEED_DRAW -> {
-                SpeedDrawGameEngine(
-                    exampleProvider = drawExampleProvider,
-                    gamesManager = gamesManager
-                )
+              speedDrawGameEngine
             }
             GameMode.ENDLESS_MODE -> {
-                TestGameEngine(
-                    exampleProvider = drawExampleProvider,
-                    gamesManager = gamesManager
-                )
+                testGameEngine
             }
         }
 

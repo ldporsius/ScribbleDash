@@ -37,7 +37,6 @@ import androidx.navigation.compose.navigation
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
-import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.core.navigation.nav_graphs.GameNavGraph
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.StatisticsNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameNavRoute

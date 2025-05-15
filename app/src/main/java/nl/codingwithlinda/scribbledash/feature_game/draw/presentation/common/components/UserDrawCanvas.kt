@@ -41,15 +41,12 @@ fun UserDrawCanvas(
         .pointerInput(true){
             this.detectDragGestures(
                 onDragStart = {
-                    println("START: $it")
                     onAction(DrawAction.StartPath(it))
                 },
                 onDragEnd = {
-                    println("END: ")
                     onAction(DrawAction.Save)
                 },
                 onDragCancel = {
-                    println("CANCEL: ")
                     onAction(DrawAction.Save)
                 }
             ) { change, dragAmount ->

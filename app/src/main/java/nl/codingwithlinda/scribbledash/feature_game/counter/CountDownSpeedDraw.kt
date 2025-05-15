@@ -4,16 +4,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import nl.codingwithlinda.scribbledash.BuildConfig
 
 class CountDownSpeedDraw {
 
     companion object {
+        const val DEBUGSTARTTIME = 30
         const val STARTTIME = 120
         const val INTERVAL = 1000L
     }
     private val isPaused = MutableStateFlow<Boolean>(true)
 
-    private var currentCount = STARTTIME
+    fun startTime() = if (BuildConfig.DEBUG) DEBUGSTARTTIME else STARTTIME
+    private var currentCount = startTime()
     private val _timer = MutableStateFlow<Int>(currentCount)
     val timer = _timer.asStateFlow()
     suspend fun startCountdown() {
@@ -46,7 +49,7 @@ class CountDownSpeedDraw {
         }
     }
     fun reset(){
-        currentCount = STARTTIME
+        currentCount = startTime()
 
     }
 }

@@ -89,6 +89,7 @@ abstract class GameEngineTemplate(
     }
 
     fun getAccuracy(): Int{
+        if (results.isEmpty()) return 100
         return resultCalculator.calculateResult(getResult(), 4)
     }
     fun getRating() : Rating{

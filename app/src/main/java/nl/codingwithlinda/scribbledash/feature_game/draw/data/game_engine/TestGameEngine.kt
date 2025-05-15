@@ -7,6 +7,7 @@ import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProv
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
 class TestGameEngine(
@@ -17,25 +18,27 @@ class TestGameEngine(
     gamesManager = gamesManager
 ) {
     override val gameMode: GameMode
-        get() = GameMode.ONE_ROUND_WONDER
+        get() = GameMode.ENDLESS_MODE
 
-    private var index = 3
     override fun getExample(): Path {
-
-        return exampleProvider.getExample(R.drawable.eye).examplePath.let {
+        return exampleProvider.getExample(R.drawable.glasses).examplePath.let {
             combinedPath(it)
         }
     }
     override fun saveResult(result: DrawResult) {
-        results.clear()
+        results.removeAll {
+            it.id == result.id
+        }
         results.add(result)
     }
     override suspend fun shouldStartNewGame(): Boolean {
-       return true
+        val limit = RatingFactory.getSuccessLimit(GameMode.ENDLESS_MODE)
+        return this.getAccuracy() > limit
     }
 
     override fun isGameSuccessful(): Boolean {
-        return true
+        val limit = RatingFactory.getSuccessLimit(GameMode.ENDLESS_MODE)
+        return this.getAccuracy() > limit
     }
 
     override suspend fun onUserInputDone() {

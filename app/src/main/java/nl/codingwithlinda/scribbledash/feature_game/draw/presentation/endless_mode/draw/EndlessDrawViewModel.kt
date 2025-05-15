@@ -3,7 +3,9 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_m
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
@@ -14,13 +16,11 @@ class EndlessDrawViewModel(
 ): ViewModel() {
 
     private val _endlessUiState = MutableStateFlow(EndlessUiState())
-    val endlessUiState = _endlessUiState.asStateFlow()
+    val endlessUiState = _endlessUiState.onStart {
+        updateUi()
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _endlessUiState.value)
 
-    init {
-       startNewGame()
-    }
-
-    private fun startNewGame(){
+    private fun updateUi(){
         viewModelScope.launch {
             val numberSuccesses = gameEngine.numberSuccessesForLatestGame()
 

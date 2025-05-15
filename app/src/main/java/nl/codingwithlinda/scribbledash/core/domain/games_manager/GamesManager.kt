@@ -99,6 +99,13 @@ class GamesManager(
     }
 
     suspend fun highestAccuracyForGameMode(mode: GameMode): Int {
+        val highestScore = gamesForMode(mode).maxOfOrNull {
+            it.scores.max()
+        } ?: 0
+        return highestScore
+    }
+
+    suspend fun highestAverageAccuracyForGameMode(mode: GameMode): Int {
         val avgScores = averageAccuracyPerGame(mode)
         return avgScores.values.maxOrNull() ?: 0
     }

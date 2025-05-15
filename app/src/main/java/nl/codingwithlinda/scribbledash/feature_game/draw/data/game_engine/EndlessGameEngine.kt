@@ -29,7 +29,7 @@ class EndlessGameEngine(
     }
     override suspend fun shouldStartNewGame(): Boolean {
         val limit = ratingFactory.getSuccessLimit(GameMode.ENDLESS_MODE)
-        return this.getAccuracy() > limit
+        return this.getAccuracy() < limit
     }
 
     override fun isGameSuccessful(): Boolean {

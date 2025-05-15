@@ -73,6 +73,7 @@ class GameDrawViewModel(
 
     init {
         viewModelScope.launch {
+            println("GameDrawViewModel init IS CALLED")
             gameEngine.start()
         }
     }

@@ -23,6 +23,7 @@ import nl.codingwithlinda.scribbledash.core.navigation.util.ViewModelUtil
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameMainScreen
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessTopBar
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.game_over.EndlessGameOverScreen
@@ -43,7 +44,6 @@ fun NavGraphBuilder.endlessModeNavGraph(
 
             NavHost(navController = navController, startDestination = EndlessDrawNavRoute){
                 composable< EndlessDrawNavRoute>{
-
                     val gameDrawViewModel = ViewModelUtil.createGameDrawViewModel(gameEngine = gameEngine)
 
                     val endlessDrawViewModel = viewModel<EndlessDrawViewModel>(
@@ -60,7 +60,10 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         topBar = {
                             EndlessTopBar(
                                 numberSuccess = endlessDrawViewModel.endlessUiState.collectAsStateWithLifecycle().value.numberSuccess,
-                                actionOnClose = onNavHome,
+                                actionOnClose = {
+                                    navController.popBackStack()
+                                    onNavHome()
+                                },
                                 modifier = Modifier.fillMaxWidth()
                             )
                         },
@@ -70,6 +73,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         onAction = gameDrawViewModel::handleAction,
                         onDone = {
                             gameDrawViewModel.onDone()
+                            gameDrawViewModel.handleAction(DrawAction.Clear)
                             navController.navigate(EndlessResultNavRoute)
                         },
                     )
@@ -127,8 +131,12 @@ fun NavGraphBuilder.endlessModeNavGraph(
 
                     EndlessGameOverScreen(
                         uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
-                        onClose = onNavHome,
+                        onClose ={
+                            navController.popBackStack()
+                            onNavHome()
+                        },
                         onDrawAgain = {
+                            navController.popBackStack()
                             navController.navigate(EndlessDrawNavRoute){
                                 popUpTo(EndlessDrawNavRoute){
                                     inclusive = true

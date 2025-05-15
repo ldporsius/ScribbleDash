@@ -33,7 +33,7 @@ class TestGameEngine(
     }
     override suspend fun shouldStartNewGame(): Boolean {
         val limit = RatingFactory.getSuccessLimit(GameMode.ENDLESS_MODE)
-        return this.getAccuracy() > limit
+        return this.getAccuracy() < limit
     }
 
     override fun isGameSuccessful(): Boolean {
@@ -42,6 +42,6 @@ class TestGameEngine(
     }
 
     override suspend fun onUserInputDone() {
-        //nothing
+
     }
 }

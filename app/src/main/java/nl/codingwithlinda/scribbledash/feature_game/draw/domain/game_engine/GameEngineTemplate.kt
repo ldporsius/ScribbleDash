@@ -30,7 +30,6 @@ abstract class GameEngineTemplate(
     private val resultCalculator = ResultCalculator
     private val ratingFactory = RatingFactory
 
-
     protected val results = mutableListOf<DrawResult>()
 
     //template method
@@ -42,6 +41,7 @@ abstract class GameEngineTemplate(
         saveResult(result)
 
         shouldShowExample.update { true }
+        exampleFlow.send(Path())
         emitNewExample()
 
         countDownTimer.countdown.collect(){count ->
@@ -51,6 +51,7 @@ abstract class GameEngineTemplate(
         }
 
         shouldShowExample.update { false }
+
     }
 
     //common functions
@@ -104,6 +105,9 @@ abstract class GameEngineTemplate(
     suspend fun averageAccuracyForLatestGame(): Int{
         return gamesManager.averageAccuracyForLatestGame(gameMode)
     }
+    suspend fun highestAccuracy(): Int{
+        return gamesManager.highestAccuracyForGameMode(gameMode)
+    }
     suspend fun isNewTopScore(): Boolean{
         return gamesManager.isNewTopScore(gameMode)
     }
@@ -124,9 +128,9 @@ abstract class GameEngineTemplate(
 
     private suspend fun emitNewExample(){
         val example = getExample()
+        saveExample(example)
         exampleFlow.send(example)
 
-        saveExample(example)
     }
     private fun saveExample(example: Path): DrawResult {
 
@@ -138,14 +142,13 @@ abstract class GameEngineTemplate(
         return result
     }
 
-
     //mandatory
     abstract val gameMode: GameMode
-
     abstract fun saveResult(result: DrawResult)
     abstract suspend fun shouldStartNewGame(): Boolean
     abstract suspend fun onUserInputDone()
     abstract fun isGameSuccessful(): Boolean
+
     //hooks
     open val drawingTimeCounter = CountDownSpeedDraw()
     open fun getExample(): Path{

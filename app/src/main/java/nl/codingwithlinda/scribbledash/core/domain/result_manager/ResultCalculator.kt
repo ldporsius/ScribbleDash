@@ -60,32 +60,27 @@ object ResultCalculator {
 
         val pixelMatches = pixelMatch(bmExample, userBitmap)
 
-       // println("pixelMatch result: $pixelMatches")
-
         val correct = pixelMatches.count { it == PixelMatch.MATCH }
-//        println("ignore = ${pixelMatches.count { it == PixelMatch.IGNORE }}")
           println("correct = ${pixelMatches.count { it == PixelMatch.MATCH }}")
-//        println("user only = ${pixelMatches.count { it == PixelMatch.USER_ONLY }}")
 
         val visibleUserPixels = visiblePixelCount(userBitmap)
-        println("visibleUserPixels = $visibleUserPixels")
+        //println("visibleUserPixels = $visibleUserPixels")
         val visibleExamplePixels = visiblePixelCount(bmExample)
-        println("visibleExamplePixels = $visibleExamplePixels")
+        //println("visibleExamplePixels = $visibleExamplePixels")
 
         val accuracy = (correct.toFloat() / visibleUserPixels.toFloat()) * 100
-        println("-- in resultcalculator --. accuracy = $accuracy")
+        //println("-- in resultcalculator --. accuracy = $accuracy")
 
         val missingLengthPenalty = getMissingLengthPenalty(
            examplePaths, userPath
         )
 
-        println("-- in resultcalculator -- . missingLengthPenalty = $missingLengthPenalty")
+        //println("-- in resultcalculator -- . missingLengthPenalty = $missingLengthPenalty")
 
         //Final Score (%) = Coverage (%) - Missing Length Penalty (%)
         return try {
             (accuracy - missingLengthPenalty).roundToInt().coerceAtLeast(0)
         }catch (e: Exception){
-            e.printStackTrace()
             -1
         }
     }
@@ -123,10 +118,9 @@ object ResultCalculator {
     private fun pixelMatch(bmExample: Bitmap, bmUser: Bitmap): List<PixelMatch>{
         val pixelsExample = getPixelArray(bmExample)
         val pixelsUser = getPixelArray(bmUser)
-
+        //println("pixelsExample.size = ${pixelsExample.size}, pixelsUser.size = ${pixelsUser.size}")
         if(pixelsExample.size != pixelsUser.size) throw Exception("pixel arrays are not the same size")
 
-        println("pixelsExample.size = ${pixelsExample.size}, pixelsUser.size = ${pixelsUser.size}")
 
        val result= pixelsUser.mapIndexed { index, pixUser ->
 

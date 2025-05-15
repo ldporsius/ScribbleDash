@@ -3,7 +3,10 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_m
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
@@ -20,9 +23,13 @@ class EndlessResultViewModel(
 
     private val _uiState = MutableStateFlow(EndlessResultUiState())
 
-    val uiState = _uiState.asStateFlow()
+    val uiState = _uiState
+        .onStart {
+            doOnStart()
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
-    init {
+    private fun doOnStart(){
         viewModelScope.launch {
             val successes = gameEngine.numberSuccessesForLatestGame()
             val accuracy = gameEngine.getAccuracy()
@@ -41,9 +48,12 @@ class EndlessResultViewModel(
 
             gameEngine.getResult().let { result ->
 
+                //debug
                 ResultCalculator.calculateResult(result, 4){
                     bmPrinter.printBitmap(it,"endless_bm_${System.currentTimeMillis()}.png")
                 }
+                //end debug
+
                 _uiState.update {
                     it.copy(
                         examplePath = combinedPath(result.examplePath),

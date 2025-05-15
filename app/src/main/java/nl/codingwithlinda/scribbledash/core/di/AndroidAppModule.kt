@@ -32,7 +32,7 @@ class AndroidAppModule(
     override val gamesManager: GamesManager
         get() = GamesManager(gamesAccess)
 
-    val gameEngineFactory =  AndroidGameEngineFactory(
+    private val gameEngineFactory =  AndroidGameEngineFactory(
         exampleProvider = drawExampleProvider,
         gamesManager = gamesManager
     )

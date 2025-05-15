@@ -27,11 +27,14 @@ class EndlessGameOverViewModel(
             val avgAccuracy = gameEngine.averageAccuracyForLatestGame()
             val isTopScore = gameEngine.isNewTopScore()
             val numSuccesses = gameEngine.numberSuccessesForLatestGame()
+            val ratingUi = ratingMapper.toUi(avgAccuracy)
+            val isHighestNumberOfSuccesses = true
             _uiState.update {
                 it.copy(
-                    ratingUi = ratingMapper.toUi(avgAccuracy),
+                    ratingUi = ratingUi,
                     isTopScore = isTopScore,
-                    successCount = numSuccesses
+                    successCount = numSuccesses,
+                    isHighestNumberOfSuccesses = isHighestNumberOfSuccesses
 
                 )
             }

@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
+import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.OneRoundHostNavRoute
@@ -24,7 +24,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
 
 fun NavGraphBuilder.oneRoundWonderNavGraph(
-    appModule: AndroidAppModule,
+    appModule: AppModule,
     gameEngine: GameEngineTemplate,
     navToHome: () -> Unit
 ) {

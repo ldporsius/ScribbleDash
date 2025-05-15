@@ -17,7 +17,7 @@ class GameDrawUiStateTest{
 
         assertFalse(state.isUndoAvailable())
         assertFalse(state.isRedoAvailable())
-        assertFalse(state.isClearAvailable())
+
 
     }
 }

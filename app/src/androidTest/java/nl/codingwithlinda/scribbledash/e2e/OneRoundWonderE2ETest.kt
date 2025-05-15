@@ -47,7 +47,7 @@ class OneRoundWonderE2ETest {
 
     private fun offsetPath(index: Int, xOffset: Float, yOffset: Float): List<Offset> {
         val result = example[index].let { path ->
-            pathToCoordinates(path)
+            pathToCoordinates(path, 5f)
         }.map {
             Offset(it.x + xOffset, it.y + yOffset)
         }
@@ -107,18 +107,14 @@ class OneRoundWonderE2ETest {
 
             println("PARENT BOUNDS: $bounds , CenterX: ${bounds.size.width.value / 2}, centerY: ${bounds.size.height.value / 2}")
             println("EXAMPLE BOUNDS: ${exampleBounds()} , centerX: ${exampleBounds().width / 2}, centerY: ${exampleBounds().height / 2}")
-            val tx = bounds.size.width.value / 2  - exampleBounds().width /2
+            val tx =  - exampleBounds().width
             println("TX: $tx")
 
-            val ty = bounds.size.height.value / 2 - exampleBounds().height / 2
+            val ty = - exampleBounds().height
             println("TY: $ty")
 
             (0 until  example.size).map{i ->
-                val parentCenterX = bounds.size.center.x.value
-                val exampleCenterX = exampleBounds().center.x
-                val center = Offset( parentCenterX - exampleCenterX, bounds.size.center.y.value)
-
-                   val finished =  robot.performDragEvents(
+                robot.performDragEvents(
                        offsetPath(i, tx, ty)
                    )
                 }
@@ -135,7 +131,7 @@ class OneRoundWonderE2ETest {
 
         robot.clickNodeWithText("Done")
         .waitForNodeWithText("example")
-        .waitForNodeWithText("drawing")
+        .waitForAtLeastOneWithText("drawing")
 
         .saveScreenshot("scribble_e2e_result.png")
 

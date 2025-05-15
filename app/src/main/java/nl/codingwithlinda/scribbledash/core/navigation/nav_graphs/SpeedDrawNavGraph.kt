@@ -2,9 +2,7 @@ package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -13,18 +11,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
-import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
+import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.SpeedDrawResultNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.util.ViewModelUtil
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawRoot
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameMainScreen
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.SpeedDrawTopBar
@@ -34,7 +26,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw
 
 fun NavGraphBuilder.speedDrawNavGraph(
     gameNavController: NavHostController,
-    appModule: AndroidAppModule,
+    appModule: AppModule,
     gameEngine: GameEngineTemplate,
     navToHome: () -> Unit
 ) {

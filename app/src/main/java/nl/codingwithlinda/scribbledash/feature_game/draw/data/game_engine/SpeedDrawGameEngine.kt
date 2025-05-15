@@ -1,10 +1,8 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine
 
 import android.graphics.Path
-import androidx.core.graphics.and
-import androidx.core.graphics.plus
-import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
+import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
@@ -12,7 +10,7 @@ import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
 class SpeedDrawGameEngine(
-    private val exampleProvider: AndroidDrawExampleProvider,
+    private val exampleProvider: DrawExampleProvider,
     private val gamesManager: GamesManager,
 ): GameEngineTemplate(
     exampleProvider = exampleProvider,

@@ -3,10 +3,9 @@ package nl.codingwithlinda.scribbledash.core.application
 import android.app.Application
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.di.AppModule
+import nl.codingwithlinda.scribbledash.core.test.AndroidTestAppModule
 
-class ScribbleDashApplication(
-
-): Application() {
+class ScribbleDashDebugApplication: Application() {
 
     companion object{
         lateinit var appModule: AppModule
@@ -14,6 +13,6 @@ class ScribbleDashApplication(
     override fun onCreate() {
         super.onCreate()
 
-        appModule = AndroidAppModule(this)
+        appModule = AndroidTestAppModule(this)
     }
 }

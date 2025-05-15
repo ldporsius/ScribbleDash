@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
+import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.EndlessRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameLevelNavRoute
@@ -19,7 +19,7 @@ import nl.codingwithlinda.scribbledash.feature_game.level.presentation.GameLevel
 
 
 fun NavGraphBuilder.GameNavGraph(
-    appModule: AndroidAppModule,
+    appModule: AppModule,
     navToHome: () -> Unit
 ) {
 
@@ -28,10 +28,7 @@ fun NavGraphBuilder.GameNavGraph(
         val gameNavController = rememberNavController()
         NavHost(navController = gameNavController, startDestination = GameLevelNavRoute) {
             val exampleProvider = appModule.drawExampleProvider
-            val oneRoundGameEngine = OneRoundGameEngine(
-                exampleProvider = exampleProvider,
-                gamesManager = appModule.gamesManager
-            )
+            val oneRoundGameEngine = appModule.gameEngine(GameMode.ONE_ROUND_WONDER)
            val speedDrawGameEngine = SpeedDrawGameEngine(
                exampleProvider = exampleProvider,
                gamesManager = appModule.gamesManager

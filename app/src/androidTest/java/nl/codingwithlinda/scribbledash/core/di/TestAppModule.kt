@@ -8,6 +8,10 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampl
 import nl.codingwithlinda.scribbledash.core.data.local_cache.RoomGamesAccess
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
+import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.TestGameEngine
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
 class TestAppModule: AppModule {
 
@@ -20,4 +24,14 @@ class TestAppModule: AppModule {
         get() = RoomGamesAccess(testDb.gameDao)
     override val gamesManager: GamesManager
         get() = GamesManager(gamesAccess)
+
+    override fun gameEngine(gameMode: GameMode): GameEngineTemplate {
+        return TestGameEngine(
+            exampleProvider = drawExampleProvider,
+            gamesManager = gamesManager
+        )
+    }
+
+    override val ratingTextGenerator: RatingTextGenerator
+        get() = RatingTextGenerator(appContext)
 }

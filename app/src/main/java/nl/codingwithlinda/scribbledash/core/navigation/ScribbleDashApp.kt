@@ -35,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
+import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultManager
 import nl.codingwithlinda.scribbledash.core.navigation.nav_graphs.GameNavGraph
@@ -54,7 +55,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ter
 
 @Composable
 fun ScribbleDashApp(
-    appModule: AndroidAppModule
+    appModule: AppModule
 ) {
 
     val rootNavController = rememberNavController()

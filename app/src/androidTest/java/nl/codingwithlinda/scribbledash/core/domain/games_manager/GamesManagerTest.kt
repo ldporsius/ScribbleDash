@@ -1,22 +1,18 @@
 package nl.codingwithlinda.scribbledash.core.domain.games_manager
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.di.TestAppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.test.fakeDrawResultDifferentPaths
 import nl.codingwithlinda.scribbledash.core.test.fakeDrawResultSamePaths
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class GamesManagerTest{
-
-    private val appContext = ApplicationProvider.getApplicationContext<Application>()
 
     private val testData = fakeDrawResultSamePaths()
     private lateinit var appModule: TestAppModule

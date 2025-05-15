@@ -8,7 +8,7 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordi
 
 fun fakeDrawingOnCanvas(path: Path) = flow<Offset> {
 
-    pathToCoordinates(path).forEach {
+    pathToCoordinates(path, 10f).forEach {
         emit(Offset(it.x, it.y))
         delay(10)
     }

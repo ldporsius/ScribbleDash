@@ -6,8 +6,6 @@ import kotlinx.coroutines.runBlocking
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
 import nl.codingwithlinda.scribbledash.core.di.TestAppModule
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import org.junit.Assert.*
@@ -39,7 +37,7 @@ class EndlessDrawViewModelTest{
 
             val result = gameEngine.getResult()
             val userIput = result.examplePath.map {
-                pathToCoordinates(it)
+                pathToCoordinates(it, 5f)
             }.flatten()
                 .map {coor ->
                    Offset(coor.x, coor.y)

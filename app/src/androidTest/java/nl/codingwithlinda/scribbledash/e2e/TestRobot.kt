@@ -2,13 +2,18 @@ package nl.codingwithlinda.scribbledash.e2e
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertAny
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.getBoundsInRoot
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -29,6 +34,14 @@ class TestRobot(
     private val testRule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 ) {
 
+    @OptIn(ExperimentalTestApi::class)
+    fun waitForAtLeastOneWithText(text: String): TestRobot{
+        testRule.waitUntilAtLeastOneExists(
+            hasText(text, true, true),
+            5000
+        )
+        return this
+    }
     fun waitForNodeWithText(text: String): TestRobot{
 
         testRule.waitUntil(

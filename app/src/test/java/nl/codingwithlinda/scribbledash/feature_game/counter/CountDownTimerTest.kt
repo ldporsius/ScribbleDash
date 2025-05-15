@@ -12,7 +12,7 @@ class CountDownTimerTest: BaseUnitTest(){
     @Test
     fun `test countdown timer`() = runTest{
 
-        countdownTimer.startCountdown().test {
+        countdownTimer.countdown.test {
             repeat(CountDownTimer.DURATION_SECS){
                 val em0 = awaitItem()
                 println("em: $em0")

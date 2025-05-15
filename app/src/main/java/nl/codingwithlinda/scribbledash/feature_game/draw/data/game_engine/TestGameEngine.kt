@@ -6,43 +6,38 @@ import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProv
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
-import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
-class EndlessGameEngine(
+class TestGameEngine(
     private val exampleProvider: DrawExampleProvider,
     private val gamesManager: GamesManager
 ): GameEngineTemplate(
     exampleProvider = exampleProvider,
     gamesManager = gamesManager
 ) {
-
-    private val ratingFactory = RatingFactory
     override val gameMode: GameMode
-        get() = GameMode.ENDLESS_MODE
+        get() = GameMode.ONE_ROUND_WONDER
 
-    override fun saveResult(result: DrawResult) {
-        results.removeAll {
-            it.id == result.id
-        }
-        results.add(result)
-    }
-    override suspend fun shouldStartNewGame(): Boolean {
-        val limit = ratingFactory.getSuccessLimit(GameMode.ENDLESS_MODE)
-        return this.getAccuracy() > limit
-    }
-
-    override fun isGameSuccessful(): Boolean {
-        val limit = ratingFactory.getSuccessLimit(GameMode.ENDLESS_MODE)
-        return this.getAccuracy() > limit
-    }
-
+    private var index = 3
     override fun getExample(): Path {
-        return exampleProvider.examples.random().examplePath.let {
+
+        return exampleProvider.examples[index].examplePath.let {
             combinedPath(it)
         }
     }
-    override suspend fun onUserInputDone() {
+    override fun saveResult(result: DrawResult) {
+        results.clear()
+        results.add(result)
+    }
+    override suspend fun shouldStartNewGame(): Boolean {
+       return true
+    }
 
+    override fun isGameSuccessful(): Boolean {
+        return true
+    }
+
+    override suspend fun onUserInputDone() {
+        //nothing
     }
 }

@@ -25,7 +25,7 @@ class ParseVectorTest {
 
 
         val coors = paths.map {
-            pathToCoordinates(it)
+            pathToCoordinates(it, 5f)
         }
         coors.onEachIndexed { index, pathCoordinates ->
             pathCoordinates.chunked(10).onEach {chunk->

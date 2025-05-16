@@ -1,6 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.presentation.design_system.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -17,8 +18,9 @@ val fontOutfitFamily = FontFamily(fontOutfit)
 val headlineXSmall = TextStyle(
     fontFamily = fontBagelFatOneFamily,
     fontSize = 14.sp,
-    lineHeight = 18.sp,
-    letterSpacing = .5.sp
+    lineHeight = 14.sp,
+    letterSpacing = .5.sp,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 // Set of Material typography styles to start with
 val Typography = Typography(

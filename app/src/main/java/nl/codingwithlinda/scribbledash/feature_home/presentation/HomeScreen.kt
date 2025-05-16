@@ -50,6 +50,7 @@ fun HomeScreen(
             )
             CounterComponent(
                 text = "0",
+                imageSize = 24.dp,
                 imageResourceId = R.drawable.coin
             )
         }

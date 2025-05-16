@@ -100,9 +100,7 @@ fun ScribbleDashApp(
                     label = UiText.StringResource(R.string.shop)
                 )
             )
-            var selectedIndex by remember {
-                mutableIntStateOf(destinations.indexOfFirst { it.route == HomeNavRoute })
-            }
+
             Scaffold(
                 containerColor = backgroundLight,
                 bottomBar = {
@@ -110,17 +108,14 @@ fun ScribbleDashApp(
                         containerColor = Color.Transparent,
                         contentColor = MaterialTheme.colorScheme.tertiary
                     ) {
-                        println("CURRENT DESTINATION: ${ currentDestination?.destination?.route}")
 
                         destinations.forEachIndexed { index, destination ->
-
-                            println("DESTINATION CLASS: ${destination.route::class}")
 
                             val selected = currentDestination?.destination?.hasRoute(destination.route::class) ?: false
                             NavigationBarItem(
                                 selected = selected,
                                 onClick = {
-                                    selectedIndex = index
+
                                     navController.navigate(destination.route){
                                         popUpTo(navController.graph.findStartDestination().id){
                                             saveState = true

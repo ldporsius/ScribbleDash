@@ -56,3 +56,12 @@ object EndlessGameOverNavRoute : NavRoute
 
 @Serializable
 object StatisticsNavRoute : NavRoute
+
+////////////////shop////////////////////////
+
+@Serializable
+object ShopNavRoute : NavRoute
+@Serializable
+object ShopRootNavRoute : NavRoute
+@Serializable
+object ShopHostNavRoute : NavRoute

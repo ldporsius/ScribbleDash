@@ -71,6 +71,7 @@
     <string name="speed_draw">Speed Draw</string>
     <string name="endless_mode">Endless Mode</string>
     <string name="statistics">Statistics</string>
+    <string name="shop">Shop</string>
 
     <string-array name="woohoo_array">
         <item>@string/feedback_woohoo_1</item>

@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -25,6 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.navigation.destinations.Destination
@@ -33,15 +37,19 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import nl.codingwithlinda.scribbledash.core.di.AndroidAppModule
 import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.navigation.nav_graphs.GameNavGraph
+import nl.codingwithlinda.scribbledash.core.navigation.nav_graphs.shopNavGraph
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.StatisticsNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.GameRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.RootNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.ShopNavRoute
+import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.ShopRootNavRoute
 import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation
 import nl.codingwithlinda.scribbledash.core.presentation.util.toUi
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
@@ -67,6 +75,8 @@ fun ScribbleDashApp(
 
         composable<RootNavRoute> {
             val navController = rememberNavController()
+            val currentDestination by navController.currentBackStackEntryAsState()
+
             val destinations = listOf(
                 Destination(
                     route = StatisticsNavRoute,
@@ -81,6 +91,13 @@ fun ScribbleDashApp(
                     unselectedIcon = Icons.Outlined.Home,
                     selectedColor = primary,
                     label = UiText.StringResource(R.string.home)
+                ),
+                Destination(
+                    route = ShopRootNavRoute,
+                    selectedIcon = Icons.Filled.ShoppingCart,
+                    unselectedIcon = Icons.Outlined.ShoppingCart,
+                    selectedColor = primary,
+                    label = UiText.StringResource(R.string.shop)
                 )
             )
             var selectedIndex by remember {
@@ -93,14 +110,24 @@ fun ScribbleDashApp(
                         containerColor = Color.Transparent,
                         contentColor = MaterialTheme.colorScheme.tertiary
                     ) {
+                        println("CURRENT DESTINATION: ${ currentDestination?.destination?.route}")
+
                         destinations.forEachIndexed { index, destination ->
 
-                            val selected = index == selectedIndex
+                            println("DESTINATION CLASS: ${destination.route::class}")
+
+                            val selected = currentDestination?.destination?.hasRoute(destination.route::class) ?: false
                             NavigationBarItem(
                                 selected = selected,
                                 onClick = {
                                     selectedIndex = index
-                                    navController.navigate(destination.route)
+                                    navController.navigate(destination.route){
+                                        popUpTo(navController.graph.findStartDestination().id){
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 },
                                 icon = {
                                     Image(
@@ -150,6 +177,8 @@ fun ScribbleDashApp(
                             infos = viewModel.statistics.collectAsStateWithLifecycle().value
                         )
                     }
+
+                    shopNavGraph()
                 }
             }
         }

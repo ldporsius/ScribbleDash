@@ -9,4 +9,8 @@ class FakeExampleProvider: DrawExampleProvider {
         get() = List(10){
             DrawExample(examplePath = listOf( fakePathCircle()))
         }
+
+    override fun getExample(resource: Int): DrawExample {
+        return DrawExample(examplePath = listOf( fakePathCircle()))
+    }
 }

@@ -24,6 +24,7 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = onPrimary,
     onBackground = onBackground,
     onSurface = onSurface,
+    onSurfaceVariant = onSurfaceVariant
 
 )
 

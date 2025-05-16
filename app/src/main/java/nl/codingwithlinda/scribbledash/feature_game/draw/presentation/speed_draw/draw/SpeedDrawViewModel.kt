@@ -62,6 +62,10 @@ class SpeedDrawViewModel(
         }.launchIn(viewModelScope)
     }
 
+    fun stopCountdown(){
+        countDownJob?.cancel()
+    }
+
     fun onDone(){
         viewModelScope.launch {
 

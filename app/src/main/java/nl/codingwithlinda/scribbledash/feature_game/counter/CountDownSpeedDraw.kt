@@ -9,16 +9,17 @@ import nl.codingwithlinda.scribbledash.BuildConfig
 class CountDownSpeedDraw {
 
     companion object {
-        const val DEBUGSTARTTIME = 30
+        const val DEBUGSTARTTIME = 20
         const val STARTTIME = 120
         const val INTERVAL = 1000L
     }
     private val isPaused = MutableStateFlow<Boolean>(true)
 
-    fun startTime() = if (BuildConfig.DEBUG) DEBUGSTARTTIME else STARTTIME
+    private fun startTime() = if (BuildConfig.DEBUG) DEBUGSTARTTIME else STARTTIME
     private var currentCount = startTime()
     private val _timer = MutableStateFlow<Int>(currentCount)
     val timer = _timer.asStateFlow()
+
     suspend fun startCountdown() {
 
         reset()

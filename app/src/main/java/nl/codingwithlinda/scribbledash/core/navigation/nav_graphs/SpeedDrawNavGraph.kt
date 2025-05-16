@@ -54,7 +54,10 @@ fun NavGraphBuilder.speedDrawNavGraph(
             topBar = {
                 SpeedDrawTopBar(
                     uiState = speedDrawViewModel.topBarUiState.collectAsStateWithLifecycle().value,
-                    actionOnClose = navToHome,
+                    actionOnClose = {
+                        speedDrawViewModel.stopCountdown()
+                        navToHome()
+                    },
                     modifier = Modifier.fillMaxWidth().padding(8.dp)
                 )
             },

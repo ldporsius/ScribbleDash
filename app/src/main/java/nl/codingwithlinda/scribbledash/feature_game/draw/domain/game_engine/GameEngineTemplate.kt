@@ -76,7 +76,6 @@ abstract class GameEngineTemplate(
         )
         saveResult(result)
         persistResult()
-
     }
 
     fun getResult() = results.lastOrNull() ?: createDrawResult()

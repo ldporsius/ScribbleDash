@@ -37,7 +37,7 @@ class StatisticsViewModel(
                 info = "Most Meh+ drawings in Speed Draw",
                 value = numSuccessSpeed.toString()
             )
-            val highestEndlessAccuracy = gamesManager.highestAccuracyForGameMode(GameMode.ENDLESS_MODE)
+            val highestEndlessAccuracy = gamesManager.highestAverageAccuracyForGameMode(GameMode.ENDLESS_MODE)
             val numSuccessEndless = gamesManager.highestNumberOfSuccessesForMode(GameMode.ENDLESS_MODE)
 
             val endlessAccuracyInfo = StatisticInfoUi(

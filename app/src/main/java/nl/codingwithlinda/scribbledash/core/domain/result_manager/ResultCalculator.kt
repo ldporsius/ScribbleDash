@@ -61,12 +61,10 @@ object ResultCalculator {
         val pixelMatches = pixelMatch(bmExample, userBitmap)
 
         val correct = pixelMatches.count { it == PixelMatch.MATCH }
-          println("correct = ${pixelMatches.count { it == PixelMatch.MATCH }}")
+          println("RESULT CALCULATOR NUMBER PIXELS THAT MATCH = ${correct}")
 
         val visibleUserPixels = visiblePixelCount(userBitmap)
         //println("visibleUserPixels = $visibleUserPixels")
-        val visibleExamplePixels = visiblePixelCount(bmExample)
-        //println("visibleExamplePixels = $visibleExamplePixels")
 
         val accuracy = (correct.toFloat() / visibleUserPixels.toFloat()) * 100
         //println("-- in resultcalculator --. accuracy = $accuracy")

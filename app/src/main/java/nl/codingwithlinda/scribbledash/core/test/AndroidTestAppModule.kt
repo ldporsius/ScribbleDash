@@ -10,6 +10,7 @@ import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.AndroidGameEngineFactory
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.SpeedDrawGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.TestGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
@@ -40,6 +41,10 @@ class AndroidTestAppModule(
         exampleProvider = drawExampleProvider,
         gamesManager = gamesManager
     )
+    private val oneRoundGameEngine = OneRoundGameEngine(
+        exampleProvider = drawExampleProvider,
+        gamesManager = gamesManager
+    )
     private val speedDrawGameEngine = SpeedDrawGameEngine(
         exampleProvider = drawExampleProvider,
         gamesManager = gamesManager
@@ -48,7 +53,7 @@ class AndroidTestAppModule(
     override fun gameEngine(gameMode: GameMode): GameEngineTemplate {
         return when(gameMode){
             GameMode.ONE_ROUND_WONDER -> {
-               testGameEngine
+               oneRoundGameEngine
             }
             GameMode.SPEED_DRAW -> {
               speedDrawGameEngine

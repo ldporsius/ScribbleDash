@@ -11,23 +11,24 @@ import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.FinalResultUiState
 
 class SpeedDrawResultViewModel(
     private val ratingMapper: RatingMapper,
-    private val gamesManager: GamesManager
+    private val gameEngine: GameEngineTemplate
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(FinalResultUiState())
 
     val uiState = _uiState
         .onStart {
-            val avg = gamesManager.averageAccuracyForLatestGame(GameMode.SPEED_DRAW)
+            val avg = gameEngine.averageAccuracyForLatestGame()
             val ratingUi = ratingMapper.toUi(avg)
 
-            val numSuccesses = gamesManager.numberSuccessesForLatestGame(GameMode.SPEED_DRAW)
-            val isTopScore = gamesManager.isNewTopScore(GameMode.SPEED_DRAW)
-            val isHighestNumberOfSuccesses = gamesManager.isHighestNumberOfSuccesses(GameMode.SPEED_DRAW)
+            val numSuccesses = gameEngine.numberSuccessesForLatestGame()
+            val isTopScore = gameEngine.isNewTopScore()
+            val isHighestNumberOfSuccesses = gameEngine.isHighestNumberOfSuccesses()
 
             _uiState.update {
                 it.copy(
@@ -40,9 +41,5 @@ class SpeedDrawResultViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
 
-    fun startNewGame() {
-        viewModelScope.launch {
-            gamesManager.addGame(GameMode.SPEED_DRAW, emptyList())
-        }
-    }
+
 }

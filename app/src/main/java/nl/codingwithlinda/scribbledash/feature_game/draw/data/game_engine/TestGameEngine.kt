@@ -21,6 +21,7 @@ class TestGameEngine(
         get() = GameMode.ENDLESS_MODE
 
     override fun getExample(): Path {
+        exampleFlow.trySend(Path())
         return exampleProvider.getExample(R.drawable.glasses).examplePath.let {
             combinedPath(it)
         }
@@ -30,6 +31,10 @@ class TestGameEngine(
             it.id == result.id
         }
         results.add(result)
+    }
+
+    override suspend fun persistResult() {
+        gamesManager.updateLatestGame(gameMode, results)
     }
     override suspend fun shouldStartNewGame(): Boolean {
         val limit = RatingFactory.getSuccessLimit(GameMode.ENDLESS_MODE)

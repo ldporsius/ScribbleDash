@@ -34,6 +34,7 @@ abstract class GameEngineTemplate(
 
     //template method
     suspend fun start(){
+
         if (shouldStartNewGame()) {
             startGame()
         }
@@ -41,7 +42,7 @@ abstract class GameEngineTemplate(
         saveResult(result)
 
         shouldShowExample.update { true }
-        exampleFlow.send(Path())
+
         emitNewExample()
 
         countDownTimer.countdown.collect(){count ->
@@ -74,7 +75,8 @@ abstract class GameEngineTemplate(
             userPath = paths
         )
         saveResult(result)
-        gamesManager.updateLatestGame(gameMode, results)
+        persistResult()
+
     }
 
     fun getResult() = results.lastOrNull() ?: createDrawResult()
@@ -90,7 +92,7 @@ abstract class GameEngineTemplate(
     }
 
     fun getAccuracy(): Int{
-        if (results.isEmpty()) return 100
+        if (results.isEmpty()) return 0
         return resultCalculator.calculateResult(getResult(), 4)
     }
     fun getRating() : Rating{
@@ -99,7 +101,12 @@ abstract class GameEngineTemplate(
     }
 
     suspend fun numberSuccessesForLatestGame(): Int{
-        return gamesManager.numberSuccessesForLatestGame(gameMode)
+        val limit = ratingFactory.getSuccessLimit(gameMode)
+        val accs = results.map {
+            ResultCalculator.calculateResult(it, 4)
+        }.filter { it >= limit }
+
+        return accs.count()
     }
 
     suspend fun averageAccuracyForLatestGame(): Int{
@@ -110,6 +117,9 @@ abstract class GameEngineTemplate(
     }
     suspend fun isNewTopScore(): Boolean{
         return gamesManager.isNewTopScore(gameMode)
+    }
+    suspend fun isHighestNumberOfSuccesses(): Boolean{
+        return gamesManager.isHighestNumberOfSuccesses(gameMode)
     }
 
     /////////private functions////////////////////////////////
@@ -156,5 +166,7 @@ abstract class GameEngineTemplate(
             combinedPath(it)
         }
     }
-
+    open suspend fun persistResult(){
+        gamesManager.updateLatestGame(gameMode, results)
+    }
 }

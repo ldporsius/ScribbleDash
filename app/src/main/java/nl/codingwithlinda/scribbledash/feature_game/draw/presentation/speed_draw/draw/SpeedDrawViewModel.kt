@@ -5,12 +5,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.speed_draw.draw.state.SpeedDrawUiState
 
@@ -21,10 +23,16 @@ class SpeedDrawViewModel(
 
 
     private val _topBarUiState = MutableStateFlow(SpeedDrawUiState())
-    val topBarUiState = _topBarUiState.asStateFlow()
+    val topBarUiState = _topBarUiState
+        .onStart {
+            gameEngine.drawingTimeCounter.reset()
+
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SpeedDrawUiState())
 
     private var countDownJob: Job? = null
     init {
+        gameEngine.drawingTimeCounter.reset()
 
         viewModelScope.launch {
             gameEngine.drawingTimeCounter.startCountdown()
@@ -35,7 +43,6 @@ class SpeedDrawViewModel(
         }.launchIn(viewModelScope)
 
         collectSpeedDrawCountdown()
-
     }
 
 
@@ -48,6 +55,7 @@ class SpeedDrawViewModel(
                 )
             }
             if (count == 0){
+                gameEngine.persistResult()
                 delay(100)
                 navToResult()
             }
@@ -57,12 +65,12 @@ class SpeedDrawViewModel(
     fun onDone(){
         viewModelScope.launch {
 
-            val success = gameEngine.isGameSuccessful()
-            val successCount = if(success) 1 else 0
+            val numberSuccesses = gameEngine.numberSuccessesForLatestGame()
+            println("SPEED DRAW VIEW MODEL Has Successes: $numberSuccesses")
 
             _topBarUiState.update {
                 it.copy(
-                    successes = it.successes + successCount
+                    successes = numberSuccesses
                 )
             }
         }

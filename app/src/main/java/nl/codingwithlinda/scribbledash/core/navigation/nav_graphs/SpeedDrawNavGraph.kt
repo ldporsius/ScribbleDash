@@ -78,7 +78,7 @@ fun NavGraphBuilder.speedDrawNavGraph(
                 initializer {
                     SpeedDrawResultViewModel(
                         ratingMapper = RatingMapper(appModule.ratingTextGenerator),
-                        gamesManager = appModule.gamesManager
+                        gameEngine = gameEngine
                     )
                 }
             }
@@ -87,12 +87,8 @@ fun NavGraphBuilder.speedDrawNavGraph(
             uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
             onClose = navToHome,
             onDrawAgain = {
-                viewModel.startNewGame()
-                gameNavController.navigate(SpeedDrawNavRoute) {
-                    popUpTo(SpeedDrawResultNavRoute) {
-                        inclusive = true
-                    }
-                }
+                gameNavController.popBackStack()
+                gameNavController.navigate(SpeedDrawNavRoute)
             }
         )
     }

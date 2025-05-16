@@ -7,6 +7,7 @@ import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.ratings.Oops
+import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
 class SpeedDrawGameEngine(
@@ -34,6 +35,17 @@ class SpeedDrawGameEngine(
             it.id == result.id
         }
         results.add(result)
+    }
+
+    override suspend fun persistResult() {
+        val counter = this.drawingTimeCounter
+        println("SPEED DRAW GAME ENGINE HAS COUNTER VALUE: ${counter.timer.value}")
+        val shouldPersist = counter.timer.value <= 0
+        if (shouldPersist) {
+            gamesManager.updateLatestGame(gameMode, results)
+            println("SPEED DRAW GAME ENGINE PERSISTED RESULTS, size = ${results.size}")
+            drawingTimeCounter.reset()
+        }
     }
     override suspend fun shouldStartNewGame(): Boolean {
         val counter = this.drawingTimeCounter

@@ -39,8 +39,12 @@ val statisticsColors = listOf(
     Color(0xFFFDD835).copy(alpha = 0.1f),
 )
 
+//Tier colors
+val BasicTierColor = Color(0xFFffffff)
+val PremiumTierColor = Color(0xFFAB5CFA)
+val LegendaryTierColor = Color(0xFFfa852c)
 
-// Basic colors
+// Basic canvas colors
 val White = Color(0xFFFFFFFF) // Default, always unlocked
 val LightGray = Color(0xFFE0E0E0)
 val PaleBeige = Color(0xFFF5F5DC)

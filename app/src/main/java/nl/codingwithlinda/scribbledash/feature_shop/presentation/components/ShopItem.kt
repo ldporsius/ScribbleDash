@@ -23,29 +23,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CounterComponent
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.BasicTierColor
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
 
 @Composable
 fun ShopItem(
     title: String = "BASIC",
+    price: Int,
     isLocked: Boolean = true,
-    centralImage: Int = R.drawable.scribble,
+    content: @Composable () -> Unit,
+    fgColor: Color = MaterialTheme.colorScheme.onSurface,
+    bgColor: Color = BasicTierColor,
     modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
     ){
         Box(modifier = Modifier
-            .padding(4.dp)
-            .shadow(elevation = 4.dp, shape = RoundedCornerShape(25))
+            .padding(8.dp)
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(10))
             .width(110.dp)
             .height(152.dp)
-
-            .background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(25))
+            .background(color = bgColor, shape = RoundedCornerShape(10))
         ){
             Column(
                 modifier = Modifier
@@ -56,41 +60,42 @@ fun ShopItem(
             ) {
                 Text(title,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = fgColor
                 )
                 Box(
                     modifier = Modifier
+                        .padding(4.dp)
                         .border(width = 1.dp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             shape = RoundedCornerShape(25))
-                        .padding(16.dp)
-                        .background(color = MaterialTheme.colorScheme.background,
+                        .aspectRatio(1.5f)
+                        .weight(1f)
+                        .background(color = Color.Transparent,
                             shape = RoundedCornerShape(25)),
                     contentAlignment = Alignment.Center
 
                 ) {
+                    content()
                     if (isLocked){
                         Image(
                             painter = painterResource(R.drawable.lock),
                             contentDescription = "lock"
                         )
                     }
-                    Image(
-                        painter = painterResource(id = centralImage),
-                        contentDescription = "scribble"
-                    )
+
                 }
 
                 if (isLocked){
                    CounterComponent(
-                       text = "0",
+                       text = "$price",
                        backgroundColor = Color.Transparent,
+                       foregroundColor = fgColor,
                        imageResourceId = R.drawable.coin,
                        imageSize = 16.dp,
                        modifier = Modifier
                            .height(20.dp)
                            .width(66.dp)
-                           .border(width = 1.dp, Color.Green)
+
                    )
                 }
                 if (!isLocked){
@@ -111,6 +116,9 @@ fun ShopItem(
 @Composable
 private fun ShopItemPreview() {
     ScribbleDashTheme {
-        ShopItem()
+        ShopItem(
+            price = 10,
+            content = {}
+        )
     }
 }

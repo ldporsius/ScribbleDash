@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.feature_shop.presentation.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CounterComponent
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.BasicTierColor
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
@@ -40,16 +42,19 @@ fun ShopItem(
     content: @Composable () -> Unit,
     fgColor: Color = MaterialTheme.colorScheme.onSurface,
     bgColor: Color = BasicTierColor,
+    onItemClick: () -> Unit,
     modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
     ){
         Box(modifier = Modifier
-            .padding(8.dp)
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(10))
             .width(110.dp)
             .height(152.dp)
             .background(color = bgColor, shape = RoundedCornerShape(10))
+            .clickable {
+                onItemClick()
+            }
         ){
             Column(
                 modifier = Modifier
@@ -64,7 +69,7 @@ fun ShopItem(
                 )
                 Box(
                     modifier = Modifier
-                        .padding(4.dp)
+
                         .border(width = 1.dp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             shape = RoundedCornerShape(25))
@@ -118,7 +123,8 @@ private fun ShopItemPreview() {
     ScribbleDashTheme {
         ShopItem(
             price = 10,
-            content = {}
+            content = {},
+            onItemClick = {}
         )
     }
 }

@@ -20,11 +20,13 @@ import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CounterComponent
 import nl.codingwithlinda.scribbledash.feature_shop.presentation.components.toPenShopContent
 import nl.codingwithlinda.scribbledash.feature_shop.presentation.components.toShopContent
+import nl.codingwithlinda.scribbledash.feature_shop.presentation.state.ShopAction
 import nl.codingwithlinda.scribbledash.feature_shop.presentation.state.ShopUiState
 
 @Composable
 fun ShopScreen(
-    uiState: ShopUiState
+    uiState: ShopUiState,
+    onAction: (ShopAction) -> Unit
 ) {
 
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -65,17 +67,26 @@ fun ShopScreen(
         when(selectedTab){
             0 -> {
                 uiState.penProducts.toPenShopContent(
-                    priceCalculator = uiState.pricePenCalculator,
-                ) {
-                   uiState.isLocked(it.id)
-                }
+                    calculatePrice = {
+                        uiState.pricePenCalculator.calculatePrice(it)
+                    },
+                    isLocked = {
+                        uiState.isLocked(it.id)
+                    },
+                    onItemClick = {
+                        onAction(ShopAction.ItemClickPen(it.id))
+                    }
+                )
             }
             1 -> {
                 uiState.canvasProducts.toShopContent(
-                    priceCalculator = uiState.priceCanvasCalculator,
-                ) {
-                    uiState.isLocked(it.id)
-                }
+                    calculatePrice = {
+                        uiState.priceCanvasCalculator.calculatePrice(it)
+                    },
+                    isLocked = {
+                        uiState.isLocked(it.id)
+                    }
+                )
             }
         }
 

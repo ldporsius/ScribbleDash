@@ -33,7 +33,8 @@ fun ShopRoot() {
                 }
             )
             ShopScreen(
-                uiState = viewModel.uiState.value
+                uiState = viewModel.uiState.value,
+                onAction = viewModel::handleAction
             )
         }
 

@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import nl.codingwithlinda.scribbledash.core.data.shop.sales.CanvassesSalesManager
 import nl.codingwithlinda.scribbledash.core.data.shop.sales.PensSalesManager
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.UserAccount
 import nl.codingwithlinda.scribbledash.core.navigation.nav_routes.ShopNavRoute
 
 @Composable
@@ -23,7 +24,10 @@ fun ShopRoot() {
                     initializer {
                         ShopViewModel(
                             penSalesManager = PensSalesManager(),
-                            canvasSalesManager = CanvassesSalesManager()
+                            canvasSalesManager = CanvassesSalesManager(),
+                            userAccount = UserAccount(
+                                id = "1"
+                            )
                         )
                     }
                 }

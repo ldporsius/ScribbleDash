@@ -9,7 +9,7 @@ class PenCrimsonRed(): PenProduct() {
     override val color: Int
          = CrimsonRed.toArgb()
     override val id: String
-        = "penBlack"
+        = this::class.java.simpleName
     override val title: UiText
         = UiText.DynamicText("CrimsonRed")
     override val price: Int

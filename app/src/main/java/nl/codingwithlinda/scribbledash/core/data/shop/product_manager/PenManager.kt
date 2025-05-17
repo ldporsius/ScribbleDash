@@ -3,10 +3,11 @@ package nl.codingwithlinda.scribbledash.core.data.shop.product_manager
 import nl.codingwithlinda.scribbledash.core.data.shop.products.pens.PenCrimsonRed
 import nl.codingwithlinda.scribbledash.core.data.shop.products.pens.PenMidnightBlack
 import nl.codingwithlinda.scribbledash.core.data.shop.products.pens.PenSunshineYellow
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.PenProduct
 
 object PenManager {
 
-    val pensFreeTier = listOf(
+    val pensFreeTier: List<PenProduct> = listOf(
         PenMidnightBlack(),
 
     )
@@ -16,13 +17,13 @@ object PenManager {
     )
 
     val pensPremiumTier = listOf(
-        PenMidnightBlack(),
+
         PenCrimsonRed(),
         PenSunshineYellow(),
     )
 
     val pensLegendaryTier = listOf(
-        PenMidnightBlack(),
+
         PenCrimsonRed(),
         PenSunshineYellow(),
     )

@@ -10,5 +10,11 @@ data class ShopUiState(
     val pricePenCalculator: PriceCalculator = PriceForTierPenCalculator(),
     val priceCanvasCalculator: PriceCalculator = PriceForTierCanvasCalculator(),
     val penProducts: List<PenInTier> = emptyList(),
+    val availablePenProducts: List<String> = emptyList(),
     val canvasProducts: List<CanvasInTier> = emptyList(),
-)
+
+){
+    fun isLocked(productId: String): Boolean{
+        return productId !in availablePenProducts
+    }
+}

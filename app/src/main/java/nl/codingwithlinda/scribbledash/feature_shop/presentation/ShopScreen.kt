@@ -28,13 +28,6 @@ fun ShopScreen(
 ) {
 
     var selectedTab by remember { mutableIntStateOf(0) }
-    val itemsForSale = remember(selectedTab) {
-        when (selectedTab) {
-            0 -> uiState.penProducts
-            1 -> uiState.canvasProducts
-            else -> emptyList()
-        }
-    }
 
     Column {
         Row(
@@ -74,19 +67,17 @@ fun ShopScreen(
                 uiState.penProducts.toPenShopContent(
                     priceCalculator = uiState.pricePenCalculator,
                 ) {
-                    true
+                   uiState.isLocked(it.id)
                 }
             }
             1 -> {
                 uiState.canvasProducts.toShopContent(
                     priceCalculator = uiState.priceCanvasCalculator,
                 ) {
-                    true
+                    uiState.isLocked(it.id)
                 }
             }
         }
-
-
 
     }
 }

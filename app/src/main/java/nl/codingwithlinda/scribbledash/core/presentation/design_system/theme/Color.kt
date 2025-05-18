@@ -83,15 +83,16 @@ val CoralReef = Color(0xFFFF6F61)
 val MajesticIndigo = Color(0xFF4B0082)
 val CopperAura = Color(0xFFB87333)
 
+val rainbowColors = listOf(
+    Color(0xFFFB02FB), // Magenta
+    Color(0xFF0000FF), // Blue
+    Color(0xFF00EEFF), // Cyan
+    Color(0xFF008000), // Green
+    Color(0xFFFFFF00), // Yellow
+    Color(0xFFFFA500), // Orange
+    Color(0xFFFF0000), // Red
+)
 // Legendary Pen Colors
 val RainbowPenBrush = Brush.linearGradient(
-    colors = listOf(
-        Color(0xFFFB02FB), // Magenta
-        Color(0xFF0000FF), // Blue
-        Color(0xFF00EEFF), // Cyan
-        Color(0xFF008000), // Green
-        Color(0xFFFFFF00), // Yellow
-        Color(0xFFFFA500), // Orange
-        Color(0xFFFF0000), // Red
-    )
+    colors = rainbowColors
 )

@@ -23,6 +23,7 @@ import nl.codingwithlinda.scribbledash.feature_shop.presentation.model.toUi
 fun List<CanvasInTier>.toShopContent(
     calculatePrice: (product: CanvasInTier) -> Int,
     isLocked: (product: ShopProduct) -> Boolean,
+    isSelected: (product: ShopProduct) -> Boolean,
     onItemClick: (productId: String, price: Int) -> Unit
 ) {
 
@@ -40,6 +41,7 @@ fun List<CanvasInTier>.toShopContent(
             ShopItem(
                 title = item.tier.name,
                 isLocked = isLocked(item.product),
+                isSelected = isSelected(item.product),
                 price = price,
                 bgColor = tierToContainerColor(item.tier),
                 fgColor = tierToColor(item.tier),

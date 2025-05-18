@@ -10,18 +10,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.core.data.shop.tiers.tierToColor
 import nl.codingwithlinda.scribbledash.core.data.shop.tiers.tierToContainerColor
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.PenInTier
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.White
+import nl.codingwithlinda.scribbledash.feature_shop.presentation.model.toUi
 
 @Composable
 fun List<PenInTier>.toPenShopContent(
     calculatePrice: (product: PenInTier) -> Int,
     isLocked: (product: ShopProduct) -> Boolean,
+    isSelected: (product: ShopProduct) -> Boolean,
     onItemClick: (productId: String, price: Int) -> Unit,
 ) {
 
@@ -39,18 +40,16 @@ fun List<PenInTier>.toPenShopContent(
             ShopItem(
                 title = item.tier.name,
                 isLocked = isLocked(item.product),
+                isSelected = isSelected(item.product),
                 price = price,
                 bgColor = tierToContainerColor(item.tier),
                 fgColor = tierToColor(item.tier),
                 content = {
-                    PenShopContent(
-                        centralImage = item.product.imageResourceId,
-                        centralImageColor = Color(item.product.color),
+                    item.product.toUi(
                         modifier = Modifier.background(
                             color = White,
                             shape = RoundedCornerShape(25)
                         )
-
                     )
                 },
                 onItemClick = {

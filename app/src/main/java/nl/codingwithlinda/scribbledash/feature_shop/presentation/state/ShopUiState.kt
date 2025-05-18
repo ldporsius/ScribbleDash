@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.feature_shop.presentation.state
 import nl.codingwithlinda.scribbledash.core.data.shop.sales.prices.PriceForTierCanvasCalculator
 import nl.codingwithlinda.scribbledash.core.data.shop.sales.prices.PriceForTierPenCalculator
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.prices.PriceCalculator
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.sales.ShoppingCart
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.CanvasInTier
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.PenInTier
 
@@ -12,11 +13,16 @@ data class ShopUiState(
     val penProducts: List<PenInTier> = emptyList(),
     val availablePenProducts: List<String> = emptyList(),
     val canvasProducts: List<CanvasInTier> = emptyList(),
-    val availableCanvasProducts: List<String> = emptyList()
+    val availableCanvasProducts: List<String> = emptyList(),
+    val shoppingCart: ShoppingCart = ShoppingCart(),
+    val selectedPenId: String = "",
 
 ){
     fun isPenLocked(productId: String): Boolean{
         return productId !in availablePenProducts
+    }
+    fun isPenSelected(productId: String): Boolean{
+        return productId == selectedPenId
     }
 
     fun isCanvasLocked(productId: String): Boolean{

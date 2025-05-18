@@ -28,24 +28,35 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.json.JsonNull.content
 import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CounterComponent
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.BasicTierColor
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.util.applyIf
 
 @Composable
 fun ShopItem(
     title: String = "BASIC",
     price: Int,
     isLocked: Boolean = true,
+    isSelected: Boolean = false,
     content: @Composable () -> Unit,
     fgColor: Color = MaterialTheme.colorScheme.onSurface,
     bgColor: Color = BasicTierColor,
     onItemClick: () -> Unit,
     modifier: Modifier = Modifier) {
+
+    val selectedColor = Color.Green
+    println("Selected Shop Item: $isSelected")
     Box(
         modifier = modifier
+            .applyIf(isSelected){
+                border(width = 2.dp,
+                    color = selectedColor,
+                    shape = RoundedCornerShape(10))
+            }
     ){
         Box(modifier = Modifier
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(10))

@@ -26,6 +26,14 @@ class AccountManager {
         activeUser?.balance() ?: balance
     }
 
+    val transactions = _activeUser.value?.let {
+        it.transactions.toList()
+    } ?: emptyList()
+
+    fun userOwnsProduct(userAccountId: String, productId: String): Boolean {
+        val userAccount = userAccounts.find { it.id == userAccountId } ?: return false
+        return userAccount.transactions.any { it.productId == productId }
+    }
     fun processPurchase(userAccountId: String, productId: String, price: Int) {
         val userAccount = userAccounts.find { it.id == userAccountId } ?: return
         val purchase = Purchase(

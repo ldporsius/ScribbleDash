@@ -11,12 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import nl.codingwithlinda.scribbledash.R
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.sales.ShoppingCart
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CounterComponent
 import nl.codingwithlinda.scribbledash.feature_shop.presentation.components.toPenShopContent
 import nl.codingwithlinda.scribbledash.feature_shop.presentation.components.toShopContent
@@ -30,6 +32,9 @@ fun ShopScreen(
     onAction: (ShopAction) -> Unit
 ) {
 
+    val selectedPenId = remember(uiState.selectedPenId) {
+        mutableStateOf(uiState.selectedPenId)
+    }
     var selectedTab by remember { mutableIntStateOf(0) }
 
     Column {
@@ -74,7 +79,12 @@ fun ShopScreen(
                     isLocked = {
                         uiState.isPenLocked(it.id)
                     },
+                    isSelected = {
+                        println("Pen in basket: ${selectedPenId.value == it.id}")
+                        selectedPenId.value == it.id
+                    },
                     onItemClick = {id, price ->
+                        //selectedPenId.value = id
                         onAction(ShopAction.ItemClickPen(id, price))
                     }
                 )
@@ -86,6 +96,9 @@ fun ShopScreen(
                     },
                     isLocked = {
                         uiState.isCanvasLocked(it.id)
+                    },
+                    isSelected = {
+                        uiState.shoppingCart.canvas?.id == it.id
                     },
                     onItemClick = {id, price ->
                         onAction(ShopAction.ItemClickCanvas(id, price))

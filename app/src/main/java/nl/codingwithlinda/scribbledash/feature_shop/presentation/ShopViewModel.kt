@@ -8,7 +8,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.UserAccount
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.PenProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.sales.SalesManager
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.sales.ShoppingCart
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.CanvasInTier
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.PenInTier
 import nl.codingwithlinda.scribbledash.feature_shop.presentation.state.ShopAction
@@ -18,9 +20,10 @@ import nl.codingwithlinda.scribbledash.feature_shop.presentation.state.ShopUiSta
 class ShopViewModel(
     private val penSalesManager: SalesManager<PenInTier>,
     private val canvasSalesManager: SalesManager<CanvasInTier>,
-    private val userAccount: UserAccount
-): ViewModel() {
+    private val userAccount: UserAccount,
 
+): ViewModel() {
+    private val shoppingCart = ShoppingCart()
 
     private val _uiState = MutableStateFlow(ShopUiState())
     val uiState = _uiState.asStateFlow()
@@ -44,12 +47,19 @@ class ShopViewModel(
                 )
             }
         }
+        updatePenUi()
+        updateCanvasUi()
     }
 
     fun handleAction(action: ShopAction){
         when(action){
             is ShopAction.ItemClickCanvas -> {
                 viewModelScope.launch {
+                    if (canvasSalesManager.userOwnsProduct(productId = action.productId, userAccountId = userAccount.id)){
+                        return@launch
+
+                    }
+
                     if (canvasSalesManager.userCanAffordProduct(
                             userAccountId = userAccount.id,
                             price = action.price
@@ -68,6 +78,23 @@ class ShopViewModel(
             }
             is ShopAction.ItemClickPen -> {
                 viewModelScope.launch {
+
+                    if (penSalesManager.userOwnsProduct(productId = action.productId, userAccountId = userAccount.id)){
+                        println("SHOP VIEWMODEL UPDATES SELECTED PEN ID: ${action.productId}")
+                        _uiState.update {
+                            it.copy(
+                                selectedPenId = action.productId
+                            )
+                        }
+
+                        val pen = penSalesManager.getProductsPerTier().values.flatten().find { it.product.id == action.productId } ?: return@launch
+
+                         putPenInBasket(pen.product).let { shoppingCart ->
+
+                        }
+                        return@launch
+
+                    }
                     if (penSalesManager.userCanAffordProduct(
                             userAccountId = userAccount.id,
                             price = action.price
@@ -87,6 +114,12 @@ class ShopViewModel(
         }
     }
 
+    private fun putPenInBasket(penProduct: PenProduct): ShoppingCart {
+        return shoppingCart.copy(
+            pen = penProduct
+        )
+    }
+
     private fun updatePenUi(){
         penSalesManager.productsAvailableToUser(userAccount).let { products ->
             _uiState.update {
@@ -97,7 +130,6 @@ class ShopViewModel(
         }
     }
     private fun updateCanvasUi(){
-
         canvasSalesManager.productsAvailableToUser(userAccount).let { products ->
             _uiState.update {
                 it.copy(

@@ -19,6 +19,9 @@ abstract class SalesManager<P: ProductInTier>(
         return userAccount.transactions.map { it.productId } + freeProducts().map { it.product.id }
     }
 
+    fun userOwnsProduct(userAccountId: String, productId: String): Boolean {
+        return accountManager.userOwnsProduct(userAccountId, productId) || freeProducts().any { it.product.id == productId }
+    }
 
     fun userCanAffordProduct(
         userAccountId: String,

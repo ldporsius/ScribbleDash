@@ -10,7 +10,7 @@ class CanvasColorSoftPowderBlue: CanvasColorProduct() {
     override val color: Int
         get() = SoftPowderBlue.toArgb()
     override val id: String
-        get() = "CanvasColorWhite"
+        get() = this::class.java.simpleName
     override val title: UiText
         get() =  UiText.DynamicText("White")
     override val price: Int

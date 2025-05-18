@@ -10,7 +10,7 @@ class CanvasColorLightSageGreen: CanvasColorProduct() {
     override val color: Int
         get() = LightSageGreen.toArgb()
     override val id: String
-        get() = "CanvasColorWhite"
+        get() = this::class.java.simpleName
     override val title: UiText
         get() =  UiText.DynamicText("White")
     override val price: Int

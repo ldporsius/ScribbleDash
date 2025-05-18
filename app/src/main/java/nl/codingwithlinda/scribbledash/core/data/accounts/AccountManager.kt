@@ -47,6 +47,14 @@ class AccountManager {
         }
     }
 
+    fun processReward(coins: Int){
+        _activeUser.value?.addCoins(coins) ?: return
+        _observableBalance.update {
+            it + coins
+        }
+
+    }
+
     fun balance(userAccountId: String): Int {
         val userAccount = userAccounts.find { it.id == userAccountId } ?: return 0
         return userAccount.balance()

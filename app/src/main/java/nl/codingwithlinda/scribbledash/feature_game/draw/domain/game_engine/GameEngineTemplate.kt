@@ -4,6 +4,7 @@ import android.graphics.Path
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
@@ -12,6 +13,7 @@ import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.model.Rating
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
+import nl.codingwithlinda.scribbledash.core.domain.ratings.RewardCalculator
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation.gameMode
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
@@ -22,6 +24,7 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 abstract class GameEngineTemplate(
     private val gamesManager: GamesManager,
     private val exampleProvider: DrawExampleProvider,
+    private val accountManager: AccountManager
 ) {
     private var level: GameLevel = GameLevel.BEGINNER
 
@@ -167,5 +170,9 @@ abstract class GameEngineTemplate(
     }
     open suspend fun persistResult(){
         gamesManager.updateLatestGame(gameMode, results)
+
+        val reward = RewardCalculator.calculateReward(getRating(), level)
+
+        accountManager.processReward(reward)
     }
 }

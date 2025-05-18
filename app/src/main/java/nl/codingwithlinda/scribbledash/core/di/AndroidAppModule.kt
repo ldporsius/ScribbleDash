@@ -35,7 +35,8 @@ class AndroidAppModule(
 
     private val gameEngineFactory =  AndroidGameEngineFactory(
         exampleProvider = drawExampleProvider,
-        gamesManager = gamesManager
+        gamesManager = gamesManager,
+        accountManager = accountManager
     )
     override fun gameEngine(gameMode: GameMode): GameEngineTemplate {
         return gameEngineFactory.createEngine(gameMode)

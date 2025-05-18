@@ -1,6 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine
 
 import android.graphics.Path
+import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
@@ -10,10 +11,12 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.Game
 
 class OneRoundGameEngine(
     private val exampleProvider: DrawExampleProvider,
-    private val gamesManager: GamesManager
+    private val gamesManager: GamesManager,
+    accountManager: AccountManager
 ): GameEngineTemplate(
     exampleProvider = exampleProvider,
-    gamesManager = gamesManager
+    gamesManager = gamesManager,
+    accountManager = accountManager
 ) {
     override val gameMode: GameMode
         get() = GameMode.ONE_ROUND_WONDER

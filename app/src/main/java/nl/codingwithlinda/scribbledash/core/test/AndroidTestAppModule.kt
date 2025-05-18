@@ -40,15 +40,18 @@ class AndroidTestAppModule(
 
     private val testGameEngine = TestGameEngine(
         exampleProvider = drawExampleProvider,
-        gamesManager = gamesManager
+        gamesManager = gamesManager,
+        accountManager
     )
     private val oneRoundGameEngine = OneRoundGameEngine(
         exampleProvider = drawExampleProvider,
-        gamesManager = gamesManager
+        gamesManager = gamesManager,
+        accountManager
     )
     private val speedDrawGameEngine = SpeedDrawGameEngine(
         exampleProvider = drawExampleProvider,
-        gamesManager = gamesManager
+        gamesManager = gamesManager,
+        accountManager
     )
 
     override fun gameEngine(gameMode: GameMode): GameEngineTemplate {

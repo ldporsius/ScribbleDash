@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.core.data.shop.sales
 
+import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.PenManager
 import nl.codingwithlinda.scribbledash.core.data.shop.sales.prices.DefaultPriceCalculator
 import nl.codingwithlinda.scribbledash.core.data.shop.sales.prices.PriceForTierPenCalculator
@@ -7,10 +8,9 @@ import nl.codingwithlinda.scribbledash.core.domain.model.shop.sales.SalesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.PenInTier
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.Tier
 
-class PensSalesManager: SalesManager<PenInTier>() {
-
-    private val priceCalculator = DefaultPriceCalculator()
-    private val priceForTierCalculator = PriceForTierPenCalculator()
+class PensSalesManager(
+    accountManager: AccountManager
+): SalesManager<PenInTier>(accountManager) {
 
     private val pensPerTier = mapOf(
         Tier.FREE to PenManager.pensFreeTier.map { product ->
@@ -44,5 +44,7 @@ class PensSalesManager: SalesManager<PenInTier>() {
        return pensPerTier
     }
 
-
+    override fun freeProducts(): List<PenInTier> {
+        return pensPerTier[Tier.FREE] ?: emptyList()
+    }
 }

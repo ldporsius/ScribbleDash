@@ -24,6 +24,11 @@ class MainActivity : ComponentActivity() {
                 ScribbleDashApplication.appModule
             }
 
+        appModule.accountManager.setActiveUser(
+            appModule.accountManager.userAccount1
+        )
+
+
         setContent {
             LaunchedEffect(true) {
                 appModule.gamesManager.clear()

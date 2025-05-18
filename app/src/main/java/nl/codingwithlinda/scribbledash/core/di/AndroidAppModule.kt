@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.core.di
 import android.app.Application
 import androidx.room.Room
 import nl.codingwithlinda.room_persistence.database.ScribbleDatabase
+import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.data.local_cache.RoomGamesAccess
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
@@ -39,4 +40,7 @@ class AndroidAppModule(
     override fun gameEngine(gameMode: GameMode): GameEngineTemplate {
         return gameEngineFactory.createEngine(gameMode)
     }
+
+    override val accountManager: AccountManager
+        get() = AccountManager()
 }

@@ -151,6 +151,7 @@ fun ScribbleDashApp(
                     composable<HomeNavRoute> {
 
                         HomeScreen(
+                            accountBalance = appModule.accountManager.observableBalanceActiveUser.collectAsStateWithLifecycle(0).value,
                             gameModes = GameMode.entries.map { it.toUi() },
                             actionOnGameMode = {
                                 GameModeNavigation.gameMode = it
@@ -173,7 +174,7 @@ fun ScribbleDashApp(
                         )
                     }
 
-                    shopNavGraph()
+                    shopNavGraph(accountManager = appModule.accountManager)
                 }
             }
         }

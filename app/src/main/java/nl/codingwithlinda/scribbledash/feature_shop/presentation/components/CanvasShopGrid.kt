@@ -23,6 +23,7 @@ import nl.codingwithlinda.scribbledash.feature_shop.presentation.model.toUi
 fun List<CanvasInTier>.toShopContent(
     calculatePrice: (product: CanvasInTier) -> Int,
     isLocked: (product: ShopProduct) -> Boolean,
+    onItemClick: (productId: String, price: Int) -> Unit
 ) {
 
     LazyVerticalGrid(
@@ -35,10 +36,11 @@ fun List<CanvasInTier>.toShopContent(
         items(this@toShopContent.size){
                 index ->
             val item = this@toShopContent[index]
+            val price = calculatePrice(item)
             ShopItem(
                 title = item.tier.name,
                 isLocked = isLocked(item.product),
-                price = calculatePrice(item),
+                price = price,
                 bgColor = tierToContainerColor(item.tier),
                 fgColor = tierToColor(item.tier),
                 content = {
@@ -47,7 +49,7 @@ fun List<CanvasInTier>.toShopContent(
                     )
                 },
                 onItemClick = {
-
+                    onItemClick(item.product.id, price)
                 }
             )
         }

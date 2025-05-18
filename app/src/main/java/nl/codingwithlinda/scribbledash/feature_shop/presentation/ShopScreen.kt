@@ -25,6 +25,7 @@ import nl.codingwithlinda.scribbledash.feature_shop.presentation.state.ShopUiSta
 
 @Composable
 fun ShopScreen(
+    accountBalance: Int,
     uiState: ShopUiState,
     onAction: (ShopAction) -> Unit
 ) {
@@ -42,9 +43,9 @@ fun ShopScreen(
         ) {
             Text(text = "Shop")
             CounterComponent(
-                text = "300",
+                text = "$accountBalance",
                 imageResourceId = R.drawable.coin,
-                imageSize = 20.dp,
+                imageSize = 24.dp,
             )
         }
 
@@ -71,10 +72,10 @@ fun ShopScreen(
                         uiState.pricePenCalculator.calculatePrice(it)
                     },
                     isLocked = {
-                        uiState.isLocked(it.id)
+                        uiState.isPenLocked(it.id)
                     },
-                    onItemClick = {
-                        onAction(ShopAction.ItemClickPen(it.id))
+                    onItemClick = {id, price ->
+                        onAction(ShopAction.ItemClickPen(id, price))
                     }
                 )
             }
@@ -84,7 +85,10 @@ fun ShopScreen(
                         uiState.priceCanvasCalculator.calculatePrice(it)
                     },
                     isLocked = {
-                        uiState.isLocked(it.id)
+                        uiState.isCanvasLocked(it.id)
+                    },
+                    onItemClick = {id, price ->
+                        onAction(ShopAction.ItemClickCanvas(id, price))
                     }
                 )
             }

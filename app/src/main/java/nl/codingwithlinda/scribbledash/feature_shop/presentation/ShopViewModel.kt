@@ -1,14 +1,18 @@
 package nl.codingwithlinda.scribbledash.feature_shop.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.UserAccount
+import kotlinx.coroutines.launch
+import nl.codingwithlinda.scribbledash.core.domain.model.accounts.UserAccount
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.sales.SalesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.CanvasInTier
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.PenInTier
 import nl.codingwithlinda.scribbledash.feature_shop.presentation.state.ShopAction
+import nl.codingwithlinda.scribbledash.feature_shop.presentation.state.ShopEvent
 import nl.codingwithlinda.scribbledash.feature_shop.presentation.state.ShopUiState
 
 class ShopViewModel(
@@ -20,6 +24,8 @@ class ShopViewModel(
 
     private val _uiState = MutableStateFlow(ShopUiState())
     val uiState = _uiState.asStateFlow()
+
+    val eventChannel = Channel<ShopEvent>()
 
     init {
         penSalesManager.getProductsPerTier().let { pens ->
@@ -43,21 +49,59 @@ class ShopViewModel(
     fun handleAction(action: ShopAction){
         when(action){
             is ShopAction.ItemClickCanvas -> {
-                val product = _uiState.value.canvasProducts.find { it.product.id == action.productId } ?: return
-                penSalesManager.buyProduct(product.product, userAccount)
+                viewModelScope.launch {
+                    if (canvasSalesManager.userCanAffordProduct(
+                            userAccountId = userAccount.id,
+                            price = action.price
+                        )
+                    ) {
+                        canvasSalesManager.buyProduct(
+                            productId = action.productId,
+                            userAccountId = userAccount.id,
+                            price = action.price
+                        )
+                        updateCanvasUi()
+                    } else {
+                        eventChannel.send(ShopEvent.BalanceInsufficient)
+                    }
+                }
             }
             is ShopAction.ItemClickPen -> {
-                val product = _uiState.value.penProducts.find { it.product.id == action.productId } ?: return
-                penSalesManager.buyProduct(product.product, userAccount)
+                viewModelScope.launch {
+                    if (penSalesManager.userCanAffordProduct(
+                            userAccountId = userAccount.id,
+                            price = action.price
+                        )
+                    ) {
+                        penSalesManager.buyProduct(
+                            productId = action.productId,
+                            userAccountId = userAccount.id,
+                            price = action.price
+                        )
+                        updatePenUi()
+                    } else {
+                        eventChannel.send(ShopEvent.BalanceInsufficient)
+                    }
+                }
             }
         }
     }
 
-    private fun updateUi(){
-        penSalesManager.productsBoughtByUser(userAccount).let {products ->
+    private fun updatePenUi(){
+        penSalesManager.productsAvailableToUser(userAccount).let { products ->
             _uiState.update {
                 it.copy(
                     availablePenProducts = products
+                )
+            }
+        }
+    }
+    private fun updateCanvasUi(){
+
+        canvasSalesManager.productsAvailableToUser(userAccount).let { products ->
+            _uiState.update {
+                it.copy(
+                    availableCanvasProducts = products
                 )
             }
         }

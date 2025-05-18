@@ -12,9 +12,14 @@ data class ShopUiState(
     val penProducts: List<PenInTier> = emptyList(),
     val availablePenProducts: List<String> = emptyList(),
     val canvasProducts: List<CanvasInTier> = emptyList(),
+    val availableCanvasProducts: List<String> = emptyList()
 
 ){
-    fun isLocked(productId: String): Boolean{
+    fun isPenLocked(productId: String): Boolean{
         return productId !in availablePenProducts
+    }
+
+    fun isCanvasLocked(productId: String): Boolean{
+        return productId !in availableCanvasProducts
     }
 }

@@ -30,6 +30,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 
 @Composable
 fun HomeScreen(
+    accountBalance: Int,
     gameModes: List<GameModeUi>,
     actionOnGameMode: (GameMode) -> Unit
 ) {
@@ -49,7 +50,7 @@ fun HomeScreen(
                 modifier = Modifier
             )
             CounterComponent(
-                text = "0",
+                text = "$accountBalance",
                 imageSize = 24.dp,
                 imageResourceId = R.drawable.coin
             )

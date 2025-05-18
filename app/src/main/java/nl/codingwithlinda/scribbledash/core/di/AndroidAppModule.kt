@@ -1,6 +1,11 @@
 package nl.codingwithlinda.scribbledash.core.di
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import nl.codingwithlinda.room_persistence.database.ScribbleDatabase
 import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
@@ -11,6 +16,9 @@ import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.AndroidGameEngineFactory
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
+
+val Context.DataStore by preferencesDataStore("coins")
+val DATASTORE_BALANCE_KEY = intPreferencesKey("balance")
 
 class AndroidAppModule(
     private val application: Application
@@ -43,5 +51,9 @@ class AndroidAppModule(
     }
 
     override val accountManager: AccountManager
-        get() = AccountManager()
+        get() = AccountManager(datastore)
+
+
+    override val datastore: DataStore<Preferences>
+        = application.DataStore
 }

@@ -1,5 +1,7 @@
 package nl.codingwithlinda.scribbledash.core.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.local_cache.RoomGamesAccess
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
@@ -21,4 +23,6 @@ interface AppModule {
     val ratingTextGenerator: RatingTextGenerator
 
     val accountManager: AccountManager
+
+    val datastore : DataStore<Preferences>
 }

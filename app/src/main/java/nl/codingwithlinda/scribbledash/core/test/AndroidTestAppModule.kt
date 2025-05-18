@@ -1,16 +1,18 @@
 package nl.codingwithlinda.scribbledash.core.test
 
 import android.app.Application
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.room.Room
 import nl.codingwithlinda.room_persistence.database.ScribbleDatabase
 import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.data.local_cache.RoomGamesAccess
 import nl.codingwithlinda.scribbledash.core.di.AppModule
+import nl.codingwithlinda.scribbledash.core.di.DataStore
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.AndroidGameEngineFactory
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.SpeedDrawGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.TestGameEngine
@@ -69,5 +71,8 @@ class AndroidTestAppModule(
     }
 
     override val accountManager: AccountManager
-        get() = AccountManager()
+        get() = AccountManager(datastore)
+
+    override val datastore: DataStore<Preferences>
+        get() = application.applicationContext.DataStore
 }

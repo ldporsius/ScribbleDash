@@ -33,7 +33,7 @@ abstract class SalesManager<P: ProductInTier>(
         return price <= balance
     }
 
-    fun buyProduct(productId: String, price: Int, userAccountId: String) {
+    suspend fun buyProduct(productId: String, price: Int, userAccountId: String) {
         accountManager.processPurchase(userAccountId, productId, price)
     }
 

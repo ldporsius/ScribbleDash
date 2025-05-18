@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -34,6 +36,7 @@ import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProdu
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CounterComponent
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.BasicTierColor
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.success
 import nl.codingwithlinda.scribbledash.core.presentation.util.applyIf
 
 @Composable
@@ -41,27 +44,30 @@ fun ShopItem(
     title: String = "BASIC",
     price: Int,
     isLocked: Boolean = true,
-    isSelected: Boolean = false,
+    isSelected: ()->Boolean,
     content: @Composable () -> Unit,
     fgColor: Color = MaterialTheme.colorScheme.onSurface,
     bgColor: Color = BasicTierColor,
     onItemClick: () -> Unit,
     modifier: Modifier = Modifier) {
 
-    val selectedColor = Color.Green
-    println("Selected Shop Item: $isSelected")
+    val selectedColor = success
+
     Box(
         modifier = modifier
-            .applyIf(isSelected){
+            .requiredWidth(122.dp)
+            .height(160.dp)
+    ){
+        Box(modifier = Modifier
+            .width(110.dp)
+            .height(152.dp)
+            .align(Alignment.BottomStart)
+            .applyIf(isSelected()){
                 border(width = 2.dp,
                     color = selectedColor,
                     shape = RoundedCornerShape(10))
             }
-    ){
-        Box(modifier = Modifier
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(10))
-            .width(110.dp)
-            .height(152.dp)
             .background(color = bgColor, shape = RoundedCornerShape(10))
             .clickable {
                 onItemClick()
@@ -125,6 +131,15 @@ fun ShopItem(
 
             }
         }
+
+        if (isSelected()){
+            ProductSelectedIcon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .align(Alignment.TopEnd)
+
+            )
+        }
     }
 }
 
@@ -135,6 +150,7 @@ private fun ShopItemPreview() {
         ShopItem(
             price = 10,
             content = {},
+            isSelected = {true},
             onItemClick = {}
         )
     }

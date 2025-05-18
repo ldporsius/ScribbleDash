@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.json.JsonNull.content
 import nl.codingwithlinda.scribbledash.core.data.shop.tiers.tierToColor
 import nl.codingwithlinda.scribbledash.core.data.shop.tiers.tierToContainerColor
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.prices.PriceCalculator
@@ -41,7 +42,7 @@ fun List<CanvasInTier>.toShopContent(
             ShopItem(
                 title = item.tier.name,
                 isLocked = isLocked(item.product),
-                isSelected = isSelected(item.product),
+                isSelected = {isSelected(item.product)},
                 price = price,
                 bgColor = tierToContainerColor(item.tier),
                 fgColor = tierToColor(item.tier),

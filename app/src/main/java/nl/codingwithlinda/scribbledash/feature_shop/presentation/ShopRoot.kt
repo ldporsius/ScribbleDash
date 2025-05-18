@@ -55,7 +55,7 @@ fun ShopRoot(
             )
             ShopScreen(
                 accountBalance = accountViewModel.balance.collectAsStateWithLifecycle().value,
-                uiState = viewModel.uiState.value,
+                uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
                 onAction = viewModel::handleAction
             )
 

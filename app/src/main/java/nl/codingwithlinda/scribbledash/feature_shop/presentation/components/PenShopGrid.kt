@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.json.JsonNull.content
 import nl.codingwithlinda.scribbledash.core.data.shop.tiers.tierToColor
 import nl.codingwithlinda.scribbledash.core.data.shop.tiers.tierToContainerColor
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
@@ -29,9 +30,9 @@ fun List<PenInTier>.toPenShopContent(
     LazyVerticalGrid(
         modifier = Modifier.fillMaxWidth(),
         columns = GridCells.Fixed(3),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+        horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(8.dp)
+        contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         items(this@toPenShopContent.size){
             index ->
@@ -40,7 +41,7 @@ fun List<PenInTier>.toPenShopContent(
             ShopItem(
                 title = item.tier.name,
                 isLocked = isLocked(item.product),
-                isSelected = isSelected(item.product),
+                isSelected = {isSelected(item.product)},
                 price = price,
                 bgColor = tierToContainerColor(item.tier),
                 fgColor = tierToColor(item.tier),

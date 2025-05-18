@@ -87,11 +87,6 @@ class ShopViewModel(
                             )
                         }
 
-                        val pen = penSalesManager.getProductsPerTier().values.flatten().find { it.product.id == action.productId } ?: return@launch
-
-                         putPenInBasket(pen.product).let { shoppingCart ->
-
-                        }
                         return@launch
 
                     }

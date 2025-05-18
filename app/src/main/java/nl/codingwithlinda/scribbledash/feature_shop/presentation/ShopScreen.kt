@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,9 +33,7 @@ fun ShopScreen(
     onAction: (ShopAction) -> Unit
 ) {
 
-    val selectedPenId = remember(uiState.selectedPenId) {
-        mutableStateOf(uiState.selectedPenId)
-    }
+    val selectedPenId by rememberUpdatedState(uiState.selectedPenId)
     var selectedTab by remember { mutableIntStateOf(0) }
 
     Column {
@@ -80,8 +79,8 @@ fun ShopScreen(
                         uiState.isPenLocked(it.id)
                     },
                     isSelected = {
-                        println("Pen in basket: ${selectedPenId.value == it.id}")
-                        selectedPenId.value == it.id
+                        println("Pen sits in basket: ${selectedPenId == it.id}")
+                        selectedPenId == it.id
                     },
                     onItemClick = {id, price ->
                         //selectedPenId.value = id

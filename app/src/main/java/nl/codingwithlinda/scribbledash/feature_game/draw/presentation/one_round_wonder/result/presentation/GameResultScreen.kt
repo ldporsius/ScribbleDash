@@ -48,6 +48,8 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.core.test.testExampleDrawable
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons.CustomColoredButton
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CoinsEarnedComponent
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CounterComponent
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state.GameResultAction
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundGradient
@@ -57,6 +59,7 @@ fun GameResultScreen(
     examplePath: Path,
     userPath: List<Path>,
     ratingUi: RatingUi,
+    reward: Int,
     onAction: (GameResultAction) -> Unit
 ) {
 
@@ -197,6 +200,11 @@ fun GameResultScreen(
             textAlign = TextAlign.Center
         )
 
+        CoinsEarnedComponent(
+            coins = reward,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
         Spacer(modifier = Modifier.weight(1f))
         CustomColoredButton(
             text = "Try again",
@@ -230,6 +238,7 @@ private fun PreviewGameResultScreen() {
                 title = UiText.DynamicText("Woohoo"),
                 text = UiText.StringResource(R.string.feedback_good_1)
             ) ,
+            reward = 99,
             onAction = {}
         )
     }

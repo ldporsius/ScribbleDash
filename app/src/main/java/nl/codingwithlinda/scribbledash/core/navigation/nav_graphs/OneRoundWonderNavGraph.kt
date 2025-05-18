@@ -72,6 +72,7 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                         examplePath = viewModel.examplePath,
                         userPath = viewModel.userPath,
                         ratingUi = ratingUi,
+                        reward = gameEngine.coinsEarnedInLastestGame(),
                         onAction = { action ->
                             when (action) {
                                 GameResultAction.Close -> {

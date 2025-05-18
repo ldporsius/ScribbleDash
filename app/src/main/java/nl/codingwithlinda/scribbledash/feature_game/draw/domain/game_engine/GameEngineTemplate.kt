@@ -124,6 +124,9 @@ abstract class GameEngineTemplate(
         return gamesManager.isHighestNumberOfSuccesses(gameMode)
     }
 
+    fun coinsEarnedInLastestGame(): Int{
+        return RewardCalculator.calculateReward(getRating(), level)
+    }
     /////////private functions////////////////////////////////
     private suspend fun startGame(){
         results.clear()

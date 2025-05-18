@@ -59,6 +59,7 @@ import nl.codingwithlinda.scribbledash.feature_statistics.presentation.Statistic
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.backgroundLight
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.primary
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.tertiaryContainer
+import nl.codingwithlinda.scribbledash.feature_account.presentation.AccountViewModel
 
 @Composable
 fun ScribbleDashApp(
@@ -150,8 +151,17 @@ fun ScribbleDashApp(
                 ) {
                     composable<HomeNavRoute> {
 
+                        val accountViewModel = viewModel<AccountViewModel>(
+                            factory = viewModelFactory {
+                                initializer {
+                                    AccountViewModel(
+                                        accountManager = appModule.accountManager
+                                    )
+                                }
+                            }
+                        )
                         HomeScreen(
-                            accountBalance = appModule.accountManager.observableBalanceActiveUser.collectAsStateWithLifecycle(0).value,
+                            accountBalance = accountViewModel.balance.collectAsStateWithLifecycle(0).value,
                             gameModes = GameMode.entries.map { it.toUi() },
                             actionOnGameMode = {
                                 GameModeNavigation.gameMode = it

@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import nl.codingwithlinda.scribbledash.core.di.DATASTORE_BALANCE_KEY
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.Purchase
@@ -24,12 +25,20 @@ class AccountManager(
 
     private val _activeUser = MutableStateFlow<UserAccount?>(null)
 
-    fun setActiveUser(userAccount: UserAccount) {
+    suspend fun setActiveUser(userAccount: UserAccount) {
+        println("SETTING ACTIVE USER: ${userAccount.id}")
+
+        dataStore.data.firstOrNull()?.let {
+            println("DATASTORE BALANCE: ${it[DATASTORE_BALANCE_KEY]}")
+            userAccount.addCoins(it[DATASTORE_BALANCE_KEY] ?: 0)
+        }
         _activeUser.value = userAccount
+
+        println("ACTIVE USER BALANCE: ${userAccount.balance()}")
     }
 
-    val observableBalanceActiveUser = combine(_activeUser, dataStore.data) { activeUser, balance ->
-        balance[DATASTORE_BALANCE_KEY] ?: 0
+    val observableBalanceActiveUser = combine(_activeUser, dataStore.data) { activeUser, datastore ->
+        datastore[DATASTORE_BALANCE_KEY] ?: 0
     }
 
     fun userOwnsProduct(userAccountId: String, productId: String): Boolean {
@@ -62,6 +71,7 @@ class AccountManager(
     }
 
     private suspend fun updateBalanceInDataStore(userAccountId: String){
+        println("UPDATING BALANCE IN DATASTORE, BALANCE: ${balance(userAccountId)}")
         dataStore.edit {
             it[DATASTORE_BALANCE_KEY] = balance(userAccountId)
         }

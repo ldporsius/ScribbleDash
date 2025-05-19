@@ -12,21 +12,28 @@ class MultiColorPathCreator(
     private val colors: List<Color>
 ): PathCreator<MultiColorDrawPath> {
     override fun drawPath(path: List<Offset>): MultiColorDrawPath {
-        if (path.isEmpty()) return MultiColoredDrawPath(emptyList())
+        if (path.isEmpty()) {
+            println("MULTICOLORPATHCREATOR PATH IS EMPTY")
+            return MultiColoredDrawPath(emptyList())
+        }
 
         val paths = mutableListOf<ColoredPath>()
 
-        val chunkSize = (colors.size).coerceAtLeast(1)
+        val chunkSize = (colors.size).coerceAtLeast(10)
         path.chunked( chunkSize ).mapIndexed { index, offsets ->
 
             val colorIndex = index % colors.size
-            val color = colors.getOrElse(colorIndex, {Color.Transparent})
+            val color = colors.getOrElse(colorIndex, {Color.Black})
+
+            val previousOffset = path.getOrElse(index * chunkSize - 1, { path.first()})
+            println("MULTICOLORPATHCREATOR previous offset: $previousOffset")
 
             val subpath = Path()
 
-            subpath.moveTo(offsets.first().x, offsets.first().y)
-            offsets.onEach { offset ->
-                subpath.lineTo(offset.x, offset.y)
+            subpath.moveTo(previousOffset.x, previousOffset.y)
+
+            (0 until   offsets.size).onEach { i ->
+                subpath.lineTo(offsets[i].x, offsets[i].y)
             }
             paths.add(
                ColoredPath(
@@ -36,6 +43,7 @@ class MultiColorPathCreator(
             )
 
         }
+
 
         return MultiColoredDrawPath(
             paths = paths

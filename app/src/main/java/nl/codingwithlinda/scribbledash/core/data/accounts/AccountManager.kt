@@ -4,8 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import nl.codingwithlinda.scribbledash.core.di.DATASTORE_BALANCE_KEY
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.Purchase
@@ -19,11 +21,10 @@ class AccountManager(
     val userAccount1 = UserAccount(
         id = "1",
     )
-    private val userAccounts = listOf(
-        userAccount1
-    )
+
 
     private val _activeUser = MutableStateFlow<UserAccount?>(null)
+
 
     suspend fun setActiveUser(userAccount: UserAccount) {
         println("SETTING ACTIVE USER: ${userAccount.id}")
@@ -37,37 +38,40 @@ class AccountManager(
         println("ACTIVE USER BALANCE: ${userAccount.balance()}")
     }
 
-    val observableBalanceActiveUser = combine(_activeUser, dataStore.data) { activeUser, datastore ->
-        datastore[DATASTORE_BALANCE_KEY] ?: 0
-    }
+    val observableBalanceActiveUser = dataStore.data
+        .catch {
+            println("DATASTORE ERROR: ${it.message}")
+        }.map {
+            it[DATASTORE_BALANCE_KEY] ?: 0
+        }
+
 
     fun userOwnsProduct(userAccountId: String, productId: String): Boolean {
-        val userAccount = userAccounts.find { it.id == userAccountId } ?: return false
-        return userAccount.transactions.any { it.productId == productId }
+        return userAccount1.transactions.any { it.productId == productId }
     }
 
     suspend fun processPurchase(userAccountId: String, productId: String, price: Int) {
-        val userAccount = userAccounts.find { it.id == userAccountId } ?: return
+
         val purchase = Purchase(
             date = System.currentTimeMillis(),
             productId = productId,
             price = price
         )
-        userAccount.transactions.add(purchase)
+        userAccount1.transactions.add(purchase)
 
         updateBalanceInDataStore(userAccountId)
     }
 
     suspend fun processReward(coins: Int) {
-        _activeUser.value?.run {
+        userAccount1.run {
             addCoins(coins)
             updateBalanceInDataStore(id)
         }
     }
 
     fun balance(userAccountId: String): Int {
-        val userAccount = userAccounts.find { it.id == userAccountId } ?: return 0
-        return userAccount.balance()
+
+        return userAccount1.balance()
     }
 
     private suspend fun updateBalanceInDataStore(userAccountId: String){

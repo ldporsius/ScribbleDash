@@ -79,11 +79,9 @@ fun ShopScreen(
                         uiState.isPenLocked(it.id)
                     },
                     isSelected = {
-                        println("Pen sits in basket: ${selectedPenId == it.id}")
                         selectedPenId == it.id
                     },
                     onItemClick = {id, price ->
-                        //selectedPenId.value = id
                         onAction(ShopAction.ItemClickPen(id, price))
                     }
                 )

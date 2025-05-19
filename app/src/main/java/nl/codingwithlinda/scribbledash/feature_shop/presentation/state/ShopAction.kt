@@ -1,7 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_shop.presentation.state
 
-sealed interface ShopAction {
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
 
-    data class ItemClickPen(val productId: String, val price: Int): ShopAction
-    data class ItemClickCanvas(val productId: String, val price: Int): ShopAction
+sealed interface ShopAction {
+    data class ItemClick(val product: ShopProduct, val price: Int): ShopAction
 }

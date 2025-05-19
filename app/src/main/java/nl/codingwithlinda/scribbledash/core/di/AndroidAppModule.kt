@@ -13,6 +13,7 @@ import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampl
 import nl.codingwithlinda.scribbledash.core.data.local_cache.RoomGamesAccess
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.AndroidGameEngineFactory
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
@@ -51,9 +52,10 @@ class AndroidAppModule(
     }
 
     override val accountManager: AccountManager
-        get() = AccountManager(datastore)
+        get() = AccountManager.Instance(datastore)
 
+    override val shoppingCart: MyShoppingCart = MyShoppingCart(datastore)
 
     override val datastore: DataStore<Preferences>
-        = application.DataStore
+        get() = application.DataStore
 }

@@ -44,7 +44,10 @@ fun NavGraphBuilder.endlessModeNavGraph(
 
             NavHost(navController = navController, startDestination = EndlessDrawNavRoute){
                 composable< EndlessDrawNavRoute>{
-                    val gameDrawViewModel = ViewModelUtil.createGameDrawViewModel(gameEngine = gameEngine)
+                    val gameDrawViewModel = ViewModelUtil.createGameDrawViewModel(
+                        gameEngine = gameEngine,
+                        shoppingCart = appModule.shoppingCart
+                    )
 
                     val endlessDrawViewModel = viewModel<EndlessDrawViewModel>(
                         factory = viewModelFactory {

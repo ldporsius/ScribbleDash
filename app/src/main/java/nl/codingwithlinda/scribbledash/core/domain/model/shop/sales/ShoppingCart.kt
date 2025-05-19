@@ -1,9 +1,14 @@
 package nl.codingwithlinda.scribbledash.core.domain.model.shop.sales
 
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasProduct
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.PenProduct
-
 data class ShoppingCart(
-    val pen: PenProduct? = null,
-    val canvas: CanvasProduct? = null
-)
+    val penProductId : String? = null,
+    val canvasProductId: String? = null
+){
+    companion object{
+        const val PEN_PRODUCT_ID = "penProductId"
+        const val CANVAS_PRODUCT_ID = "canvasProductId"
+    }
+    override fun toString(): String{
+        return "$penProductId;$canvasProductId"
+    }
+}

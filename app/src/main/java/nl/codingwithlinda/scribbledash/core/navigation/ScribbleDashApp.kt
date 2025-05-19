@@ -184,7 +184,10 @@ fun ScribbleDashApp(
                         )
                     }
 
-                    shopNavGraph(accountManager = appModule.accountManager)
+                    shopNavGraph(
+                        accountManager = appModule.accountManager,
+                        shoppingCart = appModule.shoppingCart
+                    )
                 }
             }
         }

@@ -37,6 +37,7 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
 
                 composable<GameDrawNavRoute> {
                     GameDrawRoot(
+                        appModule = appModule,
                         gameEngine = gameEngine,
                         gameNavController = gameNavController,
                         topBar = {

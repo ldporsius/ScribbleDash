@@ -1,11 +1,9 @@
 package nl.codingwithlinda.scribbledash.core.domain.model.shop.products
 
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.prices.PriceCalculator
 
 abstract class CanvasProduct: ShopProduct{
-
+    override val type: ProductType = ProductType.CANVAS
 }
-
 
 abstract class CanvasImageProduct: CanvasProduct(){
     abstract val imageResourceId: Int

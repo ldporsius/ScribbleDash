@@ -25,7 +25,7 @@ fun List<CanvasInTier>.toShopContent(
     calculatePrice: (product: CanvasInTier) -> Int,
     isLocked: (product: ShopProduct) -> Boolean,
     isSelected: (product: ShopProduct) -> Boolean,
-    onItemClick: (productId: String, price: Int) -> Unit
+    onItemClick: (product: ShopProduct, price: Int) -> Unit
 ) {
 
     LazyVerticalGrid(
@@ -52,7 +52,7 @@ fun List<CanvasInTier>.toShopContent(
                     )
                 },
                 onItemClick = {
-                    onItemClick(item.product.id, price)
+                    onItemClick(item.product, price)
                 }
             )
         }

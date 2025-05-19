@@ -1,7 +1,7 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common
 
-import android.graphics.Color
-import androidx.compose.ui.graphics.asComposePath
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.NonCancellable
@@ -13,24 +13,31 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.PenManager
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
 import nl.codingwithlinda.scribbledash.core.domain.model.SingleDrawPath
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.BasicPenProduct
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.MultiColorPenProduct
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.PenProduct
+import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.mapping.coordinatesToPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.MultiColorPathCreator
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
+import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawExampleUiState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawState
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.GameDrawUiState
-import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawExampleUiState
 
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
     private val offsetParser: OffsetParser,
     private val pathDrawer: PathCreator<SingleDrawPath>,
-    private val gameEngine: GameEngineTemplate
+    private val gameEngine: GameEngineTemplate,
+    private val shoppingCart: MyShoppingCart
 ): ViewModel() {
     private val _uiState = MutableStateFlow(GameDrawUiState())
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())
@@ -58,24 +65,30 @@ class GameDrawViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DrawState.EXAMPLE)
 
     val uiState = combine(_uiState, offsets){ state, offsets ->
-        val path = offsets.map {
-            offsetParser.parseOffset(it)
-        }.let {
-            coordinatesToPath(it)
-        }.asComposePath()
 
-        val paths = if (path.isEmpty) emptyList() else listOf(path)
+        val coloredPaths = offsets.map {data->
+            splitPathIntoColors(penTool, data = data.path)
+        }.flatten()
+
         state.copy(
-            drawPaths = paths,
+            drawPaths = coloredPaths,
             canRedo = careTaker.canRedo()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _uiState.value)
+
+    private var penTool: PenProduct = PenManager.pensFreeTier[0]
+
 
     init {
         viewModelScope.launch {
             println("GameDrawViewModel init IS CALLED")
             gameEngine.start()
         }
+        viewModelScope.launch {
+            val penId = shoppingCart.getMyShoppingCart().penProductId ?: return@launch
+            penTool = PenManager.getPenById(penId)
+        }
+
     }
 
     fun handleAction(action: DrawAction){
@@ -84,7 +97,7 @@ class GameDrawViewModel(
 
                 val pathData = PathData(
                     id = System.currentTimeMillis().toString(),
-                    color = Color.BLACK,
+                    color = 0,
                     path = listOf(action.offset)
                 )
 
@@ -101,11 +114,11 @@ class GameDrawViewModel(
                     )
                     currentPath = currentPathCopy
 
-                    val drawPath = pathDrawer.drawPath(currentPathCopy.path).path
+                    val drawPath = splitPathIntoColors(penTool, currentPathCopy.path)
 
                     _uiState.update {
                         it.copy(
-                            currentPath = drawPath.asComposePath()
+                            currentPath = drawPath
                         )
                     }
                 }
@@ -119,7 +132,7 @@ class GameDrawViewModel(
                 }
                 _uiState.update {
                     it.copy(
-                        currentPath = null,
+                        currentPath = emptyList(),
                         canRedo = careTaker.canRedo(),
                     )
                 }
@@ -138,7 +151,7 @@ class GameDrawViewModel(
                 _uiState.update {
                     it.copy(
                         canUndo = canUndo(),
-                        currentPath = null,
+                        currentPath = emptyList(),
                     )
                 }
             }
@@ -188,6 +201,21 @@ class GameDrawViewModel(
         }
         currentPath = null
 
+    }
+
+    private fun splitPathIntoColors(penProduct: PenProduct, data: List<Offset>): List<ColoredPath> {
+
+        val colors = when(penProduct){
+           is BasicPenProduct -> listOf( penProduct.color)
+            is MultiColorPenProduct -> penProduct.colors
+
+            else -> emptyList()
+
+        }.map {
+            Color(it)
+        }
+        val multiColorPathCreator = MultiColorPathCreator(colors)
+        return multiColorPathCreator.drawPath(data).paths
     }
 
 }

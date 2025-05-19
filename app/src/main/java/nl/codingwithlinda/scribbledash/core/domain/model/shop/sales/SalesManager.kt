@@ -1,11 +1,8 @@
 package nl.codingwithlinda.scribbledash.core.domain.model.shop.sales
 
-import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.PenManager
 import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.UserAccount
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ProductInTier
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.PenInTier
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.Tier
 
 abstract class SalesManager<P: ProductInTier>(
@@ -36,5 +33,7 @@ abstract class SalesManager<P: ProductInTier>(
     suspend fun buyProduct(productId: String, price: Int, userAccountId: String) {
         accountManager.processPurchase(userAccountId, productId, price)
     }
+
+
 
 }

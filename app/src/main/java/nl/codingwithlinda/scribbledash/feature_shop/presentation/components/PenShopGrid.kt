@@ -24,7 +24,7 @@ fun List<PenInTier>.toPenShopContent(
     calculatePrice: (product: PenInTier) -> Int,
     isLocked: (product: ShopProduct) -> Boolean,
     isSelected: (product: ShopProduct) -> Boolean,
-    onItemClick: (productId: String, price: Int) -> Unit,
+    onItemClick: (product: ShopProduct, price: Int) -> Unit,
 ) {
 
     LazyVerticalGrid(
@@ -54,7 +54,7 @@ fun List<PenInTier>.toPenShopContent(
                     )
                 },
                 onItemClick = {
-                    onItemClick(item.product.id, price )
+                    onItemClick(item.product, price )
                 }
             )
         }

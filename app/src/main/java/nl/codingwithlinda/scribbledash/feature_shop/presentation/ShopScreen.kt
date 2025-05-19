@@ -81,8 +81,8 @@ fun ShopScreen(
                     isSelected = {
                         selectedPenId == it.id
                     },
-                    onItemClick = {id, price ->
-                        onAction(ShopAction.ItemClickPen(id, price))
+                    onItemClick = {product, price ->
+                        onAction(ShopAction.ItemClick(product, price))
                     }
                 )
             }
@@ -95,10 +95,10 @@ fun ShopScreen(
                         uiState.isCanvasLocked(it.id)
                     },
                     isSelected = {
-                        uiState.shoppingCart.canvas?.id == it.id
+                        uiState.selectedCanvasId == it.id
                     },
-                    onItemClick = {id, price ->
-                        onAction(ShopAction.ItemClickCanvas(id, price))
+                    onItemClick = {product, price ->
+                        onAction(ShopAction.ItemClick(product, price))
                     }
                 )
             }

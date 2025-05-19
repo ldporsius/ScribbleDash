@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.offset_parser.AndroidOffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
@@ -12,12 +13,15 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.Game
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.GameDrawViewModel
 
 object ViewModelUtil {
-    val pathCreator =
+    private val pathCreator =
         StraightPathCreator()
-    val offsetParser = AndroidOffsetParser
+    private val offsetParser = AndroidOffsetParser
 
     @Composable
-    fun createGameDrawViewModel(gameEngine: GameEngineTemplate): GameDrawViewModel{
+    fun createGameDrawViewModel(
+        gameEngine: GameEngineTemplate,
+        shoppingCart: MyShoppingCart
+    ): GameDrawViewModel{
         val careTaker = PathDataCareTaker()
 
         val factory = viewModelFactory {
@@ -26,7 +30,8 @@ object ViewModelUtil {
                     careTaker = careTaker,
                     offsetParser = offsetParser,
                     gameEngine = gameEngine,
-                    pathDrawer = pathCreator
+                    pathDrawer = pathCreator,
+                    shoppingCart = shoppingCart
                 )
             }
         }

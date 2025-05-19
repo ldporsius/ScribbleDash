@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.core.data.accounts
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -14,16 +15,26 @@ import nl.codingwithlinda.scribbledash.core.domain.model.accounts.Purchase
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.UserAccount
 
-class AccountManager(
+class AccountManager private constructor(
     private val dataStore: DataStore<Preferences>
 ) {
+
+    companion object{
+        @Volatile
+        private var instance: AccountManager? = null
+
+        @Synchronized
+       fun Instance(dataStore: DataStore<Preferences>): AccountManager {
+           if (instance == null){
+               instance = AccountManager(dataStore)
+           }
+            return instance!!
+       }
+    }
 
     val userAccount1 = UserAccount(
         id = "1",
     )
-
-
-    private val _activeUser = MutableStateFlow<UserAccount?>(null)
 
 
     suspend fun setActiveUser(userAccount: UserAccount) {
@@ -31,9 +42,9 @@ class AccountManager(
 
         dataStore.data.firstOrNull()?.let {
             println("DATASTORE BALANCE: ${it[DATASTORE_BALANCE_KEY]}")
+            userAccount.removeCoins(userAccount.coins)
             userAccount.addCoins(it[DATASTORE_BALANCE_KEY] ?: 0)
         }
-        _activeUser.value = userAccount
 
         println("ACTIVE USER BALANCE: ${userAccount.balance()}")
     }
@@ -60,6 +71,8 @@ class AccountManager(
         userAccount1.transactions.add(purchase)
 
         updateBalanceInDataStore(userAccountId)
+
+        println("PROCESSed PURCHASE, user owns: ${userAccount1.transactions}")
     }
 
     suspend fun processReward(coins: Int) {
@@ -70,7 +83,6 @@ class AccountManager(
     }
 
     fun balance(userAccountId: String): Int {
-
         return userAccount1.balance()
     }
 
@@ -78,6 +90,19 @@ class AccountManager(
         println("UPDATING BALANCE IN DATASTORE, BALANCE: ${balance(userAccountId)}")
         dataStore.edit {
             it[DATASTORE_BALANCE_KEY] = balance(userAccountId)
+        }
+    }
+
+    suspend fun donateCoins(amount: Int){
+        userAccount1.addCoins(amount)
+        dataStore.edit {
+            it[DATASTORE_BALANCE_KEY] = it[DATASTORE_BALANCE_KEY]?.plus(amount) ?: amount
+        }
+    }
+
+    suspend fun clearCoinsInDatastore(){
+        dataStore.edit {
+            it[DATASTORE_BALANCE_KEY] = 0
         }
     }
 }

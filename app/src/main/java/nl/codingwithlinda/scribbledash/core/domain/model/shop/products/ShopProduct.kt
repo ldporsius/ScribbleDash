@@ -6,5 +6,5 @@ interface ShopProduct {
     val id: String
     val title: UiText
     val price: Int
-
+    val type: ProductType
 }

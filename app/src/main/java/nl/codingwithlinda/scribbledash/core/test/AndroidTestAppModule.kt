@@ -12,6 +12,7 @@ import nl.codingwithlinda.scribbledash.core.di.AppModule
 import nl.codingwithlinda.scribbledash.core.di.DataStore
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.SpeedDrawGameEngine
@@ -39,6 +40,9 @@ class AndroidTestAppModule(
 
     override val gamesManager: GamesManager
         get() = GamesManager(gamesAccess)
+
+    override val accountManager: AccountManager
+            = AccountManager.Instance(datastore)
 
     private val testGameEngine = TestGameEngine(
         exampleProvider = drawExampleProvider,
@@ -70,8 +74,7 @@ class AndroidTestAppModule(
         }
     }
 
-    override val accountManager: AccountManager
-        get() = AccountManager(datastore)
+    override val shoppingCart: MyShoppingCart = MyShoppingCart(datastore)
 
     override val datastore: DataStore<Preferences>
         get() = application.applicationContext.DataStore

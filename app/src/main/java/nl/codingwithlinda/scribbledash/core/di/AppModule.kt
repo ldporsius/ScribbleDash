@@ -7,6 +7,7 @@ import nl.codingwithlinda.scribbledash.core.data.local_cache.RoomGamesAccess
 import nl.codingwithlinda.scribbledash.core.domain.draw_examples.DrawExampleProvider
 import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
+import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
@@ -23,6 +24,8 @@ interface AppModule {
     val ratingTextGenerator: RatingTextGenerator
 
     val accountManager: AccountManager
+
+    val shoppingCart: MyShoppingCart
 
     val datastore : DataStore<Preferences>
 }

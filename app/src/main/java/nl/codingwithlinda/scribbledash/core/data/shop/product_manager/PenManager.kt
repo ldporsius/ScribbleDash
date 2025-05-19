@@ -31,4 +31,10 @@ object PenManager {
     val pensLegendaryTier: List<PenProduct> = listOf(
         PenRainbow()
     )
+
+    private val allPens: List<PenProduct> = pensFreeTier + pensBasicTier + pensPremiumTier + pensLegendaryTier
+
+    fun getPenById(id: String): PenProduct {
+        return allPens.find { it.id == id } ?: PenMidnightBlack()
+    }
 }

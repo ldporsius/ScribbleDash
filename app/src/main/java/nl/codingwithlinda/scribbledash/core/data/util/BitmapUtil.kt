@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasColorProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasImageProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasProduct
@@ -168,6 +169,7 @@ fun List<Path>.toBitmapUiOnly(
 
 fun Context.bitmapFromCanvasProduct(product: CanvasProduct, requiredSize: Int,): Bitmap{
     val bm = Bitmap.createBitmap(requiredSize, requiredSize, Bitmap.Config.ARGB_8888)
+    bm.setHasAlpha(false)
     val canvas = android.graphics.Canvas(bm)
 
     when(product){
@@ -177,7 +179,12 @@ fun Context.bitmapFromCanvasProduct(product: CanvasProduct, requiredSize: Int,):
                 style = Paint.Style.FILL
             }
 
-            canvas.drawBitmap(bm, 0f, 0f, paint)
+            val colorArray = IntArray(requiredSize * requiredSize).apply {
+                fill(product.color)
+            }
+            val coloredBitmap = Bitmap.createBitmap(colorArray, requiredSize, requiredSize, Bitmap.Config.ARGB_8888)
+            canvas.drawBitmap(coloredBitmap, 0f, 0f, paint)
+
         }
 
         is CanvasImageProduct -> {

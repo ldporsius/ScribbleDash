@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasColorProduct
@@ -22,7 +23,13 @@ fun CanvasProduct.toUi(
 ){
 
     if (this is CanvasImageProduct){
-        Image(painter = painterResource(id = imageResourceId), contentDescription = "canvas")
+        Image(painter = painterResource(id = imageResourceId),
+            contentDescription = "canvas",
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = Color.Transparent, shape = RoundedCornerShape(25))
+                .clip(RoundedCornerShape(25))
+        )
     }
     if (this is CanvasColorProduct){
         val color = Color(this.color)

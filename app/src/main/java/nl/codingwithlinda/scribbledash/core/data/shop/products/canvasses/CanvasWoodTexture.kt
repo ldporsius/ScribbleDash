@@ -6,7 +6,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 
 class CanvasWoodTexture: CanvasImageProduct() {
     override val imageResourceId: Int
-        get() = R.drawable.vecteezy_woodgrain_background_164590
+        get() = R.drawable.wood_texture
     override val id: String
         get() = this::class.java.simpleName
     override val title: UiText

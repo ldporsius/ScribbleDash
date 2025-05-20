@@ -3,33 +3,35 @@ package nl.codingwithlinda.scribbledash.core.data.accounts
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
-import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import nl.codingwithlinda.scribbledash.core.di.DATASTORE_BALANCE_KEY
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.Purchase
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.UserAccount
 
 class AccountManager private constructor(
     private val dataStore: DataStore<Preferences>
 ) {
 
+    private val mutex = Mutex()
     companion object{
         @Volatile
         private var instance: AccountManager? = null
 
         @Synchronized
-       fun Instance(dataStore: DataStore<Preferences>): AccountManager {
-           if (instance == null){
-               instance = AccountManager(dataStore)
-           }
+        fun Instance(dataStore: DataStore<Preferences>): AccountManager {
+            if (instance == null){
+                instance = AccountManager(dataStore)
+            }
             return instance!!
-       }
+        }
+
+        val userLoggedInKey = stringPreferencesKey("UserLoggedIn")
+        val OPEN_ACCOUNT_BONUS = 300
     }
 
     val userAccount1 = UserAccount(
@@ -38,15 +40,16 @@ class AccountManager private constructor(
 
 
     suspend fun setActiveUser(userAccount: UserAccount) {
-        println("SETTING ACTIVE USER: ${userAccount.id}")
-
-        dataStore.data.firstOrNull()?.let {
-            println("DATASTORE BALANCE: ${it[DATASTORE_BALANCE_KEY]}")
-            userAccount.removeCoins(userAccount.coins)
-            userAccount.addCoins(it[DATASTORE_BALANCE_KEY] ?: 0)
+        mutex.withLock {
+            val isFirstTime = dataStore.data.firstOrNull()?.get(userLoggedInKey) != userAccount.id
+            dataStore.edit {
+                it[userLoggedInKey] = userAccount.id
+            }
+            if (isFirstTime) {
+                donateCoins(OPEN_ACCOUNT_BONUS)
+            }
         }
 
-        println("ACTIVE USER BALANCE: ${userAccount.balance()}")
     }
 
     val observableBalanceActiveUser = dataStore.data
@@ -63,22 +66,26 @@ class AccountManager private constructor(
 
     suspend fun processPurchase(userAccountId: String, productId: String, price: Int) {
 
-        val purchase = Purchase(
-            date = System.currentTimeMillis(),
-            productId = productId,
-            price = price
-        )
-        userAccount1.transactions.add(purchase)
+        mutex.withLock {
+            val purchase = Purchase(
+                date = System.currentTimeMillis(),
+                productId = productId,
+                price = price
+            )
+            userAccount1.transactions.add(purchase)
 
-        updateBalanceInDataStore(userAccountId)
+            updateBalanceInDataStore(userAccountId)
 
-        println("PROCESSed PURCHASE, user owns: ${userAccount1.transactions}")
+            println("PROCESSED PURCHASE, user owns: ${userAccount1.transactions}")
+        }
     }
 
     suspend fun processReward(coins: Int) {
-        userAccount1.run {
-            addCoins(coins)
-            updateBalanceInDataStore(id)
+        mutex.withLock {
+            userAccount1.run {
+                addCoins(coins)
+                updateBalanceInDataStore(id)
+            }
         }
     }
 
@@ -92,6 +99,7 @@ class AccountManager private constructor(
             it[DATASTORE_BALANCE_KEY] = balance(userAccountId)
         }
     }
+
 
     suspend fun donateCoins(amount: Int){
         userAccount1.addCoins(amount)

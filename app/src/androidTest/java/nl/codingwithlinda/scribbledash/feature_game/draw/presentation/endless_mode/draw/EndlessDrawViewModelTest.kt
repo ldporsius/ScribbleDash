@@ -24,7 +24,8 @@ class EndlessDrawViewModelTest{
 
     private val gameEngine = EndlessGameEngine(
         exampleProvider = appModule.drawExampleProvider,
-        gamesManager = gamesManager
+        gamesManager = gamesManager,
+        accountManager = appModule.accountManager,
     )
 
     @Before

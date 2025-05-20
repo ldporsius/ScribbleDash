@@ -25,13 +25,13 @@ class AccountViewModel(
     init {
         loginUser(accountManager.userAccount1)
 
-            viewModelScope.launch {
+        viewModelScope.launch {
 
-                val coins = balance.firstOrNull() ?: 0
-                if (coins < 300) {
-                    accountManager.donateCoins(300)
-                }
+            val coins = balance.firstOrNull() ?: 0
+            if (coins < 300) {
+                accountManager.donateCoins(300 - coins)
             }
+        }
 
     }
 }

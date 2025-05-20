@@ -1,6 +1,5 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common
 
-import android.graphics.Bitmap
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -17,16 +16,13 @@ import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.CanvasManager
 import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.PenManager
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
-import nl.codingwithlinda.scribbledash.core.domain.model.SingleDrawPath
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.BasicPenProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.MultiColorPenProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.PenProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
-import nl.codingwithlinda.scribbledash.core.domain.offset_parser.OffsetParser
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.MultiColorPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
@@ -36,8 +32,6 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.sta
 
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
-    private val offsetParser: OffsetParser,
-    private val pathDrawer: PathCreator<SingleDrawPath>,
     private val gameEngine: GameEngineTemplate,
     private val shoppingCart: MyShoppingCart
 ): ViewModel() {
@@ -96,7 +90,6 @@ class GameDrawViewModel(
             val canvasId = shoppingCart.getMyShoppingCart().canvasProductId ?: return@launch
             val canvasProduct = CanvasManager.getCanvasById(canvasId)
 
-            println("GAME DRAW VM HAS CANVAS: ${canvasProduct.id}")
             _uiState.update {
                 it.copy(
                     canvasProduct = canvasProduct

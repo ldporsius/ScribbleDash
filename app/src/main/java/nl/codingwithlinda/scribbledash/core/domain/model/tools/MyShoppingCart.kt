@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.core.domain.model.tools
 
+import android.graphics.Bitmap
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -46,4 +47,5 @@ class MyShoppingCart(
         }
         return cart
     }
+
 }

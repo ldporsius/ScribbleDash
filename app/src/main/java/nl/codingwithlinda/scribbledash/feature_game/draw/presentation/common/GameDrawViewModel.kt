@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common
 
+import android.graphics.Bitmap
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.CanvasManager
 import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.PenManager
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
 import nl.codingwithlinda.scribbledash.core.domain.model.SingleDrawPath
@@ -39,6 +41,7 @@ class GameDrawViewModel(
     private val gameEngine: GameEngineTemplate,
     private val shoppingCart: MyShoppingCart
 ): ViewModel() {
+
     private val _uiState = MutableStateFlow(GameDrawUiState())
     private val offsets = MutableStateFlow<List<PathData>>(emptyList())
     private var currentPath: PathData? = null
@@ -87,6 +90,18 @@ class GameDrawViewModel(
         viewModelScope.launch {
             val penId = shoppingCart.getMyShoppingCart().penProductId ?: return@launch
             penTool = PenManager.getPenById(penId)
+        }
+
+        viewModelScope.launch {
+            val canvasId = shoppingCart.getMyShoppingCart().canvasProductId ?: return@launch
+            val canvasProduct = CanvasManager.getCanvasById(canvasId)
+
+            println("GAME DRAW VM HAS CANVAS: ${canvasProduct.id}")
+            _uiState.update {
+                it.copy(
+                    canvasProduct = canvasProduct
+                )
+            }
         }
 
     }

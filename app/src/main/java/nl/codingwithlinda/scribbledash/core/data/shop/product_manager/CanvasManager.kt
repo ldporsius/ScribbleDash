@@ -16,6 +16,7 @@ import nl.codingwithlinda.scribbledash.core.data.shop.products.canvasses.CanvasC
 import nl.codingwithlinda.scribbledash.core.data.shop.products.canvasses.CanvasColorWhite
 import nl.codingwithlinda.scribbledash.core.data.shop.products.canvasses.CanvasVintageNoteBook
 import nl.codingwithlinda.scribbledash.core.data.shop.products.canvasses.CanvasWoodTexture
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasProduct
 
 object CanvasManager {
 
@@ -45,4 +46,10 @@ object CanvasManager {
         CanvasVintageNoteBook()
 
     )
+
+    private val allCanvasses = canvassesFreeTier + canvassesBasicTier + canvassesPremiumTier + canvassesLegendaryTier
+
+    fun getCanvasById(id: String): CanvasProduct{
+        return allCanvasses.find { it.id == id } ?: CanvasColorWhite()
+    }
 }

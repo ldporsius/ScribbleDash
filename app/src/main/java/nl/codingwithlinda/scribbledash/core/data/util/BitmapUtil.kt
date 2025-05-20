@@ -1,9 +1,15 @@
 package nl.codingwithlinda.scribbledash.core.data.util
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasColorProduct
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasImageProduct
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasProduct
 
 fun normalisedPath(
     path: Path,
@@ -160,5 +166,27 @@ fun List<Path>.toBitmapUiOnly(
     return Bitmap.createBitmap(requiredSize, requiredSize, Bitmap.Config.ARGB_8888)
 }
 
+fun Context.bitmapFromCanvasProduct(product: CanvasProduct, requiredSize: Int,): Bitmap{
+    val bm = Bitmap.createBitmap(requiredSize, requiredSize, Bitmap.Config.ARGB_8888)
+    val canvas = android.graphics.Canvas(bm)
 
+    when(product){
+        is CanvasColorProduct -> {
+            val paint = Paint().apply {
+                color = product.color
+                style = Paint.Style.FILL
+            }
+
+            canvas.drawBitmap(bm, 0f, 0f, paint)
+        }
+
+        is CanvasImageProduct -> {
+            val imgRes = product.imageResourceId
+            val image = BitmapFactory.decodeResource(this.resources, imgRes)
+            canvas.drawBitmap(image, 0f, 0f, null)
+        }
+    }
+
+    return bm
+}
 

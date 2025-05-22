@@ -14,6 +14,7 @@ import kotlinx.coroutines.sync.withLock
 import nl.codingwithlinda.scribbledash.core.di.DATASTORE_BALANCE_KEY
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.Purchase
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.UserAccount
+import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 
 class AccountManager private constructor(
     private val coroutineScope: CoroutineScope,
@@ -48,6 +49,26 @@ class AccountManager private constructor(
         coroutineScope.launch {
             dataStore.data.firstOrNull()?.get(DATASTORE_BALANCE_KEY)?.let {
                 userAccount1.addCoins(it)
+            }
+
+            donateCoins(OPEN_ACCOUNT_BONUS)//demo purpose only
+
+            dataStore.data.firstOrNull()?.get(MyShoppingCart.KEY_SHOPPING_CART)?.let {
+                val(pen, canvas) = it.split(";")
+                userAccount1.transactions.add(
+                    Purchase(
+                        date = System.currentTimeMillis(),
+                        productId = pen,
+                        price = 0
+                    )
+                )
+                userAccount1.transactions.add(
+                    Purchase(
+                        date = System.currentTimeMillis(),
+                        productId = canvas,
+                        price = 0
+                    )
+                )
             }
         }
 

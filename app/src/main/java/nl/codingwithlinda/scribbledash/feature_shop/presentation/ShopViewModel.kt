@@ -35,25 +35,32 @@ class ShopViewModel(
     val eventChannel = Channel<ShopEvent>()
 
     init {
-        penSalesManager.getProductsPerTier().let { pens ->
-            _uiState.update {
-                it.copy(
-                    penProducts = pens.values.flatten(),
-                    selectedPenId = penSalesManager.defaultProduct().id
-                )
-            }
-        }
+        viewModelScope.launch {
+            val selectedCanvas = shoppingCart.getMyShoppingCart().canvasProductId ?: canvasSalesManager.defaultProduct().id
 
-        canvasSalesManager.getProductsPerTier().let {canvasses ->
-            _uiState.update {
-                it.copy(
-                    canvasProducts = canvasses.values.flatten(),
-                    selectedCanvasId = canvasSalesManager.defaultProduct().id
-                )
+            canvasSalesManager.getProductsPerTier().let {canvasses ->
+                _uiState.update {
+                    it.copy(
+                        canvasProducts = canvasses.values.flatten(),
+                        selectedCanvasId = selectedCanvas
+                    )
+                }
             }
+
+            updateCanvasUi()
+
+            val selectedPen = shoppingCart.getMyShoppingCart().penProductId ?: penSalesManager.defaultProduct().id
+            penSalesManager.getProductsPerTier().let { pens ->
+                _uiState.update {
+                    it.copy(
+                        penProducts = pens.values.flatten(),
+                        selectedPenId = selectedPen
+                    )
+                }
+            }
+
+            updatePenUi()
         }
-        updatePenUi()
-        updateCanvasUi()
     }
 
     fun handleAction(action: ShopAction){

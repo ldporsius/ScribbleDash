@@ -1,6 +1,5 @@
 package nl.codingwithlinda.scribbledash.core.domain.model.tools
 
-import android.graphics.Bitmap
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -17,19 +16,19 @@ class MyShoppingCart(
     companion object{
          val KEY_SHOPPING_CART = stringPreferencesKey("shopping_cart")
     }
-    private val cart = ShoppingCart()
+    private var cart = ShoppingCart()
     suspend fun putProductInCart(product: ShopProduct){
         when(product.type){
             ProductType.PEN -> {
-                val update = cart.copy(penProductId = product.id)
+                cart = cart.copy(penProductId = product.id)
                 dataStore.edit {
-                    it[KEY_SHOPPING_CART] = update.toString()
+                    it[KEY_SHOPPING_CART] = cart.toString()
                 }
             }
             ProductType.CANVAS -> {
-                val update = cart.copy(canvasProductId = product.id)
+                cart = cart.copy(canvasProductId = product.id)
                 dataStore.edit {
-                    it[KEY_SHOPPING_CART] = update.toString()
+                    it[KEY_SHOPPING_CART] = cart.toString()
                 }
             }
         }
@@ -39,6 +38,7 @@ class MyShoppingCart(
         dataStore.data.firstOrNull()?.let { preferences ->
             preferences.get(KEY_SHOPPING_CART)?.let {
                 val (pen, canvas) = it.split(";")
+
                 return ShoppingCart(
                     penProductId = pen,
                     canvasProductId = canvas

@@ -16,11 +16,12 @@ typealias Accuracy = Int
 object ResultCalculator {
 
     const val VISIBILITY_TRESHOLD = 128
+    const val AVERAGE_STROKE_WIDTH = 4
 
     fun calculateResult(drawResult: DrawResult,
-                        strokeWidthUser: Int,
+
                         ): Accuracy{
-        return calculateResult(drawResult, strokeWidthUser){}
+        return calculateResult(drawResult, AVERAGE_STROKE_WIDTH){}
     }
     fun calculateResult(drawResult: DrawResult,
                         strokeWidthUser: Int,
@@ -31,6 +32,8 @@ object ResultCalculator {
 
         val examplePaths = drawResult.examplePath
         val userPath = drawResult.userPath
+
+        println("RESULT CALCULATOR: examplePaths.size = ${examplePaths.size}, userPath.size = ${userPath.size}")
 
         val bmExample = examplePaths.toBitmap(
             requiredSize = 500,
@@ -61,7 +64,7 @@ object ResultCalculator {
         val pixelMatches = pixelMatch(bmExample, userBitmap)
 
         val correct = pixelMatches.count { it == PixelMatch.MATCH }
-          println("RESULT CALCULATOR NUMBER PIXELS THAT MATCH = ${correct}")
+        println("RESULT CALCULATOR NUMBER PIXELS THAT MATCH = ${correct}")
 
         val visibleUserPixels = visiblePixelCount(userBitmap)
         //println("visibleUserPixels = $visibleUserPixels")
@@ -79,6 +82,7 @@ object ResultCalculator {
         return try {
             (accuracy - missingLengthPenalty).roundToInt().coerceAtLeast(0)
         }catch (e: Exception){
+            e.printStackTrace()
             -1
         }
     }

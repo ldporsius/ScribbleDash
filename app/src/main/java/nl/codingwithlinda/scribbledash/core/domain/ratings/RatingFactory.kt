@@ -6,6 +6,7 @@ import nl.codingwithlinda.scribbledash.core.domain.model.Rating
 object RatingFactory {
 
     fun getRating(accuracyPercent: Int): Rating {
+        println("RATING FACTORY: accuracy: $accuracyPercent")
         return when (accuracyPercent) {
             in 0..39 -> Oops()
             in 40..69 -> Meh()

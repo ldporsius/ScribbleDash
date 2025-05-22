@@ -1,7 +1,5 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common
 
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.NonCancellable
@@ -13,16 +11,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.CanvasManager
 import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.PenManager
 import nl.codingwithlinda.scribbledash.core.domain.memento.CareTaker
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.BasicPenProduct
-import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.MultiColorPenProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.PenProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.memento.PathDataCareTaker
-import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.MultiColorPathCreator
-import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.DrawAction
@@ -33,7 +28,8 @@ import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.sta
 class GameDrawViewModel(
     private val careTaker: CareTaker<PathData, List<PathData>> = PathDataCareTaker(),
     private val gameEngine: GameEngineTemplate,
-    private val shoppingCart: MyShoppingCart
+    private val shoppingCart: MyShoppingCart,
+    private val finished: () -> Unit
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(GameDrawUiState())
@@ -61,10 +57,11 @@ class GameDrawViewModel(
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DrawState.EXAMPLE)
 
+
     val uiState = combine(_uiState, offsets){ state, offsets ->
 
         val coloredPaths = offsets.map {data->
-            splitPathIntoColors(penTool, data = data.path)
+            gameEngine.splitPathIntoColors(penTool, data = data.path)
         }.flatten()
 
         state.copy(
@@ -84,6 +81,8 @@ class GameDrawViewModel(
         viewModelScope.launch {
             val penId = shoppingCart.getMyShoppingCart().penProductId ?: return@launch
             penTool = PenManager.getPenById(penId)
+
+            println("GameDrawViewModel has pen: ${penTool.id}")
         }
 
         viewModelScope.launch {
@@ -105,7 +104,6 @@ class GameDrawViewModel(
 
                 val pathData = PathData(
                     id = System.currentTimeMillis().toString(),
-                    color = 0,
                     path = listOf(action.offset)
                 )
 
@@ -122,7 +120,7 @@ class GameDrawViewModel(
                     )
                     currentPath = currentPathCopy
 
-                    val drawPath = splitPathIntoColors(penTool, currentPathCopy.path)
+                    val drawPath = gameEngine.splitPathIntoColors(penTool, currentPathCopy.path)
 
                     _uiState.update {
                         it.copy(
@@ -203,27 +201,18 @@ class GameDrawViewModel(
     }
 
     fun onDone(){
-        viewModelScope.launch(NonCancellable) {
-            gameEngine.processUserInput(offsets.value)
-            gameEngine.onUserInputDone()
-        }
-        currentPath = null
+        viewModelScope.launch() {
+            withContext(NonCancellable) {
+                gameEngine.processUserInput(offsets.value)
+                gameEngine.updateColoredPaths(offsets.value, penTool)
+                gameEngine.onUserInputDone()
 
+                currentPath = null
+                finished()
+            }
+        }
     }
 
-    private fun splitPathIntoColors(penProduct: PenProduct, data: List<Offset>): List<ColoredPath> {
 
-        val colors = when(penProduct){
-           is BasicPenProduct -> listOf( penProduct.color)
-            is MultiColorPenProduct -> penProduct.colors
-
-            else -> emptyList()
-
-        }.map {
-            Color(it)
-        }
-        val multiColorPathCreator = MultiColorPathCreator(colors)
-        return multiColorPathCreator.drawPath(data).paths
-    }
 
 }

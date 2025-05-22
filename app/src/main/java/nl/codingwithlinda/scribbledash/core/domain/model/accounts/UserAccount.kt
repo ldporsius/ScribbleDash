@@ -5,8 +5,8 @@ import androidx.compose.ui.util.fastSumBy
 data class UserAccount(
     val id: String,
 ){
-    val lock = Any()
-    var coins: Int = 0
+    private val lock = Any()
+    private var coins: Int = 0
     val transactions : MutableList<Purchase> = mutableListOf<Purchase>()
 
     @Synchronized

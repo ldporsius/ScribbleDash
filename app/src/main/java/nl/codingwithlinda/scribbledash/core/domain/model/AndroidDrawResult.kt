@@ -2,7 +2,6 @@ package nl.codingwithlinda.scribbledash.core.domain.model
 
 import android.graphics.Path
 
-
 data class DrawResult(
     val id: String,
     val level: GameLevel,

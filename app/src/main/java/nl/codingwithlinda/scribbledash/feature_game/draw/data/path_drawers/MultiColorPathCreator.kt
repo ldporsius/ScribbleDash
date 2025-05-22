@@ -2,14 +2,13 @@ package nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers
 
 import android.graphics.Path
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import nl.codingwithlinda.scribbledash.core.domain.model.MultiColorDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.MultiColoredDrawPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathCreator
 
 class MultiColorPathCreator(
-    private val colors: List<Color>
+    private val colors: List<Int>
 ): PathCreator<MultiColorDrawPath> {
     override fun drawPath(path: List<Offset>): MultiColorDrawPath {
         if (path.isEmpty()) {
@@ -23,10 +22,9 @@ class MultiColorPathCreator(
         path.chunked( chunkSize ).mapIndexed { index, offsets ->
 
             val colorIndex = index % colors.size
-            val color = colors.getOrElse(colorIndex, {Color.Black})
+            val color = colors.getOrElse(colorIndex, {android.graphics.Color.BLACK})
 
             val previousOffset = path.getOrElse(index * chunkSize - 1, { path.first()})
-            println("MULTICOLORPATHCREATOR previous offset: $previousOffset")
 
             val subpath = Path()
 
@@ -43,8 +41,6 @@ class MultiColorPathCreator(
             )
 
         }
-
-
         return MultiColoredDrawPath(
             paths = paths
         )

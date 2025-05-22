@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.core.navigation.nav_graphs
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -57,6 +58,7 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                         factory = viewModelFactory {
                             initializer {
                                 GameResultViewModel(
+                                    shoppingCart = appModule.shoppingCart,
                                     ratingTextGenerator = ratingTextGenerator,
                                     gameEngine = gameEngine
                                 )
@@ -64,15 +66,8 @@ fun NavGraphBuilder.oneRoundWonderNavGraph(
                         }
                     )
 
-
-                    val ratingUi = remember {
-                        viewModel.getRatingUi()
-                    }
-
                     GameResultScreen(
-                        examplePath = viewModel.examplePath,
-                        userPath = viewModel.userPath,
-                        ratingUi = ratingUi,
+                       uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
                         reward = gameEngine.coinsEarnedInLastestGame(),
                         onAction = { action ->
                             when (action) {

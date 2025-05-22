@@ -3,14 +3,20 @@ package nl.codingwithlinda.scribbledash.core.data.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.Color.toArgb
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import androidx.compose.ui.graphics.Color as ComposeColor
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.ColorUtils
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasColorProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasImageProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasProduct
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
 
 fun normalisedPath(
     path: Path,
@@ -110,6 +116,71 @@ fun List<Path>.toBitmap(
 
 }
 
+fun List<ColoredPath>.toBitmap(
+    requiredSize: Int,
+    basisStrokeWidth: Float,
+): Bitmap{
+    val boundingBox = RectF()
+
+    val combinedPath = Path()
+    this.forEach(){
+        combinedPath.addPath(it.path)
+    }
+    combinedPath.computeBounds(boundingBox, true)
+
+    try {
+
+        val bm = Bitmap.createBitmap(
+            boundingBox.width().toInt() + basisStrokeWidth.toInt(),
+            boundingBox.height().toInt() + basisStrokeWidth.toInt(),
+            Bitmap.Config.ARGB_8888
+        )
+
+        val canvas = android.graphics.Canvas(bm)
+
+
+        this.onEach {
+            //println("bitmap from list colored paths has color: ${it.color}, ${ComposeColor(it.color)}")
+             val paint = android.graphics.Paint().apply {
+                color = it.color
+                style = android.graphics.Paint.Style.STROKE
+                strokeWidth = basisStrokeWidth
+                isAntiAlias = true
+            }
+
+           it.path.transform(
+                Matrix().apply {
+                    setTranslate(
+                        -boundingBox.left, -boundingBox.top
+                    )
+                }
+            )
+            canvas.drawPath(it.path, paint)
+        }
+
+        print(bm)
+
+        val sx = requiredSize.toFloat() / bm.width.toFloat()
+        val sy = requiredSize.toFloat() / bm.height.toFloat()
+
+        val minScale = minOf(sx, sy)
+
+        val dstWidth = minScale * bm.width
+        val dstHeight = minScale * bm.height
+
+        val scaledBitmap = Bitmap.createScaledBitmap(bm, dstWidth.toInt(), dstHeight.toInt(), false)
+
+        return scaledBitmap
+    }catch (e: Exception){
+        //ignore
+        println("***************** ERROR IN BITMAP UTIL COLORED PATH **************************")
+        e.printStackTrace()
+    }
+    return Bitmap.createBitmap(requiredSize, requiredSize, Bitmap.Config.ARGB_8888)
+
+
+}
+
 fun List<Path>.toBitmapUiOnly(
     requiredSize: Int,
     basisStrokeWidth: Float,
@@ -148,17 +219,13 @@ fun List<Path>.toBitmapUiOnly(
 
         val sx = requiredSize.toFloat() / bm.width.toFloat()
         val sy = requiredSize.toFloat() / bm.height.toFloat()
-        // println("sx = $sx, sy = $sy")
 
         val minScale = minOf(sx, sy)
 
         val dstWidth = minScale * bm.width
         val dstHeight = minScale * bm.height
 
-        //println("bitmap from list paths: boundingbox w = ${boundingBox.width()}, boundingbox h = ${boundingBox.height()}")
-
         val scaledBitmap = Bitmap.createScaledBitmap(bm, dstWidth.toInt(), dstHeight.toInt(), false)
-        //println("scaledBitmap w = ${scaledBitmap.width}, scaledBitmap h = ${scaledBitmap.height}")
 
         return scaledBitmap
     }catch (e: Exception){

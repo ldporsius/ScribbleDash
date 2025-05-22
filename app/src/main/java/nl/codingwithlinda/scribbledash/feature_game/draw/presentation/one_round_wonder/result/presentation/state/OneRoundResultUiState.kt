@@ -1,4 +1,4 @@
-package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.result
+package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.one_round_wonder.result.presentation.state
 
 import android.graphics.Path
 import androidx.compose.foundation.Image
@@ -9,11 +9,11 @@ import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.CanvasPro
 import nl.codingwithlinda.scribbledash.core.presentation.model.RatingUi
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
 
-data class EndlessResultUiState(
+data class OneRoundResultUiState(
     val examplePath: Path = Path(),
     val userPath: List<ColoredPath> = emptyList(),
     val userBackgroundCanvas: CanvasProduct? = null,
-    val ratingUi: RatingUi? = null,
+    val ratingUi: RatingUi,
     val numberSuccess: Int = 0,
     val isSuccessful: Boolean = false
 ){

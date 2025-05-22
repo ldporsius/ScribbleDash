@@ -14,7 +14,8 @@ object ViewModelUtil {
     @Composable
     fun createGameDrawViewModel(
         gameEngine: GameEngineTemplate,
-        shoppingCart: MyShoppingCart
+        shoppingCart: MyShoppingCart,
+        finished: () -> Unit
     ): GameDrawViewModel{
         val careTaker = PathDataCareTaker()
 
@@ -23,7 +24,8 @@ object ViewModelUtil {
                 GameDrawViewModel(
                     careTaker = careTaker,
                     gameEngine = gameEngine,
-                    shoppingCart = shoppingCart
+                    shoppingCart = shoppingCart,
+                    finished = finished
                 )
             }
         }

@@ -1,8 +1,11 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine
 
 import android.graphics.Path
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
@@ -12,14 +15,20 @@ import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.model.Rating
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.BasicPenProduct
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.MultiColorPenProduct
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.PenProduct
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RewardCalculator
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.navigation.util.GameModeNavigation.gameMode
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownSpeedDraw
 import nl.codingwithlinda.scribbledash.feature_game.counter.CountDownTimer
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.MultiColorPathCreator
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.StraightPathCreator
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
+import nl.codingwithlinda.scribbledash.feature_shop.presentation.model.toUi
 
 abstract class GameEngineTemplate(
     private val gamesManager: GamesManager,
@@ -68,12 +77,26 @@ abstract class GameEngineTemplate(
     val shouldShowExample
             = MutableStateFlow(true)
 
+    private val _coloredPaths = MutableStateFlow<List<ColoredPath>>(emptyList())
+    val coloredPaths = _coloredPaths.asStateFlow()
+
+   fun updateColoredPaths(paths: List<PathData>, penProduct: PenProduct){
+        val coloredPaths =  paths.map {
+            splitPathIntoColors(penProduct, it.path)
+        }.flatten()
+
+        _coloredPaths.update {
+            coloredPaths
+        }
+    }
     suspend fun processUserInput(userInput: List<PathData>) {
+
         val paths = userInput.map{
-            pathCreator.drawPath(it.path)
+             pathCreator.drawPath(it.path)
         }.map {
             it.path
         }
+
         val result = getResult().copy(
             userPath = paths
         )
@@ -95,17 +118,17 @@ abstract class GameEngineTemplate(
 
     fun getAccuracy(): Int{
         if (results.isEmpty()) return 0
-        return resultCalculator.calculateResult(getResult(), 4)
+        return resultCalculator.calculateResult(getResult(),)
     }
     fun getRating() : Rating{
-        val accuracy = resultCalculator.calculateResult(getResult(), 4)
+        val accuracy = resultCalculator.calculateResult(getResult(),)
         return ratingFactory.getRating(accuracy)
     }
 
     suspend fun numberSuccessesForLatestGame(): Int{
         val limit = ratingFactory.getSuccessLimit(gameMode)
         val accs = results.map {
-            ResultCalculator.calculateResult(it, 4)
+            ResultCalculator.calculateResult(it,)
         }.filter { it >= limit }
 
         return accs.count()
@@ -155,6 +178,19 @@ abstract class GameEngineTemplate(
         saveResult(result)
 
         return result
+    }
+
+    fun splitPathIntoColors(penProduct: PenProduct, data: List<Offset>): List<ColoredPath> {
+
+        val colors = when(penProduct){
+            is BasicPenProduct -> listOf( penProduct.color)
+            is MultiColorPenProduct -> penProduct.colors
+
+            else -> emptyList()
+
+        }
+        val multiColorPathCreator = MultiColorPathCreator(colors)
+        return multiColorPathCreator.drawPath(data).paths
     }
 
     //mandatory

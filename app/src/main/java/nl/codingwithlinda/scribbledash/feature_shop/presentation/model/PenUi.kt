@@ -56,9 +56,7 @@ fun PenProduct.toUi(
         val context = LocalContext.current
         val resources = LocalContext.current.resources
 
-        val colors = this.colors.map {
-            Color(it)
-        }
+        val colors = this.colors
 
         val paths = resourceToDrawPaths(centralImage, context).map {
             pathToCoordinates(it, 1f)
@@ -87,7 +85,7 @@ fun PenProduct.toUi(
                 coloredPaths.forEachIndexed { index, path ->
                     drawPath(
                         path = path.path.asComposePath(),
-                        color = path.color,
+                        color = Color(path.color),
                         style = Stroke(10f)
 
                     )

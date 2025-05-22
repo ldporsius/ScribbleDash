@@ -16,7 +16,10 @@ fun GameDrawRoot(
     topBar: @Composable () -> Unit = {}
 ) {
 
-    val viewModel = ViewModelUtil.createGameDrawViewModel(gameEngine, appModule.shoppingCart)
+    val viewModel = ViewModelUtil.createGameDrawViewModel(gameEngine, appModule.shoppingCart){
+        gameNavController.popBackStack()
+        gameNavController.navigate(GameResultNavRoute)
+    }
 
     GameMainScreen(
         topBar = {
@@ -28,8 +31,7 @@ fun GameDrawRoot(
         onAction = viewModel::handleAction,
         onDone = {
             viewModel.onDone()
-            gameNavController.popBackStack()
-            gameNavController.navigate(GameResultNavRoute)
+
         }
     )
 }

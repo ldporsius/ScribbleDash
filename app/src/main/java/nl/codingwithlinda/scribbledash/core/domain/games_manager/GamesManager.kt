@@ -82,7 +82,7 @@ class GamesManager(
 
     private fun listAccuracies(drawResults: List<DrawResult>): List<Int> {
         return drawResults.map {
-            ResultCalculator.calculateResult(it, 4)
+            ResultCalculator.calculateResult(it,)
         }
     }
 

@@ -11,10 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import nl.codingwithlinda.scribbledash.core.data.util.bitmapFromCanvasProduct
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons.CustomColoredButton
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CoinsEarnedComponent
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameResultComparison
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.draw.EndlessTopBar
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.oneRoundWonderColor
@@ -23,6 +26,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.spe
 @Composable
 fun EndlessModeResultScreen(
     endlessResultUiState: EndlessResultUiState,
+    reward: Int,
     onClose: () -> Unit,
     onFinish: () -> Unit,
     onNext: () -> Unit
@@ -30,6 +34,8 @@ fun EndlessModeResultScreen(
 
 
     endlessResultUiState.ratingUi ?: return
+
+    val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -47,6 +53,9 @@ fun EndlessModeResultScreen(
         GameResultComparison(
             examplePath = endlessResultUiState.examplePath,
             userPath = endlessResultUiState.userPath,
+            userBackground = {reqSize ->
+                endlessResultUiState.userBackgroundCanvas?.let { context.bitmapFromCanvasProduct(it, reqSize) }
+            },
             checkIcon = { endlessResultUiState.CheckIcon() }
         )
 
@@ -58,6 +67,11 @@ fun EndlessModeResultScreen(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.fillMaxWidth(0.8f),
             textAlign = TextAlign.Center
+        )
+
+        CoinsEarnedComponent(
+            coins = reward,
+            modifier = Modifier.padding(top = 16.dp)
         )
 
         Spacer(modifier = Modifier.weight(1f))

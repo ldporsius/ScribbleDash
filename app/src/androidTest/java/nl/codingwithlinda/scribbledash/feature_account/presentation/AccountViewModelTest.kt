@@ -3,6 +3,7 @@ package nl.codingwithlinda.scribbledash.feature_account.presentation
 import android.app.Application
 import androidx.datastore.preferences.core.edit
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -93,5 +94,9 @@ class AccountManagerTest{
 
         val balance2 = accountManager.balance(accountManager.userAccount1.id)
         assertEquals(0, balance2)
+
+        val balanceDatastore = accountManager.observableBalanceActiveUser.first()
+        assertEquals(0, balanceDatastore)
+
     }
 }

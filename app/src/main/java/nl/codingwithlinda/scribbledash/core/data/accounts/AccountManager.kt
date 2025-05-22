@@ -4,9 +4,11 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import nl.codingwithlinda.scribbledash.core.di.DATASTORE_BALANCE_KEY
@@ -14,6 +16,7 @@ import nl.codingwithlinda.scribbledash.core.domain.model.accounts.Purchase
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.UserAccount
 
 class AccountManager private constructor(
+    private val coroutineScope: CoroutineScope,
     private val dataStore: DataStore<Preferences>
 ) {
 
@@ -23,9 +26,12 @@ class AccountManager private constructor(
         private var instance: AccountManager? = null
 
         @Synchronized
-        fun Instance(dataStore: DataStore<Preferences>): AccountManager {
+        fun Instance(
+            dataStore: DataStore<Preferences>,
+            coroutineScope: CoroutineScope
+        ): AccountManager {
             if (instance == null){
-                instance = AccountManager(dataStore)
+                instance = AccountManager(dataStore = dataStore, coroutineScope = coroutineScope)
             }
             return instance!!
         }
@@ -38,7 +44,14 @@ class AccountManager private constructor(
         id = "1",
     )
 
+    init {
+        coroutineScope.launch {
+            dataStore.data.firstOrNull()?.get(DATASTORE_BALANCE_KEY)?.let {
+                userAccount1.addCoins(it)
+            }
+        }
 
+    }
     suspend fun setActiveUser(userAccount: UserAccount) {
         mutex.withLock {
             val isFirstTime = dataStore.data.firstOrNull()?.get(userLoggedInKey) != userAccount.id
@@ -49,7 +62,6 @@ class AccountManager private constructor(
                 donateCoins(OPEN_ACCOUNT_BONUS)
             }
         }
-
     }
 
     val observableBalanceActiveUser = dataStore.data
@@ -75,8 +87,6 @@ class AccountManager private constructor(
             userAccount1.transactions.add(purchase)
 
             updateBalanceInDataStore(userAccountId)
-
-            println("PROCESSED PURCHASE, user owns: ${userAccount1.transactions}")
         }
     }
 
@@ -94,7 +104,6 @@ class AccountManager private constructor(
     }
 
     private suspend fun updateBalanceInDataStore(userAccountId: String){
-        println("UPDATING BALANCE IN DATASTORE, BALANCE: ${balance(userAccountId)}")
         dataStore.edit {
             it[DATASTORE_BALANCE_KEY] = balance(userAccountId)
         }

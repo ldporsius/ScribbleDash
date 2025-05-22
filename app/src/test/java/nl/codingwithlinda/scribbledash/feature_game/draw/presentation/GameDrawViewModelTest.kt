@@ -28,8 +28,6 @@ class GameDrawViewModelTest {
 
     private val dispatcher = UnconfinedTestDispatcher()
     private val careTaker = PathDataCareTaker()
-    private val offsetParser = AndroidOffsetParser
-    private val pathDrawer = StraightPathCreator()
     private val exampleProvider = FakeExampleProvider()
 
     private lateinit var gameEngine: GameEngineTemplate
@@ -44,13 +42,13 @@ class GameDrawViewModelTest {
 
         gameEngine = OneRoundGameEngine(
             exampleProvider = exampleProvider,
-            gamesManager = gamesManager
+            gamesManager = gamesManager,
+            accountManager = TODO()
         )
         viewModel = GameDrawViewModel(
             gameEngine = gameEngine,
             careTaker = careTaker,
-            offsetParser = offsetParser,
-            pathDrawer = pathDrawer,
+            shoppingCart = TODO(),
         )
     }
     @After

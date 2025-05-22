@@ -1,5 +1,6 @@
 package nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components
 
+import android.graphics.Bitmap
 import android.graphics.Path
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -29,20 +31,32 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import nl.codingwithlinda.scribbledash.R
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
+import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.resourceToDrawPaths
+import nl.codingwithlinda.scribbledash.core.data.shop.products.canvasses.CanvasWoodTexture
+import nl.codingwithlinda.scribbledash.core.data.util.bitmapFromCanvasProduct
 import nl.codingwithlinda.scribbledash.core.data.util.centerPath
+import nl.codingwithlinda.scribbledash.core.data.util.toBitmap
 import nl.codingwithlinda.scribbledash.core.data.util.toBitmapUiOnly
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.endless_mode.result.EndlessResultUiState
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
+import nl.codingwithlinda.scribbledash.core.test.fakePathCircle
+import nl.codingwithlinda.scribbledash.core.test.fakePathSquare
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
 
 @Composable
 fun GameResultComparison(
     examplePath: Path,
-    userPath: List<Path>,
+    userPath: List<ColoredPath>,
+    userBackground: (size: Int) -> Bitmap?,
     checkIcon: @Composable () -> Unit,
     ) {
 
+
+    val context = LocalContext.current
+    val bmPrinter = AndroidBitmapPrinter(context = context)
 
     Row(
         modifier = Modifier
@@ -105,7 +119,6 @@ fun GameResultComparison(
 
             Column(
                 modifier = Modifier
-
                     .width(126.dp)
                     .graphicsLayer {
                         this.rotationZ = 10f
@@ -113,7 +126,6 @@ fun GameResultComparison(
                     .constrainAs(user) {
                         top.linkTo(parent.top)
                         start.linkTo(centerGuideline)
-                        //end.linkTo(parent.end)
                     }
                 ,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -137,17 +149,24 @@ fun GameResultComparison(
                         val w = size.width
                         val h = size.height
                         val requiredSize = 100.dp.toPx().toInt()
-                        val strokeWidth = 5.dp.toPx()
-                        val bm = userPath.toBitmapUiOnly(
+                        val strokeWidth = 4.dp.toPx()
+                        val bm = userPath
+                            .toBitmap(
                             requiredSize = requiredSize,
                             basisStrokeWidth = strokeWidth
                         )
                         val dx = w / 2 - bm.width / 2
                         val dy = h / 2 - bm.height / 2
+
+                        userBackground(w.toInt())?.run {
+                            drawImage(
+                                image = this.asImageBitmap(),
+                                topLeft = Offset(0f, 0f)
+                            )
+                        }
                         drawImage(
-                            bm.asImageBitmap(),
-                            topLeft = Offset(dx, dy),
-                            style = Stroke(4.dp.toPx())
+                            image = bm.asImageBitmap(),
+                            topLeft = Offset(dx, dy)
                         )
                     }
                 }
@@ -171,6 +190,13 @@ fun GameResultComparison(
 @Composable
 private fun GameResultComparisonPreview() {
 
+    val context = LocalContext.current
+    val drawRes = resourceToDrawPaths(R.drawable.glasses, context).map {
+        ColoredPath(
+            color = android.graphics.Color.BLUE,
+            path = it
+        )
+    }
     val uiState = EndlessResultUiState(
         examplePath = Path(),
         userPath = emptyList()
@@ -179,7 +205,10 @@ private fun GameResultComparisonPreview() {
     ScribbleDashTheme {
         GameResultComparison(
             examplePath = Path(),
-            userPath = emptyList(),
+            userPath = drawRes,
+            userBackground = {
+                context.bitmapFromCanvasProduct(CanvasWoodTexture(), 500)
+            },
             checkIcon = {
                 uiState.CheckIcon()
             }

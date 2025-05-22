@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import nl.codingwithlinda.room_persistence.database.ScribbleDatabase
 import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
@@ -52,7 +54,9 @@ class AndroidAppModule(
     }
 
     override val accountManager: AccountManager
-        get() = AccountManager.Instance(datastore)
+        get() = AccountManager.Instance(
+            coroutineScope = CoroutineScope(Dispatchers.IO),
+            dataStore = datastore)
 
     override val shoppingCart: MyShoppingCart = MyShoppingCart(datastore)
 

@@ -48,7 +48,9 @@ fun NavGraphBuilder.speedDrawNavGraph(
         )
        
 
-        val gameDrawViewModel = ViewModelUtil.createGameDrawViewModel(gameEngine, appModule.shoppingCart)
+        val gameDrawViewModel = ViewModelUtil.createGameDrawViewModel(gameEngine, appModule.shoppingCart){
+            //
+        }
 
         GameMainScreen(
             topBar = {

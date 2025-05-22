@@ -2,7 +2,7 @@ package nl.codingwithlinda.scribbledash.core.domain.ratings
 
 import nl.codingwithlinda.scribbledash.core.domain.model.Rating
 
-class UnknownRating: Rating{
+class UnknownRating(): Rating{
     override val fromAccuracyPercent: Int
          = -1
     override val toAccuracyPercent: Int

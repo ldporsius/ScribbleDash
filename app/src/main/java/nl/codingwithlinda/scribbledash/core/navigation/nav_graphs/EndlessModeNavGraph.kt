@@ -47,7 +47,9 @@ fun NavGraphBuilder.endlessModeNavGraph(
                     val gameDrawViewModel = ViewModelUtil.createGameDrawViewModel(
                         gameEngine = gameEngine,
                         shoppingCart = appModule.shoppingCart
-                    )
+                    ){
+                        navController.navigate(EndlessResultNavRoute)
+                    }
 
                     val endlessDrawViewModel = viewModel<EndlessDrawViewModel>(
                         factory = viewModelFactory {
@@ -75,9 +77,9 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         gameDrawUiState = gameDrawViewModel.uiState.collectAsStateWithLifecycle().value,
                         onAction = gameDrawViewModel::handleAction,
                         onDone = {
+
                             gameDrawViewModel.onDone()
-                            gameDrawViewModel.handleAction(DrawAction.Clear)
-                            navController.navigate(EndlessResultNavRoute)
+                            //gameDrawViewModel.handleAction(DrawAction.Clear)
                         },
                     )
                 }
@@ -89,6 +91,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                         factory = viewModelFactory {
                             initializer {
                                 EndlessResultViewModel(
+                                    shoppingCart = appModule.shoppingCart,
                                     gameEngine = gameEngine,
                                     ratingMapper = RatingMapper(appModule.ratingTextGenerator),
                                     bmPrinter = bmPrinter
@@ -98,6 +101,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
                     )
                     EndlessModeResultScreen(
                         endlessResultUiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+                        reward = gameEngine.coinsEarnedInLastestGame(),
                         onClose = {
                             navController.popBackStack()
                             onNavHome()

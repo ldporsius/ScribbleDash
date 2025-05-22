@@ -8,12 +8,13 @@ import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.ratings.RatingFactory
+import nl.codingwithlinda.scribbledash.core.domain.ratings.RewardCalculator
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
 class EndlessGameEngine(
     private val exampleProvider: DrawExampleProvider,
     private val gamesManager: GamesManager,
-    accountManager: AccountManager
+    private val accountManager: AccountManager
 ): GameEngineTemplate(
     exampleProvider = exampleProvider,
     gamesManager = gamesManager,
@@ -30,6 +31,7 @@ class EndlessGameEngine(
         }
         results.add(result)
     }
+
     override suspend fun shouldStartNewGame(): Boolean {
         val limit = ratingFactory.getSuccessLimit(GameMode.ENDLESS_MODE)
         return this.getAccuracy() < limit

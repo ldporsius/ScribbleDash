@@ -10,16 +10,22 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nl.codingwithlinda.scribbledash.core.data.AndroidBitmapPrinter
+import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.CanvasManager
 import nl.codingwithlinda.scribbledash.core.data.util.combinedPath
+import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 import nl.codingwithlinda.scribbledash.core.domain.result_manager.ResultCalculator
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingMapper
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.game_engine.GameEngineTemplate
 
 class EndlessResultViewModel(
+    private val shoppingCart: MyShoppingCart,
     private val gameEngine: GameEngineTemplate,
     private val ratingMapper: RatingMapper,
-    private val bmPrinter: AndroidBitmapPrinter
+    private val bmPrinter: AndroidBitmapPrinter,
 ): ViewModel() {
+    private val coloredPaths = gameEngine.coloredPaths.also {
+        println("ENDLESS RESULT VIEW MODEL: coloredPaths = ${it.value}")
+    }
 
     private val _uiState = MutableStateFlow(EndlessResultUiState())
 
@@ -37,27 +43,33 @@ class EndlessResultViewModel(
 
             val isSuccessful = gameEngine.isGameSuccessful()
 
+            val userPath = coloredPaths.value
+
+            val userBackgroundCanvas = shoppingCart.getMyShoppingCart().canvasProductId?.let {
+                CanvasManager.getCanvasById(it)
+            }
 
             _uiState.update {
                 it.copy(
                     numberSuccess = successes,
                     ratingUi = ratingUi,
-                    isSuccessful = isSuccessful
+                    isSuccessful = isSuccessful,
+                    userPath = userPath,
+                    userBackgroundCanvas = userBackgroundCanvas
                 )
             }
 
             gameEngine.getResult().let { result ->
 
                 //debug
-                ResultCalculator.calculateResult(result, 4){
-                    bmPrinter.printBitmap(it,"endless_bm_${System.currentTimeMillis()}.png")
-                }
+//                ResultCalculator.calculateResult(result, 4){
+//                    bmPrinter.printBitmap(it,"endless_bm_${System.currentTimeMillis()}.png")
+//                }
                 //end debug
 
                 _uiState.update {
                     it.copy(
                         examplePath = combinedPath(result.examplePath),
-                        userPath = result.userPath,
                     )
                 }
             }

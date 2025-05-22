@@ -2,11 +2,13 @@ package nl.codingwithlinda.scribbledash.core.test
 
 import android.graphics.Path
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.util.pathToCoordinates
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawResult
 import nl.codingwithlinda.scribbledash.core.domain.model.DrawPath
 import nl.codingwithlinda.scribbledash.core.domain.model.GameLevel
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.path_drawers.paths.SimpleDrawPath
+import nl.codingwithlinda.scribbledash.feature_game.draw.domain.ColoredPath
 import nl.codingwithlinda.scribbledash.feature_game.draw.domain.PathData
 
 fun fakeDrawResultSamePaths(): DrawResult {
@@ -27,7 +29,10 @@ fun fakeDrawResultDifferentPaths(): DrawResult{
     )
 }
 
-
+fun Path.toColoredPath(color: Int = android.graphics.Color.BLACK) = ColoredPath(
+    path = this,
+    color = color
+)
 fun fakeAndroidDrawPathSquare(): DrawPath {
     return SimpleDrawPath(
         path = fakePathSquare()
@@ -53,7 +58,6 @@ fun fakePathCircle(): Path{
 fun fakePathData() = List(10){
     PathData(
         id = it.toString(),
-        color = 0,
         path = fakeOffsets()
     )
 }

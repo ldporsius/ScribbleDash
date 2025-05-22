@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.room.Room
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import nl.codingwithlinda.room_persistence.database.ScribbleDatabase
 import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
 import nl.codingwithlinda.scribbledash.core.data.draw_examples.AndroidDrawExampleProvider
@@ -14,6 +16,7 @@ import nl.codingwithlinda.scribbledash.core.domain.games_manager.GamesManager
 import nl.codingwithlinda.scribbledash.core.domain.model.GameMode
 import nl.codingwithlinda.scribbledash.core.domain.model.tools.MyShoppingCart
 import nl.codingwithlinda.scribbledash.core.presentation.util.RatingTextGenerator
+import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.EndlessGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.OneRoundGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.SpeedDrawGameEngine
 import nl.codingwithlinda.scribbledash.feature_game.draw.data.game_engine.TestGameEngine
@@ -42,7 +45,9 @@ class AndroidTestAppModule(
         get() = GamesManager(gamesAccess)
 
     override val accountManager: AccountManager
-            = AccountManager.Instance(datastore)
+            = AccountManager.Instance(
+        coroutineScope = CoroutineScope(Dispatchers.IO),
+        dataStore= datastore)
 
     private val testGameEngine = TestGameEngine(
         exampleProvider = drawExampleProvider,
@@ -60,6 +65,12 @@ class AndroidTestAppModule(
         accountManager
     )
 
+    private val endlessGameEngine = EndlessGameEngine(
+        exampleProvider = drawExampleProvider,
+        gamesManager = gamesManager,
+        accountManager
+    )
+
     override fun gameEngine(gameMode: GameMode): GameEngineTemplate {
         return when(gameMode){
             GameMode.ONE_ROUND_WONDER -> {
@@ -69,7 +80,7 @@ class AndroidTestAppModule(
               speedDrawGameEngine
             }
             GameMode.ENDLESS_MODE -> {
-                testGameEngine
+                endlessGameEngine
             }
         }
     }

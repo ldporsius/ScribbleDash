@@ -100,14 +100,14 @@ fun UserDrawCanvas(
         uiState.drawPaths.onEach {path ->
             drawPath(
                 path = path.path.asComposePath(),
-                color = path.color,
+                color = Color( path.color ),
                 style = Stroke(width = 2.dp.toPx())
             )
         }
         uiState.currentPath.forEach{ path ->
             drawPath(
                 path = path.path.asComposePath(),
-                color = path.color,
+                color = Color(path.color),
                 style = Stroke(width = 2.dp.toPx()),
 
             )

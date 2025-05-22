@@ -1,8 +1,11 @@
 package nl.codingwithlinda.scribbledash.core.domain.model.shop.sales
 
 import nl.codingwithlinda.scribbledash.core.data.accounts.AccountManager
+import nl.codingwithlinda.scribbledash.core.data.shop.product_manager.PenManager
 import nl.codingwithlinda.scribbledash.core.domain.model.accounts.UserAccount
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.PenProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ProductInTier
+import nl.codingwithlinda.scribbledash.core.domain.model.shop.products.ShopProduct
 import nl.codingwithlinda.scribbledash.core.domain.model.shop.tiers.Tier
 
 abstract class SalesManager<P: ProductInTier>(
@@ -12,6 +15,9 @@ abstract class SalesManager<P: ProductInTier>(
     abstract fun getProductsPerTier(): Map<Tier, List<P>>
     abstract fun freeProducts(): List<P>
 
+    fun defaultProduct(): ShopProduct{
+        return freeProducts().first().product
+    }
     fun productsAvailableToUser(userAccount: UserAccount): List<String> {
         return userAccount.transactions.map { it.productId } + freeProducts().map { it.product.id }
     }

@@ -38,7 +38,8 @@ class ShopViewModel(
         penSalesManager.getProductsPerTier().let { pens ->
             _uiState.update {
                 it.copy(
-                    penProducts = pens.values.flatten()
+                    penProducts = pens.values.flatten(),
+                    selectedPenId = penSalesManager.defaultProduct().id
                 )
             }
         }
@@ -46,7 +47,8 @@ class ShopViewModel(
         canvasSalesManager.getProductsPerTier().let {canvasses ->
             _uiState.update {
                 it.copy(
-                    canvasProducts = canvasses.values.flatten()
+                    canvasProducts = canvasses.values.flatten(),
+                    selectedCanvasId = canvasSalesManager.defaultProduct().id
                 )
             }
         }

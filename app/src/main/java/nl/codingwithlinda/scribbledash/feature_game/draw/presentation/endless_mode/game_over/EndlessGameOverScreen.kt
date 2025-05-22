@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -28,6 +30,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.util.UiText
 import nl.codingwithlinda.scribbledash.core.presentation.util.asString
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons.CloseButton
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.buttons.CustomColoredButton
+import nl.codingwithlinda.scribbledash.core.presentation.design_system.components.CounterComponent
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.components.GameSuccessCounter
 import nl.codingwithlinda.scribbledash.feature_game.draw.presentation.common.state.FinalResultUiState
 import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.ScribbleDashTheme
@@ -41,6 +44,7 @@ import nl.codingwithlinda.scribbledash.core.presentation.design_system.theme.sur
 @Composable
 fun EndlessGameOverScreen(
     uiState: FinalResultUiState,
+    reward: Int,
     onClose: () -> Unit,
     onDrawAgain: () -> Unit
 ) {
@@ -50,13 +54,13 @@ fun EndlessGameOverScreen(
     Surface(
         contentColor = onBackground,
 
-    ) {
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = backgroundGradient)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(48.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -72,7 +76,7 @@ fun EndlessGameOverScreen(
 
             Text(
                 "Game over!",
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.labelLarge,
             )
 
 
@@ -107,7 +111,7 @@ fun EndlessGameOverScreen(
                             uiState.ratingUi.accuracyPercent.toString() + "%",
                             style = MaterialTheme.typography.displayLarge,
                             modifier = Modifier.fillMaxWidth(),
-                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            textAlign = TextAlign.Center
                         )
                     }
 
@@ -121,30 +125,50 @@ fun EndlessGameOverScreen(
                             uiState.ratingUi.title.asString(),
                             style = MaterialTheme.typography.headlineLarge,
                             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            textAlign = TextAlign.Center
                         )
                         Text(
                             uiState.ratingUi.text.asString(),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = 48.dp, vertical = 8.dp),
-                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            textAlign = TextAlign.Center
                         )
 
-                        GameSuccessCounter(
-                            successes = uiState.successCount.toString(),
-                            backgroundColor = uiState.backgroundColor(),
-                            foregroundColor = if (uiState.isHighestNumberOfSuccesses) surfaceHigh else onBackground
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+                            verticalAlignment = Alignment.Top,
+                        ) {
 
-                        if (uiState.isHighestNumberOfSuccesses) {
-                            Text(
-                                "NEW HIGH!",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = onSurface,
-                                modifier = Modifier
+                            Column(
+                                modifier = Modifier.alignByBaseline(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+
+                            ) {
+                                GameSuccessCounter(
+                                    successes = uiState.successCount.toString(),
+                                    backgroundColor = uiState.backgroundColor(),
+                                    foregroundColor = if (uiState.isHighestNumberOfSuccesses) surfaceHigh else onBackground
+                                )
+
+                                if (uiState.isHighestNumberOfSuccesses) {
+                                    Text(
+                                        "NEW HIGH!",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = onSurface,
+                                        modifier = Modifier
+                                    )
+                                }
+                            }
+                            CounterComponent(
+                                text = "+ $reward",
+                                imageResourceId = R.drawable.coin,
+                                imageSize = 28.dp,
+                                backgroundColor = surfaceLow,
+                                foregroundColor = onBackground,
+                                modifier = Modifier.alignByBaseline()
                             )
-
                         }
                     }
                 }
@@ -162,6 +186,7 @@ fun EndlessGameOverScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.weight(1f))
 
             CustomColoredButton(
                 text = "Draw again",
@@ -191,6 +216,7 @@ private fun EndlessGameOverScreenPreview() {
                 successCount = 12,
                 isHighestNumberOfSuccesses = true
             ),
+            reward = 1,
             onClose = {},
             onDrawAgain = {}
         )

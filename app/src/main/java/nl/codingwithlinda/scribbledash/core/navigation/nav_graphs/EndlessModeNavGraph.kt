@@ -138,6 +138,7 @@ fun NavGraphBuilder.endlessModeNavGraph(
 
                     EndlessGameOverScreen(
                         uiState = viewModel.uiState.collectAsStateWithLifecycle().value,
+                        reward = gameEngine.coinsEarnedInLastestGame(),
                         onClose ={
                             navController.popBackStack()
                             onNavHome()

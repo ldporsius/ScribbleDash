@@ -50,7 +50,6 @@ class EndlessDrawViewModelTest{
             assertTrue(userIput.isNotEmpty())
             val pathData = PathData(
                 id = "",
-                color = 0,
                 path = userIput
             )
             gameEngine.processUserInput(

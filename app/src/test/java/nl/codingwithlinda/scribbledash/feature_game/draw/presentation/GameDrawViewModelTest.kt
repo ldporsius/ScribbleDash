@@ -49,6 +49,7 @@ class GameDrawViewModelTest {
             gameEngine = gameEngine,
             careTaker = careTaker,
             shoppingCart = TODO(),
+            finished = TODO(),
         )
     }
     @After

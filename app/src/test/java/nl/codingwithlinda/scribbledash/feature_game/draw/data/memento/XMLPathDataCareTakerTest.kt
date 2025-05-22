@@ -12,13 +12,11 @@ class XMLPathDataCareTakerTest{
     fun testSave(){
         val pathData = PathData(
             id = "6",
-            color = 10,
             path = listOf()
         )
         val list = (0..5).map {
             pathData.copy(
                 id = it.toString(),
-                color = it
             )
         }
 
